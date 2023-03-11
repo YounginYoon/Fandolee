@@ -1,9 +1,19 @@
-import logo from "./logo.svg";
-import "./App.css";
-import { db } from "./config/firebase";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
-function App() {
+import "./App.css";
+import { Reset } from "styled-reset";
+import styled from "styled-components";
+import { colors } from "./config/color";
+
+// firestore 데이터 베이스
+import { db } from "./config/firebase";
+
+// components
+import Header from "./components/header/Header";
+import Footer, { footerHeight } from "./components/footer/Footer";
+import NavBar from "./components/nav/NavBar";
+
+const App = () => {
   const test = async () => {
     const product = db.collection("product");
 
@@ -15,24 +25,29 @@ function App() {
   useEffect(() => {
     test();
   }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <RootLayout className="root-styles">
+      {/* 스타일 리셋 */}
+      <Reset />
+
+      {/* header */}
+      <Header />
+
+      {/* 네비게이션 바 */}
+      <NavBar />
+
+      {/* footer */}
+      <Footer />
+    </RootLayout>
   );
-}
+};
 
 export default App;
+
+const RootLayout = styled.div`
+  background-color: ${colors.COLOR_MAIN_BACKGROUND};
+  padding-bottom: ${footerHeight};
+  min-height: calc(100vh - ${footerHeight});
+  position: relative;
+`;
