@@ -1,7 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { db } from "./config/firebase";
+import { useEffect } from "react";
 
 function App() {
+  const test = async () => {
+    const product = db.collection("product");
+
+    const ret = await product.doc("6PK3dqb4N85M7LloAYNA").get();
+
+    console.log("ret: ", ret.data());
+  };
+
+  useEffect(() => {
+    test();
+  }, []);
   return (
     <div className="App">
       <header className="App-header">
