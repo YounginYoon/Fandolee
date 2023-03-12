@@ -7,11 +7,17 @@ import { colors } from "./config/color";
 
 // firestore 데이터 베이스
 import { db } from "./config/firebase";
+import { Route, Routes } from "react-router-dom";
 
 // components
 import Header from "./components/header/Header";
 import Footer, { footerHeight } from "./components/footer/Footer";
 import NavBar from "./components/nav/NavBar";
+import MainPage from "./pages/MainPage";
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
+import MainLayout from "./layouts/MainLayout";
+import SubLayout from "./layouts/SubLayout";
 
 const App = () => {
   const test = async () => {
@@ -31,11 +37,16 @@ const App = () => {
       {/* 스타일 리셋 */}
       <Reset />
 
-      {/* header */}
-      <Header />
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route path="main" element={<MainPage />} />
+        </Route>
 
-      {/* 네비게이션 바 */}
-      <NavBar />
+        <Route path="/user" element={<SubLayout />}>
+          <Route path="login" element={<LoginPage />} />
+          <Route path="signup" element={<SignUpPage />} />
+        </Route>
+      </Routes>
 
       {/* footer */}
       <Footer />

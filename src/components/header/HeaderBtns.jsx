@@ -1,11 +1,23 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import styled from "styled-components";
+import { colors } from "../../config/color";
 
 const HeaderBtns = () => {
+  const navigate = useNavigate();
+
   return (
     <HeaderBtnsDiv>
-      <HeaderBtn>로그인</HeaderBtn>
-      <HeaderBtn>회원가입</HeaderBtn>
+      <HeaderBtn onClick={() => navigate("/user/login")}>로그인</HeaderBtn>
+      <HeaderBtn onClick={() => navigate("/user/signup")}>회원가입</HeaderBtn>
+
+      {/* <User>
+        <ProfileImage />
+        <HeaderBtn>닉네임</HeaderBtn>
+      </User>
+
+      <HeaderBtn style={{ color: colors.COLOR_GRAY_TEXT }}>로그아웃</HeaderBtn> */}
     </HeaderBtnsDiv>
   );
 };
@@ -18,8 +30,22 @@ const HeaderBtnsDiv = styled.div`
 `;
 
 const HeaderBtn = styled.div`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   margin: 0 10px;
+  cursor: pointer;
+`;
+
+const User = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const ProfileImage = styled.img`
+  background-color: ${colors.COLOR_DARKGRAY_BACKGROUND};
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid ${colors.COLOR_DARKGRAY_BACKGROUND};
   cursor: pointer;
 `;
