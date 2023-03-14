@@ -1,26 +1,44 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+import { signOut } from "firebase/auth";
+
 import styled from "styled-components";
 import { colors } from "../../config/color";
 import useUser from "../../hooks/useUser";
+import { authService } from "../../config/firebase";
 
 const HeaderBtns = () => {
   const navigate = useNavigate();
   const user = useUser();
 
-  const { displayName, photoURL } = user;
+  const onLogout = async () => {
+    if (!window.confirm("로그아웃 하시겠습니까?")) {
+      return;
+    }
+
+    try {
+      const ret = await signOut(authService);
+      window.sessionStorage.removeItem("user");
+      window.location.reload();
+    } catch (err) {
+      console.log("logout error! ", err);
+    }
+  };
 
   return (
     <HeaderBtnsDiv>
       {user ? (
         <>
           <User>
-            <ProfileImage src={photoURL} />
-            <HeaderBtn>{displayName}</HeaderBtn>
+            <ProfileImage src={user.photoURL} />
+            <HeaderBtn>{user.displayName}</HeaderBtn>
           </User>
 
-          <HeaderBtn style={{ color: colors.COLOR_GRAY_TEXT }}>
+          <HeaderBtn
+            style={{ color: colors.COLOR_GRAY_TEXT }}
+            onClick={onLogout}
+          >
             로그아웃
           </HeaderBtn>
         </>
