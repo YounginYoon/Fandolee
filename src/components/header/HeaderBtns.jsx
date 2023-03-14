@@ -3,21 +3,35 @@ import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import { colors } from "../../config/color";
+import useUser from "../../hooks/useUser";
 
 const HeaderBtns = () => {
   const navigate = useNavigate();
+  const user = useUser();
+
+  const { displayName, photoURL } = user;
 
   return (
     <HeaderBtnsDiv>
-      <HeaderBtn onClick={() => navigate("/user/login")}>로그인</HeaderBtn>
-      <HeaderBtn onClick={() => navigate("/user/signup")}>회원가입</HeaderBtn>
+      {user ? (
+        <>
+          <User>
+            <ProfileImage src={photoURL} />
+            <HeaderBtn>{displayName}</HeaderBtn>
+          </User>
 
-      {/* <User>
-        <ProfileImage />
-        <HeaderBtn>닉네임</HeaderBtn>
-      </User>
-
-      <HeaderBtn style={{ color: colors.COLOR_GRAY_TEXT }}>로그아웃</HeaderBtn> */}
+          <HeaderBtn style={{ color: colors.COLOR_GRAY_TEXT }}>
+            로그아웃
+          </HeaderBtn>
+        </>
+      ) : (
+        <>
+          <HeaderBtn onClick={() => navigate("/user/login")}>로그인</HeaderBtn>
+          <HeaderBtn onClick={() => navigate("/user/signup")}>
+            회원가입
+          </HeaderBtn>
+        </>
+      )}
     </HeaderBtnsDiv>
   );
 };

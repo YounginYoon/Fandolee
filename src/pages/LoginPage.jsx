@@ -1,11 +1,65 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+
 import styled from "styled-components";
 import { colors } from "../config/color";
 
+import { db, authService } from "../config/firebase";
+
 const LoginPage = () => {
   const navigate = useNavigate();
-  const onLogin = async () => {};
+
+  const [inputs, setInputs] = useState({
+    email: "",
+    password: "",
+  });
+  const { email, password } = inputs;
+
+  const onLogin = async () => {
+    if (!email) {
+      alert("이메일을 입력해주세요!");
+      return;
+    }
+    if (!password) {
+      alert("비밀번호를 입력해주세요!");
+      return;
+    }
+    try {
+      const ret = await signInWithEmailAndPassword(
+        authService,
+        email,
+        password
+      );
+
+      const user = ret.user;
+
+      alert("로그인이 완료되었습니다.");
+      window.sessionStorage.setItem("user", JSON.stringify(user));
+      window.location.replace("/");
+    } catch (err) {
+      console.log("login error! ", err);
+    }
+  };
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setInputs({
+      ...inputs,
+      [name]: value,
+    });
+  };
+
+  const onKeyUp = (e) => {
+    if (e.key === "Enter") {
+      onLogin();
+    }
+  };
+
   return (
     <LoginDiv>
       <LoginBox>
@@ -13,11 +67,23 @@ const LoginPage = () => {
 
         <InputDiv>
           <Label>이메일</Label>
-          <Input placeholder="이메일을 입력해주세요" />
+          <Input
+            placeholder="이메일을 입력해주세요"
+            value={email}
+            name="email"
+            onChange={onChange}
+          />
         </InputDiv>
         <InputDiv>
           <Label>비밀번호</Label>
-          <Input placeholder="비밀번호를 입력해주세요" type="password" />
+          <Input
+            placeholder="비밀번호를 입력해주세요"
+            type="password"
+            value={password}
+            name="password"
+            onChange={onChange}
+            onKeyUp={onKeyUp}
+          />
         </InputDiv>
 
         <div style={{ marginBottom: "70px" }}></div>
@@ -25,6 +91,7 @@ const LoginPage = () => {
         <Button
           color={colors.COLOR_WHITE_TEXT}
           backgroundColor={colors.COLOR_MAIN}
+          onClick={onLogin}
         >
           로그인
         </Button>
