@@ -39,7 +39,7 @@ const App = () => {
 
       <Routes>
         <Route path="/" element={<MainLayout />}>
-          <Route path="main" element={<MainPage />} />
+          <Route path="" element={<MainPage />} />
         </Route>
 
         <Route path="/user" element={<SubLayout />}>
