@@ -12,12 +12,12 @@ import { Route, Routes } from "react-router-dom";
 // components
 import Header from "./components/header/Header";
 import Footer, { footerHeight } from "./components/footer/Footer";
-import NavBar from "./components/nav/NavBar";
 import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import MainLayout from "./layouts/MainLayout";
 import SubLayout from "./layouts/SubLayout";
+import ProfilePage from "./pages/ProfilePage";
 
 const App = () => {
   const test = async () => {
@@ -39,7 +39,10 @@ const App = () => {
 
       <Routes>
         <Route path="/" element={<MainLayout />}>
+          {/* 메인 홈 페이지 */}
           <Route path="" element={<MainPage />} />
+          {/* 프로필 페이지 */}
+          <Route path="profile/:userId" element={<ProfilePage />} />
         </Route>
 
         <Route path="/user" element={<SubLayout />}>
@@ -61,4 +64,5 @@ const RootLayout = styled.div`
   padding-bottom: ${footerHeight};
   min-height: calc(100vh - ${footerHeight});
   position: relative;
+  min-width: 800px;
 `;

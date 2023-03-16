@@ -26,12 +26,16 @@ const HeaderBtns = () => {
     }
   };
 
+  const goProfilePage = () => {
+    navigate(`/profile/${user.uid}`);
+  };
+
   return (
     <HeaderBtnsDiv>
       {user ? (
         <>
           <User>
-            <ProfileImage src={user.photoURL} />
+            <ProfileImage src={user.photoURL} onClick={goProfilePage} />
             <HeaderBtn>{user.displayName}</HeaderBtn>
           </User>
 
