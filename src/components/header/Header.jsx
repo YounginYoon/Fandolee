@@ -11,7 +11,13 @@ const Header = () => {
     <HeaderDiv>
       <HeaderInner>
         <HeaderLeft>
-          <HeaderTitle>팬도리</HeaderTitle>
+          <HeaderTitle
+            onClick={() => {
+              window.location.replace("/");
+            }}
+          >
+            팬도리
+          </HeaderTitle>
 
           <HeaderInput />
         </HeaderLeft>

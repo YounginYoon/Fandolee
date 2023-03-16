@@ -8,7 +8,7 @@ const SubLayout = () => {
   return (
     <>
       <TitleDiv>
-        <Title onClick={() => navigate("/main")}>팬도리</Title>
+        <Title onClick={() => navigate("/")}>팬도리</Title>
       </TitleDiv>
 
       <>
