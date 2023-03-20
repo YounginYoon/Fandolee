@@ -50,9 +50,11 @@ $ npm start
 
 ### 3/13
 
-- 윤영인:
+ 1. 프로젝트 환경 및 폴더 구조 세팅
+ 
+ 2. 프로젝트 기획안 작성: '아이돌 중고굿즈 경매 웹사이트' 프로젝트를 기획한 이유와 배경 설명
 
- 1. 피그마 제작
+ 3. 피그마 제작
 
   + 메인: 
    
@@ -90,15 +92,6 @@ $ npm start
     
      아이돌의 이름과 굿즈 종류로 검색을 진행하여 관련 게시글을 띄움
      
-
-
-
-- 김은원:
-
- 1. 프로젝트 기획안 작성: '아이돌 중고굿즈 경매 웹사이트' 프로젝트를 기획한 이유와 배경 설명
-  
- 2. 피그마 제작
-
   + 게시글 상세 페이지: 
 
     <img width="50%" src="https://user-images.githubusercontent.com/92067715/226099733-11be94ec-1d99-4d6d-a2dc-2aef2e0ef80d.png" />
@@ -124,17 +117,28 @@ $ npm start
     팬봇 추천 가격은 AI로 이전 데이터를 분석하여 채택 가능성이 높은 가격 제시
     
     채팅 시 상대의 정보는 보이지 않고 날짜와 시간 표시
-    
-    
-    
-    
-- 김아영:
+     
 
- 1. 프로젝트 환경 및 폴더 구조 세팅
 
- 2. 헤더, 네비바, 푸터 레이아웃
-
- 3. 로그인/로그아웃 기능 연동
+ 4. 레이아웃
+ 
+  + 메인 페이지
+  
+    <img width="50%" src="https://user-images.githubusercontent.com/92067715/226100071-9eb16e2d-0dd9-400f-8258-fef5fe5cd3f2.png" />
+  
+    메인 홈 광고 배너 슬라이더 HomeBanner.jsx
+     - react-slick 라이브러리 사용
+     
+  + 로그인/회원가입 페이지 레이아웃
+    
+    <img width="50%" src="https://user-images.githubusercontent.com/92067715/226100436-4cb4f0b1-93bc-45cb-8e55-23740a56ecd3.png"/>
+    
+    <img width="50%" src="https://user-images.githubusercontent.com/92067715/226100459-175d75c9-1f6a-4adf-bb2a-4d617d5c3588.png" />
+    
+    
+  
+ 
+ 5. 로그인/로그아웃 기능 연동
 
     Firebase 의 signInWithEmailAndPassword 메소드를 이용해 이메일과 비밀번호로 로그인 기능 연동
    
@@ -142,18 +146,5 @@ $ npm start
    
     sessionStorage에 저장되어 있는 유저 정보를 가져오는 커스텀 훅 useUser 정의
    
- 4. 메인 페이지 레이아웃
 
-    <img width="50%" src="https://user-images.githubusercontent.com/92067715/226100071-9eb16e2d-0dd9-400f-8258-fef5fe5cd3f2.png" />
-    
-    메인 홈 광고 배너 슬라이더 HomeBanner.jsx
-     - react-slick 라이브러리 사용
-
- 5. 로그인/회원가입 페이지 레이아웃
-
-    <img width="50%" src="https://user-images.githubusercontent.com/92067715/226100436-4cb4f0b1-93bc-45cb-8e55-23740a56ecd3.png"/>
-    
-    <img width="50%" src="https://user-images.githubusercontent.com/92067715/226100459-175d75c9-1f6a-4adf-bb2a-4d617d5c3588.png" />
-    
-    
     
