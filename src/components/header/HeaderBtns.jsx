@@ -20,7 +20,7 @@ const HeaderBtns = () => {
     try {
       const ret = await signOut(authService);
       window.sessionStorage.removeItem("user");
-      window.location.reload();
+      window.location.replace("/");
     } catch (err) {
       console.log("logout error! ", err);
     }

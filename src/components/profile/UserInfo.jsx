@@ -28,6 +28,7 @@ const UserInfoDiv = styled.div``;
 
 const ProfileImageDiv = styled.div`
   position: relative;
+  overflow: hidden;
 `;
 
 const ProfileImage = styled.img`
