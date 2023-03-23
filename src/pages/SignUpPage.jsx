@@ -79,10 +79,10 @@ const SignUpPage = () => {
       );
 
       var user_info = {
-        Email: input.email,
-        Password: input.password,
-        Username: input.username,
-        Nickname: input.nickname,
+        email: input.email,
+        passWord: input.password,
+        userName: input.username,
+        nickName: input.nickname,
       };
 
       const user = ret.user;
