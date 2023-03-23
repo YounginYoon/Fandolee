@@ -1,28 +1,32 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { signOut } from "firebase/auth";
+import { signOut } from 'firebase/auth';
 
-import styled from "styled-components";
-import { colors } from "../../config/color";
-import useUser from "../../hooks/useUser";
-import { authService } from "../../config/firebase";
+import styled from 'styled-components';
+import { colors } from '../../config/color';
+import useUser from '../../hooks/useUser';
+
+import { authService, storage } from '../../config/firebase';
+import { ref, getDownloadURL } from 'firebase/storage';
+import UserInfo from '../profile/UserInfo';
 
 const HeaderBtns = () => {
   const navigate = useNavigate();
   const user = useUser();
+  const [url, setUrl] = useState({});
 
   const onLogout = async () => {
-    if (!window.confirm("로그아웃 하시겠습니까?")) {
+    if (!window.confirm('로그아웃 하시겠습니까?')) {
       return;
     }
 
     try {
       const ret = await signOut(authService);
-      window.sessionStorage.removeItem("user");
+      window.sessionStorage.removeItem('user');
       window.location.reload();
     } catch (err) {
-      console.log("logout error! ", err);
+      console.log('logout error! ', err);
     }
   };
 
@@ -48,8 +52,8 @@ const HeaderBtns = () => {
         </>
       ) : (
         <>
-          <HeaderBtn onClick={() => navigate("/user/login")}>로그인</HeaderBtn>
-          <HeaderBtn onClick={() => navigate("/user/signup")}>
+          <HeaderBtn onClick={() => navigate('/user/login')}>로그인</HeaderBtn>
+          <HeaderBtn onClick={() => navigate('/user/signup')}>
             회원가입
           </HeaderBtn>
         </>
