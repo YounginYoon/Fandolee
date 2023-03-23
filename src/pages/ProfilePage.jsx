@@ -30,10 +30,10 @@ const ProfilePage = () => {
 
   return (
     <ProfileDiv>
-      <UserInfo />
+      <UserInfo profileImage={profile.프로필} />
 
       <InfoDiv>
-        <Bamboo nickname={"닉네임"} bamboo={8.5} />
+        <Bamboo nickname={profile.닉네임} bamboo={8.5} />
 
         <TransactionHistory />
       </InfoDiv>

@@ -10,7 +10,7 @@ const UserInfo = ({ profileImage }) => {
   return (
     <UserInfoDiv>
       <ProfileImageDiv>
-        <ProfileImage />
+        <ProfileImage src={profileImage} />
 
         {/* <EditIcon>
           <FontAwesomeIcon icon={faPen} />
@@ -35,6 +35,7 @@ const ProfileImage = styled.img`
   height: 200px;
   border-radius: 50%;
   background-color: ${colors.COLOR_DARKGRAY_BACKGROUND};
+  object-fit: cover;
 `;
 
 const EditIcon = styled.div`
