@@ -1,10 +1,10 @@
-# 팬도리
+# 팬도리 🐼
 
 
 ## 🔧 개발환경 세팅
 
 ```bash
-$ git clone https://github.com/Ahyoung-Kim/DDJT
+$ git clone https://github.com/Ahyoung-Kim/Fandolee.git
 $ cd DDJT
 $ npm install
 ```
@@ -22,29 +22,29 @@ $ npm start
 ## 👩‍🔧 팀원 소개
 |이름|역할|
 |------|---|
-|윤영인|프로젝트 관리, 백엔드|
-|김은원|백엔드|
-|김아영|프론트엔드|
+|윤영인|백엔드, 회의록 작성|
+|김은원|백엔드, 위키페이지 관리|
+|김아영|프론트엔드, PM|
 
 ---
 
 ### 3/6
 
-1. 프로젝트 주제 결정
+ 1. 프로젝트 주제 결정
 
-- 주제 : 아이돌 중고굿즈 경매 사이트
+ - 주제 : 아이돌 중고굿즈 경매 사이트
 
-2. 프로젝트 설명 :
+ 2. 프로젝트 설명 :
 
-3. 개발환경 설정 :
+ 3. 개발환경 설정 :
 
-- Visual Studio Code
-- 데이터 베이스 : Firebase
-- 개발 언어: React
+ - Visual Studio Code
+ - 데이터 베이스 : Firebase
+ - 개발 언어: React
 
-4. Github 생성
+ 4. Github 생성
 
-- https://github.com/Ahyoung-Kim/DDJT.git
+ - https://github.com/Ahyoung-Kim/Fandolee.git
 
 ---
 
@@ -147,4 +147,6 @@ $ npm start
     sessionStorage에 저장되어 있는 유저 정보를 가져오는 커스텀 훅 useUser 정의
    
 
-    
+---
+
+### 3/20
