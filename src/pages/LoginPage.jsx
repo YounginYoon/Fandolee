@@ -35,10 +35,6 @@ const LoginPage = () => {
       );
 
       const user = ret.user;
-      const imageRef = ref(storage, `profile_image/${user.uid}`);
-      getDownloadURL(imageRef).then((url) => {
-        sessionStorage.setItem('profileImageUrl', url);
-      });
 
       alert('로그인이 완료되었습니다!');
       window.sessionStorage.setItem('user', JSON.stringify(user));
