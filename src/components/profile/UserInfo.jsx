@@ -36,6 +36,9 @@ const UserInfo = () => {
     console.log(ok);
     if (ok) {
       storage.refFromURL(imageRef).delete();
+      let userGet = JSON.parse(sessionStorage.getItem('user'));
+      userGet.photoURL = null;
+      sessionStorage.setItem('user', JSON.stringify(userGet));
       window.location.reload();
     }
   };
