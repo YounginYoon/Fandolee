@@ -1,12 +1,19 @@
-import React from "react";
-import styled from "styled-components";
-import { colors } from "../../config/color";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { colors } from '../../config/color';
 
 const NavBar = () => {
+  const navigate = useNavigate();
+
+  const goAuctionListPage = () => {
+    navigate(`/auction/auctionlist`);
+  };
+
   return (
     <NavBarDiv>
       <NavBarInner>
-        <NavBtn>경매</NavBtn>
+        <NavBtn onClick={goAuctionListPage}>경매</NavBtn>
         <NavBtn>교환</NavBtn>
         <NavBtn>공지사항</NavBtn>
         <NavBtn>커뮤니티</NavBtn>
