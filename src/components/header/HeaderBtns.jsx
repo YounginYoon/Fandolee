@@ -25,6 +25,7 @@ const HeaderBtns = () => {
     try {
       const ret = await signOut(authService);
       window.sessionStorage.removeItem('user');
+      window.sessionStorage.removeItem('profileImageUrl');
       window.location.replace('/');
     } catch (err) {
       console.log('logout error! ', err);
