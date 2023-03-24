@@ -11,16 +11,18 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { onAuthStateChanged, reload, updateProfile } from 'firebase/auth';
 import { useParams } from 'react-router-dom';
 import useUser from '../../hooks/useUser';
+import { update } from 'firebase/database';
+import { faWindows } from '@fortawesome/free-brands-svg-icons';
 
 const UserInfo = () => {
   const params = useParams();
   const { userId } = params;
   const userSessionStorage = useUser();
+  const profileImageUrl = sessionStorage.getItem('profileImageUrl');
 
   const fileInputRef = useRef(null);
   const [imageUpload, setImageUpload] = useState('');
   const [image, setImage] = useState('');
-  const [deleteImage, setDeleteImage] = useState('');
   const imageRef = ref(storage, `profile_image/${userId}`);
 
   const handleClickFileInput = () => {
@@ -36,9 +38,7 @@ const UserInfo = () => {
     console.log(ok);
     if (ok) {
       storage.refFromURL(imageRef).delete();
-      let userGet = JSON.parse(sessionStorage.getItem('user'));
-      userGet.photoURL = null;
-      sessionStorage.setItem('user', JSON.stringify(userGet));
+      sessionStorage.setItem('profileImageUrl', '');
       window.location.reload();
     }
   };
@@ -52,8 +52,7 @@ const UserInfo = () => {
       getDownloadURL(snapshot.ref).then((url) => {
         setImage(url);
         authService.onAuthStateChanged((user) => {
-          updateProfile(user, { photoURL: url });
-          sessionStorage.setItem('user', JSON.stringify(user));
+          sessionStorage.setItem('profileImageUrl', url);
           window.location.reload();
         });
       });
@@ -64,7 +63,7 @@ const UserInfo = () => {
   return (
     <UserInfoDiv>
       <ProfileImageDiv>
-        <ProfileImage src={userSessionStorage.photoURL} />
+        <ProfileImage src={profileImageUrl} />
         <input
           name="inputUpload"
           type="file"
