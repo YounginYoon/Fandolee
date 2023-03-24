@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 import styled from 'styled-components';
 import { colors } from '../config/color';
 
-import { db, authService } from '../config/firebase';
+import { db, authService, storage } from '../config/firebase';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -34,8 +35,12 @@ const LoginPage = () => {
       );
 
       const user = ret.user;
+      const imageRef = ref(storage, `profile_image/${user.uid}`);
+      getDownloadURL(imageRef).then((url) => {
+        sessionStorage.setItem('profileImageUrl', url);
+      });
 
-      alert('로그인이 완료되었습니다.');
+      alert('로그인이 완료되었습니다!');
       window.sessionStorage.setItem('user', JSON.stringify(user));
       window.location.replace('/');
     } catch (err) {
