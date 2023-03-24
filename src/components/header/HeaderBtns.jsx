@@ -14,8 +14,7 @@ import UserInfo from '../profile/UserInfo';
 const HeaderBtns = () => {
   const navigate = useNavigate();
   const user = useUser();
-  const profileImageUrl = sessionStorage.getItem('profileImageUrl');
-  const [url, setUrl] = useState({});
+  const [url, setUrl] = useState('');
 
   const onLogout = async () => {
     if (!window.confirm('로그아웃 하시겠습니까?')) {
@@ -25,7 +24,6 @@ const HeaderBtns = () => {
     try {
       const ret = await signOut(authService);
       window.sessionStorage.removeItem('user');
-      window.sessionStorage.removeItem('profileImageUrl');
       window.location.replace('/');
     } catch (err) {
       console.log('logout error! ', err);
@@ -36,13 +34,24 @@ const HeaderBtns = () => {
     navigate(`/profile/${user.uid}`);
   };
 
+  useEffect(() => {
+    authService.onAuthStateChanged((user) => {
+      if (user) {
+        sessionStorage.setItem('user', JSON.stringify(user));
+        setUrl(user.photoURL);
+      } else {
+        window.sessionStorage.removeItem('user');
+      }
+    });
+  }, []);
+
   return (
     <HeaderBtnsDiv>
       {user ? (
         <>
           <User>
-            {profileImageUrl ? (
-              <ProfileImage src={profileImageUrl} onClick={goProfilePage} />
+            {url ? (
+              <ProfileImage src={url} onClick={goProfilePage} />
             ) : (
               <ProfileImage onClick={goProfilePage} />
             )}

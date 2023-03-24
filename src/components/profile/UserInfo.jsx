@@ -18,11 +18,11 @@ const UserInfo = () => {
   const params = useParams();
   const { userId } = params;
   const userSessionStorage = useUser();
-  const profileImageUrl = sessionStorage.getItem('profileImageUrl');
 
   const fileInputRef = useRef(null);
   const [imageUpload, setImageUpload] = useState('');
-  const [image, setImage] = useState('');
+  const [deleteImage, setDeleteImage] = useState('');
+
   const imageRef = ref(storage, `profile_image/${userId}`);
 
   const handleClickFileInput = () => {
@@ -33,13 +33,11 @@ const UserInfo = () => {
     setImageUpload(e.target.files?.[0]);
   };
 
-  const handleRemoveImage = () => {
+  const handleRemoveImage = (e) => {
     const ok = window.confirm('프로필 사진을 삭제하시겠습니까?');
     console.log(ok);
     if (ok) {
-      storage.refFromURL(imageRef).delete();
-      sessionStorage.setItem('profileImageUrl', '');
-      window.location.reload();
+      setDeleteImage(2);
     }
   };
 
@@ -48,22 +46,36 @@ const UserInfo = () => {
     if (!imageUpload) return;
 
     //파이어베이스 storage에 이미지 업로드
-    uploadBytes(imageRef, imageUpload).then((snapshot) => {
-      getDownloadURL(snapshot.ref).then((url) => {
-        setImage(url);
-        authService.onAuthStateChanged((user) => {
-          sessionStorage.setItem('profileImageUrl', url);
-          window.location.reload();
+    authService.onAuthStateChanged((user) => {
+      if (user) {
+        uploadBytes(imageRef, imageUpload).then((snapshot) => {
+          getDownloadURL(snapshot.ref).then((url) => {
+            updateProfile(user, { photoURL: url });
+            window.location.reload();
+          });
         });
-      });
+      }
     });
   }, [imageUpload]);
   //console.log(userSessionStorage.photoURL);
 
+  useEffect(() => {
+    if (!deleteImage) return;
+
+    // 프로필 사진 삭제
+    authService.onAuthStateChanged((user) => {
+      if (user) {
+        storage.refFromURL(imageRef).delete();
+        updateProfile(user, { photoURL: '' });
+        window.location.reload();
+      }
+    });
+  }, [deleteImage]);
+
   return (
     <UserInfoDiv>
       <ProfileImageDiv>
-        <ProfileImage src={profileImageUrl} />
+        <ProfileImage src={userSessionStorage.photoURL} />
         <input
           name="inputUpload"
           type="file"
