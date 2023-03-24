@@ -14,6 +14,7 @@ import UserInfo from '../profile/UserInfo';
 const HeaderBtns = () => {
   const navigate = useNavigate();
   const user = useUser();
+  const profileImageUrl = sessionStorage.getItem('profileImageUrl');
   const [url, setUrl] = useState({});
 
   const onLogout = async () => {
@@ -24,7 +25,7 @@ const HeaderBtns = () => {
     try {
       const ret = await signOut(authService);
       window.sessionStorage.removeItem('user');
-      window.location.reload();
+      window.location.replace('/');
     } catch (err) {
       console.log('logout error! ', err);
     }
@@ -39,8 +40,13 @@ const HeaderBtns = () => {
       {user ? (
         <>
           <User>
-            <ProfileImage src={user.photoURL} onClick={goProfilePage} />
-            <HeaderBtn>{user.displayName}</HeaderBtn>
+            {profileImageUrl ? (
+              <ProfileImage src={profileImageUrl} onClick={goProfilePage} />
+            ) : (
+              <ProfileImage onClick={goProfilePage} />
+            )}
+
+            <HeaderBtn onClick={goProfilePage}>{user.displayName}</HeaderBtn>
           </User>
 
           <HeaderBtn
