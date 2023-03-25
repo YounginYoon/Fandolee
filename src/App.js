@@ -19,6 +19,7 @@ import MainLayout from './layouts/MainLayout';
 import SubLayout from './layouts/SubLayout';
 import ProfilePage from './pages/ProfilePage';
 import AuctionListPage from './pages/AuctionListPage';
+import AuctionUpPage from './pages/AuctionUpPage';
 
 const App = () => {
   const test = async () => {
@@ -53,6 +54,7 @@ const App = () => {
 
         <Route path="/auction" element={<MainLayout />}>
           {/*경매 게시글 나열 페이지*/}
+          <Route path="auctionUp" element={<AuctionUpPage/>}/>
           <Route path="auctionlist" element={<AuctionListPage />} />
         </Route>
       </Routes>
