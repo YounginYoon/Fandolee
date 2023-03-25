@@ -35,10 +35,12 @@ const LoginPage = () => {
       );
 
       const user = ret.user;
+      const getPrevUrl = JSON.parse(sessionStorage.getItem('previousUrl'));
 
       alert('로그인이 완료되었습니다!');
       window.sessionStorage.setItem('user', JSON.stringify(user));
-      window.location.replace('/');
+
+      window.location.replace(`${getPrevUrl}`);
     } catch (err) {
       console.log('login error! ', err);
       alert('이메일 또는 비밀번호를 확인해 주세요!');
