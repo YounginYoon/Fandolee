@@ -33,7 +33,7 @@ const ProfilePage = () => {
       <UserInfo profileImage={profile.프로필} />
 
       <InfoDiv>
-        <Bamboo nickname={profile.닉네임} bamboo={8.5} />
+        <Bamboo nickname={profile.nickName} bamboo={8.5} />
 
         <TransactionHistory />
       </InfoDiv>

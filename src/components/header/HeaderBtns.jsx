@@ -1,16 +1,20 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { signOut } from "firebase/auth";
 
 import styled from "styled-components";
 import { colors } from "../../config/color";
 import useUser from "../../hooks/useUser";
-import { authService } from "../../config/firebase";
+
+import { authService, storage } from "../../config/firebase";
+import { ref, getDownloadURL } from "firebase/storage";
+import UserInfo from "../profile/UserInfo";
 
 const HeaderBtns = () => {
   const navigate = useNavigate();
   const user = useUser();
+  const [url, setUrl] = useState("");
 
   const onLogout = async () => {
     if (!window.confirm("로그아웃 하시겠습니까?")) {
@@ -30,13 +34,29 @@ const HeaderBtns = () => {
     navigate(`/profile/${user.uid}`);
   };
 
+  useEffect(() => {
+    authService.onAuthStateChanged((user) => {
+      if (user) {
+        sessionStorage.setItem("user", JSON.stringify(user));
+        setUrl(user.photoURL);
+      } else {
+        window.sessionStorage.removeItem("user");
+      }
+    });
+  }, []);
+
   return (
     <HeaderBtnsDiv>
       {user ? (
         <>
           <User>
-            <ProfileImage src={user.photoURL} onClick={goProfilePage} />
-            <HeaderBtn>{user.displayName}</HeaderBtn>
+            {url ? (
+              <ProfileImage src={url} onClick={goProfilePage} />
+            ) : (
+              <ProfileImage onClick={goProfilePage} />
+            )}
+
+            <HeaderBtn onClick={goProfilePage}>{user.displayName}</HeaderBtn>
           </User>
 
           <HeaderBtn
