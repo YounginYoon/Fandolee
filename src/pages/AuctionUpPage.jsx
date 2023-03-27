@@ -1,14 +1,12 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 import { colors } from '../config/color';
 import { doc } from 'firebase/firestore';
 import { db,  storage } from '../config/firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL,listAll } from 'firebase/storage';
 import moment from 'moment';
-
-insert_dt : moment().format('YYYY-MM-DD hh:mm:ss')
 
 
 
@@ -29,65 +27,106 @@ const AuctionUpPage = () => {
     likes:0
 
   });
-  
-  const selectList = ["BTS", "SKZ", "SVT", "NCT DREAM","Black Pink"];
-  const categoryList = ["Albums", "MD", "Tickets", "ETC"];
+  //현재시간
+  const timeStamp = moment().format('YYYY-MM-DD hh:mm:ss');
+
+  const selectList = [ "Your Idol", "BTS", "SKZ", "SVT", "NCT DREAM","Black Pink","MONSTA X", "NCT 127", "IVE", "NEW JEANS"];
+  const categoryList = [ "Goods", "Albums", "MD", "Tickets", "Photo Cards"];
   // const handleClickFileInput = () => {
   //   fileInputRef.current?.click();
   // };
-  const [Selected, setSelected] = useState("");
+  const [Selected, setSelected] = useState("Your Idol");
   const handleSelect = (e) => {
     setSelected(e.target.value);
   };
 
-  const [Category, setCategory] = useState("");
+  const [Category, setCategory] = useState("Goods");
   const handleCategory = (e) => {
     setCategory(e.target.value);
   };
 
   //이미지 업로드
-  // const fileInputRef = useRef(null);
-  // const [imageUpload, setImageUpload] = useState('');
-  // const uploadImage = (e)=>{
-  //   setImageUpload(e.target.files?.[0]);
-  // };
+  const [imageUpload, setImageUpload] = useState(null);
+
+
+  const [imageList, setImageList] = useState([]);
+  const imageListRef = ref(storage, "product_image/");
+
+
+  
+  //이미지 불러오기
+  // useEffect(() => {
+  //   listAll(imageListRef).then((response) => {
+  //     response.items.forEach((item) => {
+  //       getDownloadURL(item).then((url) => {
+  //         setImageList((prev) => [...prev, url]);
+  //       });
+  //     });
+  //   });
+  // }, []);
+
+
 
   const addPost = async () => {
     const postDB = db.collection('product')
+
+    
+
+
     try{
+      //이미지 upload
+      if (imageUpload === null) return;
 
-      var post_info = {
-        
-        minPrice: input.minPrice,
-        maxPrice: input.maxPrice,
-        info: input.info,
-        idol: Selected,
-        
-        image:'',
-        
-        category: Category,
-        title: input.title,
-        subtitle:input.subtitle,
-        likes: 0,
-        date : moment().format('YYYY-MM-DD hh:mm:ss')
-      };
-
+      const imageRef = ref(storage, `product_image/${imageUpload.name}${timeStamp}`);
       
-      const user_info = {
-          user_id: JSON.parse( sessionStorage.getItem('user') ).uid
-      }
       
-      postDB.add({...post_info,...user_info}).then((doc) =>{
-        console.log(doc);
+      // `images === 참조값이름(폴더이름), / 뒤에는 파일이름 어떻게 지을지
+      uploadBytes(imageRef, imageUpload).then((snapshot) => {
+        // 업로드 되자마자 뜨게 만들기
+        getDownloadURL(snapshot.ref).then((url) => {
+          setImageList((prev) => [...prev, url]);
+          
+          var post_info = {
+        
+            minPrice: parseInt(input.minPrice),
+            maxPrice: parseInt(input.maxPrice),
+            info: input.info,
+            idol: Selected,
+            image: url,
+            category: Category,
+            title: input.title,
+            subtitle:input.subtitle,
+            likes: 0,
+            date : new Date() 
+          };
+    
+          
+          const user_info = {
+              user_id: JSON.parse( sessionStorage.getItem('user') ).uid
+          }
+          
+          postDB.add({...post_info,...user_info}).then((doc) =>{
+            console.log(doc);
+    
+          }).catch((err) =>{  // 실패했을 때
+              console.log('작성 실패', err)
+          })
+            // 
+        });
+        
+      });
+      //이미지 upload
 
-      }).catch((err) =>{  // 실패했을 때
-          console.log('작성 실패', err)
-      })
+      navigate(`/auction/auctionlist`);
 
     } catch(err){
       console.log('posting error', err);
 
     }
+
+    
+    
+    
     
   }
 
@@ -135,17 +174,15 @@ const AuctionUpPage = () => {
         <input  type="number" onChange={onChange} value={input.minPrice} name="minPrice" placeholder="최소 금액"  />
         <input  type="number" onChange={onChange} value={input.maxPrice} name="maxPrice" placeholder="최대 금액"  />
 
-        {/* <EditBox onClick={handleClickFileInput}>대표 사진 고르기</EditBox>
-        
         <input
-          name="image"
-          type="file"
-          accept="image/jpg, image/png, image/jpeg"
-          ref={fileInputRef}
-          onChange={uploadImage}
-          style={{ display: 'none' }}
-        />  */}
+          type="file" onChange={(event) => {
+            setImageUpload(event.target.files[0]);
+          }}
+        />
+        
         <button onClick={addPost}>업로드</button>
+
+        
       </div>
     </div>
     
