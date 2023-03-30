@@ -1,7 +1,7 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { colors } from '../../config/color';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { colors } from "../../common/color";
 
 const NavBar = () => {
   const navigate = useNavigate();

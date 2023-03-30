@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { signOut } from "firebase/auth";
 
 import styled from "styled-components";
-import { colors } from "../../config/color";
+import { colors } from "../../common/color";
 import useUser from "../../hooks/useUser";
 
 import { authService, storage } from "../../config/firebase";

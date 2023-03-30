@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { colors } from "../config/color";
+import { colors } from "../common/color";
 
 const SubLayout = () => {
   const navigate = useNavigate();

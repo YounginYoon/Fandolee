@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styled from "styled-components";
-import { colors } from "../../config/color";
+import { colors } from "../../common/color";
 
 const HomeBanner = () => {
   const sliderParams = {
