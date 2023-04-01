@@ -1,73 +1,73 @@
-import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
-import styled from 'styled-components';
-import { colors } from '../config/color';
-import { db, authService } from '../config/firebase';
-import { async } from '@firebase/util';
-import { doc } from 'firebase/firestore';
+import styled from "styled-components";
+import { colors } from "../common/color";
+import { db, authService } from "../config/firebase";
+import { async } from "@firebase/util";
+import { doc } from "firebase/firestore";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
 
   const [input, setInputs] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    username: '',
-    nickname: '',
+    email: "",
+    password: "",
+    confirmPassword: "",
+    username: "",
+    nickname: "",
   });
   const [error, setError] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    username: '',
-    nickname: '',
+    email: "",
+    password: "",
+    confirmPassword: "",
+    username: "",
+    nickname: "",
   });
 
   //const { email, password, password_check, name, nickname } = inputs;
 
   const onSignUp = async () => {
     if (!input.email) {
-      alert('이메일을 입력하세요!');
+      alert("이메일을 입력하세요!");
       return;
     } else {
       const EmailCheck = await db
-        .collection('users')
-        .where('Email', '==', input.email)
+        .collection("users")
+        .where("Email", "==", input.email)
         .get();
       if (EmailCheck.docs.length > 0) {
-        alert('이메일을 확인하세요!');
+        alert("이메일을 확인하세요!");
         return;
       }
     }
     if (!input.password) {
-      alert('비밀번호를 입력하세요!');
+      alert("비밀번호를 입력하세요!");
       return;
     } else if (input.password.length < 8 || input.password.length > 20) {
-      alert('비밀번호를 8~20자로 입력하세요!');
+      alert("비밀번호를 8~20자로 입력하세요!");
       return;
     }
     if (!input.confirmPassword || input.confirmPassword !== input.password) {
-      alert('비밀번호를 다시 확인하세요!');
+      alert("비밀번호를 다시 확인하세요!");
       return;
     }
     if (!input.username) {
-      alert('이름을 입력하세요!');
+      alert("이름을 입력하세요!");
       return;
     }
     if (!input.nickname) {
-      alert('닉네임을 입력하세요!');
+      alert("닉네임을 입력하세요!");
       return;
     } else {
       const NicknameCheck = await db
-        .collection('users')
-        .where('Nickname', '==', input.nickname)
+        .collection("users")
+        .where("Nickname", "==", input.nickname)
         .get();
       if ((await NicknameCheck).docs.length > 0) {
-        alert('닉네임을 확인하세요!');
+        alert("닉네임을 확인하세요!");
         return;
       }
     }
@@ -87,19 +87,19 @@ const SignUpPage = () => {
 
       const user = ret.user;
       if (user) {
-        console.log('1');
+        console.log("1");
         await updateProfile(user, { displayName: input.nickname });
-        db.collection('users')
+        db.collection("users")
           .doc(user.uid)
           .set(user_info)
           .then((result) => {
             console.log(result);
-            alert('회원가입이 완료되었습니다.');
-            navigate('/user/login');
+            alert("회원가입이 완료되었습니다.");
+            navigate("/user/login");
           });
       }
     } catch (err) {
-      console.log('signup error', err);
+      console.log("signup error", err);
     }
   };
 
@@ -115,61 +115,61 @@ const SignUpPage = () => {
   const validateInput = (e) => {
     let { name, value } = e.target;
     setError((prev) => {
-      const stateObj = { ...prev, [name]: '' };
+      const stateObj = { ...prev, [name]: "" };
 
       switch (name) {
-        case 'username':
+        case "username":
           if (!value) {
-            stateObj[name] = '이름을 입력하세요!';
+            stateObj[name] = "이름을 입력하세요!";
           }
           break;
-        case 'email':
+        case "email":
           if (!value) {
-            stateObj[name] = '이메일을 입력하세요!';
+            stateObj[name] = "이메일을 입력하세요!";
           } else {
             const check = db
-              .collection('users')
-              .where('Email', '==', value)
+              .collection("users")
+              .where("Email", "==", value)
               .get()
               .then((res) => {
                 if (res.size > 0)
-                  stateObj[name] = '이미 사용 중인 이메일 입니다.';
+                  stateObj[name] = "이미 사용 중인 이메일 입니다.";
               });
           }
           break;
-        case 'nickname':
+        case "nickname":
           if (!value) {
-            stateObj[name] = '닉네임을 입력하세요!';
+            stateObj[name] = "닉네임을 입력하세요!";
           } else {
             const check = db
-              .collection('users')
-              .where('Nickname', '==', value)
+              .collection("users")
+              .where("Nickname", "==", value)
               .get()
               .then((res) => {
                 if (res.size > 0)
-                  stateObj[name] = '이미 사용 중인 닉네임 입니다.';
+                  stateObj[name] = "이미 사용 중인 닉네임 입니다.";
               });
           }
           break;
-        case 'password':
+        case "password":
           if (!value) {
-            stateObj[name] = '비밀번호를 입력하세요!';
+            stateObj[name] = "비밀번호를 입력하세요!";
           } else if (value.length < 8) {
-            stateObj[name] = '비밀번호가 너무 짧습니다. (8~20자)';
+            stateObj[name] = "비밀번호가 너무 짧습니다. (8~20자)";
           } else if (value.length > 20) {
-            stateObj[name] = '비밀번호가 너무 깁니다. (8~20자)';
+            stateObj[name] = "비밀번호가 너무 깁니다. (8~20자)";
           } else if (input.confirmPassword && value !== input.confirmPassword) {
-            stateObj['confirmPassword'] = '비밀번호가 일치하지 않습니다!';
+            stateObj["confirmPassword"] = "비밀번호가 일치하지 않습니다!";
           } else {
-            stateObj['confirmPassword'] = input.confirmPassword
-              ? ''
+            stateObj["confirmPassword"] = input.confirmPassword
+              ? ""
               : error.confirmPassword;
           }
           break;
-        case 'confirmPassword':
-          if (!value) stateObj[name] = '비밀번호를 다시 입력하세요!';
+        case "confirmPassword":
+          if (!value) stateObj[name] = "비밀번호를 다시 입력하세요!";
           if (input.password && value !== input.password) {
-            stateObj[name] = '비밀번호가 일치하지 않습니다!';
+            stateObj[name] = "비밀번호가 일치하지 않습니다!";
           }
           break;
         default:
@@ -181,7 +181,7 @@ const SignUpPage = () => {
   };
 
   const onKeyUp = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       onSignUp();
     }
   };
@@ -266,7 +266,7 @@ const SignUpPage = () => {
           )}
         </ERRDIV>
 
-        <div style={{ marginBottom: '70px' }}></div>
+        <div style={{ marginBottom: "70px" }}></div>
 
         <Button
           color={colors.COLOR_WHITE_TEXT}
@@ -278,7 +278,7 @@ const SignUpPage = () => {
         <Button
           color={colors.COLOR_MAIN}
           backgroundColor={colors.COLOR_MAIN_BACKGROUND}
-          onClick={() => navigate('/user/login')}
+          onClick={() => navigate("/user/login")}
         >
           로그인
         </Button>

@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { signOut } from 'firebase/auth';
+import { signOut } from "firebase/auth";
 
-import styled from 'styled-components';
-import { colors } from '../../config/color';
-import useUser from '../../hooks/useUser';
+import styled from "styled-components";
+import { colors } from "../../common/color";
+import useUser from "../../hooks/useUser";
 
-import { authService, storage } from '../../config/firebase';
-import { ref, getDownloadURL } from 'firebase/storage';
-import UserInfo from '../profile/UserInfo';
+import { authService, storage } from "../../config/firebase";
+import { ref, getDownloadURL } from "firebase/storage";
+import UserInfo from "../profile/UserInfo";
 
 const HeaderBtns = () => {
   const navigate = useNavigate();
   const user = useUser();
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState("");
 
   const onLogout = async () => {
-    if (!window.confirm('로그아웃 하시겠습니까?')) {
+    if (!window.confirm("로그아웃 하시겠습니까?")) {
       return;
     }
 
@@ -30,8 +30,9 @@ const HeaderBtns = () => {
 
       if (pathName === `/profile/${user.uid}`) window.location.replace('/');
       else window.location.reload();
+      
     } catch (err) {
-      console.log('logout error! ', err);
+      console.log("logout error! ", err);
     }
   };
 
@@ -49,10 +50,10 @@ const HeaderBtns = () => {
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
       if (user) {
-        sessionStorage.setItem('user', JSON.stringify(user));
+        sessionStorage.setItem("user", JSON.stringify(user));
         setUrl(user.photoURL);
       } else {
-        window.sessionStorage.removeItem('user');
+        window.sessionStorage.removeItem("user");
       }
     });
   }, []);

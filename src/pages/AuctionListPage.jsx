@@ -14,6 +14,7 @@ const AuctionListPage = () => {
     navigate(`/auction/auctionUp`);
   };
   if (user) return <button onClick={goAuctionUpPage}>글올리기</button>;
+
 };
 
 export default AuctionListPage;

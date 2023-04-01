@@ -1,30 +1,30 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-import styled from 'styled-components';
-import { colors } from '../config/color';
+import styled from "styled-components";
+import { colors } from "../common/color";
 
-import { db, authService, storage } from '../config/firebase';
+import { db, authService, storage } from "../config/firebase";
 
 const LoginPage = () => {
   const navigate = useNavigate();
 
   const [inputs, setInputs] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
   const { email, password } = inputs;
 
   const onLogin = async () => {
     if (!email) {
-      alert('이메일을 입력해주세요!');
+      alert("이메일을 입력해주세요!");
       return;
     }
     if (!password) {
-      alert('비밀번호를 입력해주세요!');
+      alert("비밀번호를 입력해주세요!");
       return;
     }
     try {
@@ -41,9 +41,10 @@ const LoginPage = () => {
       window.sessionStorage.setItem('user', JSON.stringify(user));
 
       window.location.replace(`${getPrevUrl}`);
+
     } catch (err) {
-      console.log('login error! ', err);
-      alert('이메일 또는 비밀번호를 확인해 주세요!');
+      console.log("login error! ", err);
+      alert("이메일 또는 비밀번호를 확인해 주세요!");
     }
   };
 
@@ -56,7 +57,7 @@ const LoginPage = () => {
   };
 
   const onKeyUp = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       onLogin();
     }
   };
@@ -87,7 +88,7 @@ const LoginPage = () => {
           />
         </InputDiv>
 
-        <div style={{ marginBottom: '70px' }}></div>
+        <div style={{ marginBottom: "70px" }}></div>
 
         <Button
           color={colors.COLOR_WHITE_TEXT}
@@ -99,7 +100,7 @@ const LoginPage = () => {
         <Button
           color={colors.COLOR_MAIN}
           backgroundColor={colors.COLOR_MAIN_BACKGROUND}
-          onClick={() => navigate('/user/signup')}
+          onClick={() => navigate("/user/signup")}
         >
           회원가입
         </Button>

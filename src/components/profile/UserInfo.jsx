@@ -1,18 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
 
-import styled from 'styled-components';
-import { colors } from '../../config/color';
+import styled from "styled-components";
+import { colors } from "../../common/color";
 
-import { db, authService, storage } from '../../config/firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { onAuthStateChanged, reload, updateProfile } from 'firebase/auth';
-import { useParams } from 'react-router-dom';
-import useUser from '../../hooks/useUser';
-import { update } from 'firebase/database';
-import { faWindows } from '@fortawesome/free-brands-svg-icons';
+import { db, authService, storage } from "../../config/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { onAuthStateChanged, reload, updateProfile } from "firebase/auth";
+import { useParams } from "react-router-dom";
+import useUser from "../../hooks/useUser";
+import { update } from "firebase/database";
+import { faWindows } from "@fortawesome/free-brands-svg-icons";
 
 const UserInfo = () => {
   const params = useParams();
@@ -20,8 +20,8 @@ const UserInfo = () => {
   const userSessionStorage = useUser();
 
   const fileInputRef = useRef(null);
-  const [imageUpload, setImageUpload] = useState('');
-  const [deleteImage, setDeleteImage] = useState('');
+  const [imageUpload, setImageUpload] = useState("");
+  const [deleteImage, setDeleteImage] = useState("");
 
   const imageRef = ref(storage, `profile_image/${userId}`);
 
@@ -34,7 +34,7 @@ const UserInfo = () => {
   };
 
   const handleRemoveImage = (e) => {
-    const ok = window.confirm('프로필 사진을 삭제하시겠습니까?');
+    const ok = window.confirm("프로필 사진을 삭제하시겠습니까?");
     console.log(ok);
     if (ok) {
       setDeleteImage(2);
@@ -66,7 +66,7 @@ const UserInfo = () => {
     authService.onAuthStateChanged((user) => {
       if (user) {
         storage.refFromURL(imageRef).delete();
-        updateProfile(user, { photoURL: '' });
+        updateProfile(user, { photoURL: "" });
         window.location.reload();
       }
     });
@@ -82,7 +82,7 @@ const UserInfo = () => {
           accept="image/jpg, image/png, image/jpeg"
           ref={fileInputRef}
           onChange={uploadProfile}
-          style={{ display: 'none' }}
+          style={{ display: "none" }}
         />
       </ProfileImageDiv>
 
@@ -100,6 +100,7 @@ const UserInfoDiv = styled.div``;
 
 const ProfileImageDiv = styled.div`
   position: relative;
+  overflow: hidden;
 `;
 
 const ProfileImage = styled.img`
