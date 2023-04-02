@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { colors } from "../common/color";
 import { db, authService, storage } from '../config/firebase';
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import useUser from '../hooks/useUser';
+
+
 import AuctionContainer from '../components/auction/AuctionContainer';
-
-
 import ProductContainer from "../components/common/ProductContainer";
 import ProductImg from "../components/common/ProductImg";
 import ProductOwner from "../components/common/ProductOwner";
@@ -49,37 +50,32 @@ const AuctionListPage = () => {
     setCategory(e.target.value);
   };
   //거래 데이터
-  const [AuctionImage, setImage] = useState();
-
-  const filtering = () =>{
-    const postDB = db.collection("product");
+  let data, newData;
+  
+  const filtering = async() =>{
+    const productDB = collection(db,"product");
+    
+    try{
+      const q = await query(
+        productDB,
+        where('category','==',Category),
+        where('idol','==',Selected),
+        orderBy('end_date')
+      );
+      data = await getDocs(q);
+      newData = data.docs.map(doc => ({
+        ...doc.data()
+      }));
+      console.log(newData);
+      
+      //new Data에 필터링한 Auctions 저장하기.
+    }catch(err){
+      console.log("error!!",err);
+    }
     
 
-    postDB
-      .where('category','==',Category)
-      .where('idol','==',Selected)
-      .get()
-      .then((result) => {
-        result.map((doc)=>{
-          console.log(doc.data().title);
-          setImage(doc.data().image);
-          <ProductContainer>
-            <ProductImg image={AuctionImage} />
-
-            <ProductOwner owner={{}} />
-
-            <ProductTitle title={doc.data().title} />
-          </ProductContainer>
-        });
-        
-      })
-      .catch((err) => {
-        console.log("검색 filtering 실패 : ", err);
-      });
             
   };
-
-
 
   if (user)
   return(
@@ -107,11 +103,10 @@ const AuctionListPage = () => {
           ))}
       </select>
       <button onClick={filtering}>검색하기</button>
-
+      <AuctionContainer/>
       <button onClick={goAuctionUpPage}>글올리기</button>
 
       
-
 
 
     </div>
