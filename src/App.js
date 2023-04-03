@@ -23,6 +23,8 @@ import AuctionListPage from "./pages/AuctionListPage";
 import AuctionUpPage from "./pages/AuctionUpPage";
 import UserPage from "./pages/UserPage";
 import MyPage from "./pages/MyPage";
+import { MyTab } from "./constants/mypage";
+import ProfileContainer from "./components/mypage/profile/ProfileContainer";
 
 const App = () => {
   const test = async () => {
@@ -51,7 +53,12 @@ const App = () => {
           {/* 유저 페이지 */}
           <Route path="user/:userId" element={<UserPage />} />
           {/* 마이 페이지 */}
-          <Route path="mypage/:userId" element={<MyPage />} />
+          <Route path="mypage/:userId" element={<MyPage />}>
+            <Route path={MyTab[0].tab} element={<ProfileContainer />} />
+            <Route path={MyTab[1].tab} element={<div>채팅</div>} />
+            <Route path={MyTab[2].tab} element={<div>찜목록</div>} />
+            <Route path={MyTab[3].tab} element={<div>거래내역</div>} />
+          </Route>
         </Route>
 
         <Route path="/user" element={<SubLayout />}>
