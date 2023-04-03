@@ -37,7 +37,8 @@ const HeaderBtns = () => {
   };
 
   const goProfilePage = () => {
-    navigate(`/profile/${user.uid}`);
+    // navigate(`/profile/${user.uid}`);
+    navigate(`/user/${user.uid}`);
   };
 
   const goLoginPage = () => {
