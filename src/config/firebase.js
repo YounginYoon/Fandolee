@@ -2,14 +2,16 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
+import 'firebase/compat/database';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getDatabase } from 'firebase/database';
+// import { getFirestore } from 'firebase/firestore';
+// import { getDatabase } from 'firebase/database';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAj-l4QrI9d0ax3Qv4nPBiCVfWkqre9XYA',
   authDomain: 'capstone2023-57a1c.firebaseapp.com',
+  databaseURL: 'https://capstone2023-57a1c-default-rtdb.firebaseio.com',
   projectId: 'capstone2023-57a1c',
   storageBucket: 'capstone2023-57a1c.appspot.com',
   messagingSenderId: '475497513021',
@@ -23,3 +25,4 @@ const app = initializeApp(firebaseConfig);
 export const authService = getAuth(app);
 export const db = firebase.firestore();
 export const storage = firebase.storage();
+export const realTimeDatabase = firebase.database();

@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+
 import { colors } from "../common/color";
+
 import { db, authService, storage } from '../config/firebase';
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import useUser from '../hooks/useUser';
@@ -21,7 +23,6 @@ const AuctionListPage = () => {
   const goAuctionUpPage = () => {
     navigate(`/auction/auctionUp`);
   };
-
 
   // 카테고리, 아이돌 그룹 선택하여 검색 필터링
   const selectList = [
