@@ -12,6 +12,5 @@ const Title = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-weight: bold;
   margin-top: 5px;
 `;

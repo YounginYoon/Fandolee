@@ -24,6 +24,7 @@ const ProfileImage = styled.img`
   width: 35px;
   height: 35px;
   border-radius: 50%;
+  cursor: pointer;
 `;
 
 const Ninckname = styled.p`
