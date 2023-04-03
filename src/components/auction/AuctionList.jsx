@@ -20,5 +20,5 @@ const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   //   background-color: orange;
-  margin: 0 auto;
+  margin: 50px auto 200px;
 `;
