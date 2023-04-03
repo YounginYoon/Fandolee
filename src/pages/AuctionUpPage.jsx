@@ -46,12 +46,12 @@ const AuctionUpPage = () => {
   // const handleClickFileInput = () => {
   //   fileInputRef.current?.click();
   // };
-  const [Selected, setSelected] = useState("Your Idol");
+  const [selected, setSelected] = useState("Your Idol");
   const handleSelect = (e) => {
     setSelected(e.target.value);
   };
 
-  const [Category, setCategory] = useState("Goods");
+  const [category, setCategory] = useState("Goods");
   const handleCategory = (e) => {
     setCategory(e.target.value);
   };
@@ -95,9 +95,9 @@ const AuctionUpPage = () => {
             minPrice: parseInt(input.minPrice),
             maxPrice: parseInt(input.maxPrice),
             info: input.info,
-            idol: Selected,
+            idol: selected,
             image: url,
-            category: Category,
+            category: category,
             title: input.title,
             subtitle: input.subtitle,
             likes: 0,
@@ -151,7 +151,7 @@ const AuctionUpPage = () => {
         />
         <select
           onChange={handleSelect}
-          value={Selected}
+          value={selected}
           placeholder="아이돌그룹"
         >
           {selectList.map((item) => (
@@ -162,7 +162,7 @@ const AuctionUpPage = () => {
         </select>
         <select
           onChange={handleCategory}
-          value={Category}
+          value={category}
           placeholder="카테고리"
         >
           {categoryList.map((item) => (

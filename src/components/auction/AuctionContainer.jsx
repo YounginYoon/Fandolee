@@ -7,14 +7,14 @@ import ProductImg from "../common/ProductImg";
 import ProductOwner from "../common/ProductOwner";
 import ProductTitle from "../common/ProductTitle";
 
-const AuctionContainer = () => {
+const AuctionContainer = ({data}) => {
   return (
     <ProductContainer>
-      <ProductImg image={"../img/mon1.jpeg"} />
+      <ProductImg image={data.image} />
 
-      <ProductOwner owner={{}} />
+      <ProductOwner owner={data.uid} />
 
-      <ProductTitle title={{}} />
+      <ProductTitle title={data.title} />
     </ProductContainer>
   );
 };

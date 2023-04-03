@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import "./App.css";
-import { Reset } from "styled-reset";
-import styled from "styled-components";
-import { colors } from "./common/color";
+import './App.css';
+import { Reset } from 'styled-reset';
+import styled from 'styled-components';
+import { colors } from './common/color';
 
 // firestore 데이터 베이스
-import { db } from "./config/firebase";
-import { Route, Routes } from "react-router-dom";
+import { db } from './config/firebase';
+import { Route, Routes } from 'react-router-dom';
 
 // components
+import AuctionBiddingPage from './pages/AuctionBiddingPage';
 import Header from "./components/header/Header";
 import Footer, { footerHeight } from "./components/footer/Footer";
 import MainPage from "./pages/MainPage";
@@ -27,11 +28,11 @@ import ProfileContainer from "./components/mypage/profile/ProfileContainer";
 
 const App = () => {
   const test = async () => {
-    const product = db.collection("product");
+    const product = db.collection('product');
 
-    const ret = await product.doc("6PK3dqb4N85M7LloAYNA").get();
+    const ret = await product.doc('6PK3dqb4N85M7LloAYNA').get();
 
-    console.log("ret: ", ret.data());
+    console.log('ret: ', ret.data());
   };
 
   useEffect(() => {
@@ -69,6 +70,8 @@ const App = () => {
           {/*경매 게시글 나열 페이지*/}
           <Route path="auctionUp" element={<AuctionUpPage />} />
           <Route path="auctionlist" element={<AuctionListPage />} />
+          {/*경매 투찰 임시 페이지 */}
+          <Route path="auctionbidding" element={<AuctionBiddingPage />} />
         </Route>
       </Routes>
 

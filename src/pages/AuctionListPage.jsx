@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+
 import { colors } from "../common/color";
+
 import { db, authService, storage } from '../config/firebase';
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import useUser from '../hooks/useUser';
@@ -22,7 +24,6 @@ const AuctionListPage = () => {
     navigate(`/auction/auctionUp`);
   };
 
-
   // 카테고리, 아이돌 그룹 선택하여 검색 필터링
   const selectList = [
     "Your Idol",
@@ -40,33 +41,65 @@ const AuctionListPage = () => {
   const categoryList = ["Goods", "Albums", "MD", "Tickets", "Photo Cards"];
   
 
-  const [Selected, setSelected] = useState("Your Idol");
+  const [selected, setSelected] = useState("Your Idol");
   const handleSelect = (e) => {
     setSelected(e.target.value);
   };
 
-  const [Category, setCategory] = useState("Goods");
+  const [category, setCategory] = useState("Goods");
   const handleCategory = (e) => {
     setCategory(e.target.value);
   };
+
+  const [products, setProducts] = useState([])
   //거래 데이터
-  let data, newData;
   
+  
+  //전체 거래 정보를 가져온다.
+  const getAuctionList = async() =>{
+    const productAllDB = collection(db, "product");
+
+    try{
+      const queryAll = await query(
+        productAllDB,
+        orderBy('end_date')
+      );
+      const data = await getDocs(queryAll);
+      const newData = data.docs.map(doc => ({
+        ...doc.data()
+      }));
+
+      setProducts(newData)
+    }catch(err){
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getAuctionList()
+  }, [])
+
+  useEffect(() => {
+    console.log('products: ', products)
+  }, [products])
+
+  //필터링 된 거래 정보를 가져온다.
   const filtering = async() =>{
     const productDB = collection(db,"product");
     
     try{
       const q = await query(
         productDB,
-        where('category','==',Category),
-        where('idol','==',Selected),
+        where('category','==',category),
+        where('idol','==',selected),
         orderBy('end_date')
       );
-      data = await getDocs(q);
-      newData = data.docs.map(doc => ({
+      const data = await getDocs(q);
+      const newData = data.docs.map(doc => ({
         ...doc.data()
       }));
-      console.log(newData);
+      
+      setProducts(newData)
       
       //new Data에 필터링한 Auctions 저장하기.
     }catch(err){
@@ -82,7 +115,7 @@ const AuctionListPage = () => {
     <div>
       <select
           onChange={handleSelect}
-          value={Selected}
+          value={selected}
           placeholder="아이돌그룹"
         >
           {selectList.map((item) => (
@@ -93,7 +126,7 @@ const AuctionListPage = () => {
       </select>
       <select
           onChange={handleCategory}
-          value={Category}
+          value={category}
           placeholder="카테고리"
         >
           {categoryList.map((item) => (
@@ -103,8 +136,17 @@ const AuctionListPage = () => {
           ))}
       </select>
       <button onClick={filtering}>검색하기</button>
-      <AuctionContainer/>
+      
       <button onClick={goAuctionUpPage}>글올리기</button>
+      
+      {products.map((item,index)=>{
+        // console.log('item: ', item.title)
+        return (
+          <AuctionContainer data={item}/>
+        )
+      })}
+      
+      
 
       
 
