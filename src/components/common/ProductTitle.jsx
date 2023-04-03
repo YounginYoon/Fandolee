@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const ProductTitle = ({ title }) => {
-  return <Title>NCT dream 버퍼링(Glitch Mode)</Title>;
+  return <Title>{title}</Title>;
 };
 
 export default ProductTitle;

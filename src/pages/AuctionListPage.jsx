@@ -142,7 +142,7 @@ const AuctionListPage = () => {
       {products.map((item,index)=>{
         // console.log('item: ', item.title)
         return (
-          <AuctionContainer data={item}/>
+          <AuctionContainer data={item} key={index}/>
         )
       })}
       
