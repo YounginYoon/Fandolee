@@ -34,7 +34,9 @@ const UserHeader = () => {
             <Nickname>닉네임</Nickname>
 
             {isAdmin ? (
-              <MyPageBtn onClick={() => navigate(`/mypage/${user.uid}`)}>
+              <MyPageBtn
+                onClick={() => navigate(`/mypage/${user.uid}/profile`)}
+              >
                 <MyPage>마이 페이지</MyPage>
                 <FontAwesomeIcon icon={faChevronRight} />
               </MyPageBtn>
