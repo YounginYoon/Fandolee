@@ -1,28 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { colors } from "../../../common/color";
+import { db } from "../../../config/firebase";
+import useUser from "../../../hooks/useUser";
 
 const ProfileInputs = () => {
+  const user = useUser();
   const [inputs, setInputs] = useState({
     email: "",
     userName: "",
     nickName: "",
   });
+  const { email, userName, nickName } = inputs;
+
+  const getUserData = async () => {
+    const users = db.collection("users");
+    const ret = await users.doc(user.uid).get();
+    setInputs(ret.data());
+  };
+
+  const onChange = () => {};
+
+  useEffect(() => {
+    getUserData();
+  }, []);
   return (
     <Container>
       <InputBox>
         <Label>이메일</Label>
-        <Input disabled />
+        <Input disabled name="email" onChange={onChange} value={email} />
       </InputBox>
 
       <InputBox>
         <Label>이름</Label>
-        <Input disabled />
+        <Input disabled name="userName" onChange={onChange} value={userName} />
       </InputBox>
 
       <InputBox>
         <Label>닉네임</Label>
-        <SmallInput />
+        <SmallInput name="nickName" onChange={onChange} value={nickName} />
 
         <DupBtn>중복검사</DupBtn>
       </InputBox>

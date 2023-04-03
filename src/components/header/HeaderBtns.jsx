@@ -28,9 +28,10 @@ const HeaderBtns = () => {
       const pathName = window.location.pathname;
       //console.log(`/profile/${user.uid}`);
 
-      if (pathName === `/profile/${user.uid}`) window.location.replace('/');
-      else window.location.reload();
-      
+      // if (pathName === `/profile/${user.uid}`) window.location.replace('/');
+      // else window.location.reload();
+
+      window.location.replace("/");
     } catch (err) {
       console.log("logout error! ", err);
     }
@@ -43,9 +44,9 @@ const HeaderBtns = () => {
 
   const goLoginPage = () => {
     const previousUrl = window.location.pathname;
-    sessionStorage.setItem('previousUrl', JSON.stringify(previousUrl));
+    sessionStorage.setItem("previousUrl", JSON.stringify(previousUrl));
 
-    navigate('/user/login');
+    navigate("/user/login");
   };
 
   useEffect(() => {
@@ -83,7 +84,7 @@ const HeaderBtns = () => {
       ) : (
         <>
           <HeaderBtn onClick={goLoginPage}>로그인</HeaderBtn>
-          <HeaderBtn onClick={() => navigate('/user/signup')}>
+          <HeaderBtn onClick={() => navigate("/user/signup")}>
             회원가입
           </HeaderBtn>
         </>

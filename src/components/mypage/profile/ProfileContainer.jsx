@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,31 +6,41 @@ import { faPen } from "@fortawesome/free-solid-svg-icons";
 import Bamboo from "../../common/Bamboo";
 import { colors } from "../../../common/color";
 import ProfileInputs from "./ProfileInputs";
+import ProfileImgModal from "./ProfileImgModal";
+import useUser from "../../../hooks/useUser";
 
 const ProfileContainer = () => {
+  const user = useUser();
+  const [openModal, setOpenModal] = useState(false);
+
   return (
-    <Container>
-      <ProfileBox>
-        <ProfileImageDiv>
-          <ProfileImage src="../../img/mon1.jpeg" />
-          <ProfileEditBtn>
-            <FontAwesomeIcon icon={faPen} />
-          </ProfileEditBtn>
-        </ProfileImageDiv>
+    <>
+      {openModal ? <ProfileImgModal setOpenModal={setOpenModal} /> : null}
 
-        <BambooDiv>
-          <BambooText>나의 밤부 레벨은?</BambooText>
-          <Bamboo bamboo={9} />
-        </BambooDiv>
-      </ProfileBox>
+      <Container>
+        <ProfileBox>
+          <ProfileImageDiv>
+            <ProfileImage src={user.photoURL} />
 
-      <ProfileInputs />
+            <ProfileEditBtn onClick={() => setOpenModal(true)}>
+              <FontAwesomeIcon icon={faPen} />
+            </ProfileEditBtn>
+          </ProfileImageDiv>
 
-      <Btns>
-        <Btn bgColor={colors.COLOR_GRAY_BACKGROUND}>취소</Btn>
-        <Btn bgColor={colors.COLOR_MAIN}>수정</Btn>
-      </Btns>
-    </Container>
+          <BambooDiv>
+            <BambooText>나의 밤부 레벨은?</BambooText>
+            <Bamboo bamboo={9} />
+          </BambooDiv>
+        </ProfileBox>
+
+        <ProfileInputs />
+
+        <Btns>
+          <Btn bgColor={colors.COLOR_GRAY_BACKGROUND}>취소</Btn>
+          <Btn bgColor={colors.COLOR_MAIN}>수정</Btn>
+        </Btns>
+      </Container>
+    </>
   );
 };
 
