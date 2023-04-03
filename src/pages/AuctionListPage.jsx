@@ -40,26 +40,50 @@ const AuctionListPage = () => {
   const categoryList = ["Goods", "Albums", "MD", "Tickets", "Photo Cards"];
   
 
-  const [Selected, setSelected] = useState("Your Idol");
+  const [selected, setSelected] = useState("Your Idol");
   const handleSelect = (e) => {
     setSelected(e.target.value);
   };
 
-  const [Category, setCategory] = useState("Goods");
+  const [category, setCategory] = useState("Goods");
   const handleCategory = (e) => {
     setCategory(e.target.value);
   };
   //거래 데이터
   let data, newData;
   
+
+  const getAuctionList = async() =>{
+    const productAllDB = collection(db, "product");
+
+    try{
+      const queryAll = await query(
+        productAllDB,
+        orderBy('end_date')
+      );
+      data = await getDocs(queryAll);
+      newData = data.docs.map(doc => ({
+        ...doc.data()
+      }));
+      console.log('newDatadddd: ',newData);
+    }catch(err){
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getAuctionList()
+  }, [])
+
+
   const filtering = async() =>{
     const productDB = collection(db,"product");
     
     try{
       const q = await query(
         productDB,
-        where('category','==',Category),
-        where('idol','==',Selected),
+        where('category','==',category),
+        where('idol','==',selected),
         orderBy('end_date')
       );
       data = await getDocs(q);
@@ -82,7 +106,7 @@ const AuctionListPage = () => {
     <div>
       <select
           onChange={handleSelect}
-          value={Selected}
+          value={selected}
           placeholder="아이돌그룹"
         >
           {selectList.map((item) => (
@@ -93,7 +117,7 @@ const AuctionListPage = () => {
       </select>
       <select
           onChange={handleCategory}
-          value={Category}
+          value={category}
           placeholder="카테고리"
         >
           {categoryList.map((item) => (
@@ -103,10 +127,10 @@ const AuctionListPage = () => {
           ))}
       </select>
       <button onClick={filtering}>검색하기</button>
-      <AuctionContainer/>
+      
       <button onClick={goAuctionUpPage}>글올리기</button>
 
-      
+      <AuctionContainer/>
 
 
     </div>
