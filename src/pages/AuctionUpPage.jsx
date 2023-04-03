@@ -7,6 +7,11 @@ import { doc } from "firebase/firestore";
 import { db, storage } from "../config/firebase";
 import { ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 import moment from "moment";
+//달력 추가하기 npm install 해야함
+import DatePicker from "react-datepicker";
+import { ko } from 'date-fns/esm/locale';
+import "react-datepicker/dist/react-datepicker.css";
+import { addDays } from 'date-fns';
 
 const AuctionUpPage = () => {
   const navigate = useNavigate();
@@ -15,7 +20,6 @@ const AuctionUpPage = () => {
     maxPrice: 0,
     info: "",
     image: "",
-
     title: "",
     subtitle: "",
     likes: 0,
@@ -34,7 +38,10 @@ const AuctionUpPage = () => {
     "NCT 127",
     "IVE",
     "NEW JEANS",
+    "NCT",
   ];
+  //카테고리리스트
+
   const categoryList = ["Goods", "Albums", "MD", "Tickets", "Photo Cards"];
   // const handleClickFileInput = () => {
   //   fileInputRef.current?.click();
@@ -65,7 +72,7 @@ const AuctionUpPage = () => {
   //     });
   //   });
   // }, []);
-
+  
   const addPost = async () => {
     const postDB = db.collection("product");
 
@@ -78,7 +85,7 @@ const AuctionUpPage = () => {
         `product_image/${imageUpload.name}${timeStamp}`
       );
 
-      // `images === 참조값이름(폴더이름), / 뒤에는 파일이름 어떻게 지을지
+      // `images === 참조값이름(폴더이름)
       uploadBytes(imageRef, imageUpload).then((snapshot) => {
         // 업로드 되자마자 뜨게 만들기
         getDownloadURL(snapshot.ref).then((url) => {
@@ -95,10 +102,11 @@ const AuctionUpPage = () => {
             subtitle: input.subtitle,
             likes: 0,
             date: new Date(),
+            end_date:endDate,
           };
 
           const user_info = {
-            user_id: JSON.parse(sessionStorage.getItem("user")).uid,
+            uid: JSON.parse(sessionStorage.getItem("user")).uid,
           };
 
           postDB
@@ -120,6 +128,9 @@ const AuctionUpPage = () => {
       console.log("posting error", err);
     }
   };
+  //달력 추가하기
+  const [endDate, setEndDate] = useState(addDays(new Date() , 1));
+  
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -174,6 +185,7 @@ const AuctionUpPage = () => {
           name="info"
           placeholder="상품 설명 입력 (150자 이내)"
         />
+        <label>최소 금액</label>
         <input
           type="number"
           onChange={onChange}
@@ -181,6 +193,7 @@ const AuctionUpPage = () => {
           name="minPrice"
           placeholder="최소 금액"
         />
+        <label>최대 금액</label>
         <input
           type="number"
           onChange={onChange}
@@ -188,7 +201,15 @@ const AuctionUpPage = () => {
           name="maxPrice"
           placeholder="최대 금액"
         />
-
+        <label>거래 종료 날짜 선택하기</label>
+        <DatePicker 
+          dateFormat="yyyy년 MM월 dd일"
+          selected={endDate} 
+          onChange={date => setEndDate(date)} 
+          locale={ko}
+          minDate={addDays(new Date() , 1)}
+        />
+        <label>이미지 파일 선택하기</label>
         <input
           type="file"
           onChange={(event) => {

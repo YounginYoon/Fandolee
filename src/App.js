@@ -10,17 +10,19 @@ import { db } from './config/firebase';
 import { Route, Routes } from 'react-router-dom';
 
 // components
-import Header from './components/header/Header';
-import Footer, { footerHeight } from './components/footer/Footer';
-import MainPage from './pages/MainPage';
-import LoginPage from './pages/LoginPage';
-import SignUpPage from './pages/SignUpPage';
-import MainLayout from './layouts/MainLayout';
-import SubLayout from './layouts/SubLayout';
-import ProfilePage from './pages/ProfilePage';
-import AuctionListPage from './pages/AuctionListPage';
-import AuctionUpPage from './pages/AuctionUpPage';
 import AuctionBiddingPage from './pages/AuctionBiddingPage';
+import Header from "./components/header/Header";
+import Footer, { footerHeight } from "./components/footer/Footer";
+import MainPage from "./pages/MainPage";
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
+import MainLayout from "./layouts/MainLayout";
+import SubLayout from "./layouts/SubLayout";
+import ProfilePage from "./pages/ProfilePage";
+import AuctionListPage from "./pages/AuctionListPage";
+import AuctionUpPage from "./pages/AuctionUpPage";
+import UserPage from "./pages/UserPage";
+import MyPage from "./pages/MyPage";
 
 const App = () => {
   const test = async () => {
@@ -46,6 +48,10 @@ const App = () => {
           <Route path="" element={<MainPage />} />
           {/* 프로필 페이지 */}
           <Route path="profile/:userId" element={<ProfilePage />} />
+          {/* 유저 페이지 */}
+          <Route path="user/:userId" element={<UserPage />} />
+          {/* 마이 페이지 */}
+          <Route path="mypage/:userId" element={<MyPage />} />
         </Route>
 
         <Route path="/user" element={<SubLayout />}>
