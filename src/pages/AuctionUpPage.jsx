@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
-import { colors } from "../common/color";
+
 import { doc } from "firebase/firestore";
 import { db, storage } from "../config/firebase";
 import { ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
@@ -204,12 +204,3 @@ const AuctionUpPage = () => {
 
 export default AuctionUpPage;
 
-const EditBox = styled.div`
-  cursor: pointer;
-  color: ${colors.COLOR_WHITE_TEXT};
-  background-color: ${colors.COLOR_GRAY_BACKGROUND};
-  line-height: 40px;
-  border-radius: 8px;
-  text-align: center;
-  margin-top: 20px;
-`;
