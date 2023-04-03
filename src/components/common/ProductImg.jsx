@@ -26,6 +26,7 @@ const BorderRadisSizeTable = {
 
 const Container = styled.div`
   position: relative;
+  cursor: pointer;
 `;
 
 const Image = styled.img`

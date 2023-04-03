@@ -12,5 +12,5 @@ export default ProductContainer;
 
 const Container = styled.div`
   width: ${ImageSizeTable["M"]};
-  background-color: orange;
+  padding: 20px 10px;
 `;
