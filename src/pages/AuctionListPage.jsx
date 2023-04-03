@@ -50,10 +50,12 @@ const AuctionListPage = () => {
   const handleCategory = (e) => {
     setCategory(e.target.value);
   };
-  //거래 데이터
-  let data, newData;
-  
 
+  const [products, setProducts] = useState([])
+  //거래 데이터
+  
+  
+  //전체 거래 정보를 가져온다.
   const getAuctionList = async() =>{
     const productAllDB = collection(db, "product");
 
@@ -62,11 +64,12 @@ const AuctionListPage = () => {
         productAllDB,
         orderBy('end_date')
       );
-      data = await getDocs(queryAll);
-      newData = data.docs.map(doc => ({
+      const data = await getDocs(queryAll);
+      const newData = data.docs.map(doc => ({
         ...doc.data()
       }));
-      console.log('newDatadddd: ',newData);
+
+      setProducts(newData)
     }catch(err){
       console.log(err);
     }
@@ -76,7 +79,11 @@ const AuctionListPage = () => {
     getAuctionList()
   }, [])
 
+  useEffect(() => {
+    console.log('products: ', products)
+  }, [products])
 
+  //필터링 된 거래 정보를 가져온다.
   const filtering = async() =>{
     const productDB = collection(db,"product");
     
@@ -87,11 +94,12 @@ const AuctionListPage = () => {
         where('idol','==',selected),
         orderBy('end_date')
       );
-      data = await getDocs(q);
-      newData = data.docs.map(doc => ({
+      const data = await getDocs(q);
+      const newData = data.docs.map(doc => ({
         ...doc.data()
       }));
-      console.log(newData);
+      
+      setProducts(newData)
       
       //new Data에 필터링한 Auctions 저장하기.
     }catch(err){
@@ -130,8 +138,17 @@ const AuctionListPage = () => {
       <button onClick={filtering}>검색하기</button>
       
       <button onClick={goAuctionUpPage}>글올리기</button>
+      
+      {products.map((item,index)=>{
+        // console.log('item: ', item.title)
+        return (
+          <AuctionContainer data={item}/>
+        )
+      })}
+      
+      
 
-      <AuctionContainer/>
+      
 
 
     </div>
