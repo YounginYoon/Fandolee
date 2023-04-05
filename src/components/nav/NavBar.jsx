@@ -1,20 +1,38 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import styled, { css } from "styled-components";
 import { colors } from "../../common/color";
 
 const NavBar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const [currentTab, setCurrentTab] = useState("");
 
   const goAuctionListPage = () => {
     navigate(`/auction/auctionlist`);
   };
+  const goExchangeListPage = () => {
+    navigate("/exchange/list");
+  };
+
+  useEffect(() => {
+    const [, tmp] = location.pathname.split("/");
+    setCurrentTab(tmp);
+  }, [location.pathname]);
 
   return (
     <NavBarDiv>
       <NavBarInner>
-        <NavBtn onClick={goAuctionListPage}>경매</NavBtn>
-        <NavBtn>교환</NavBtn>
+        <NavBtn isActive={currentTab === "auction"} onClick={goAuctionListPage}>
+          경매
+        </NavBtn>
+        <NavBtn
+          isActive={currentTab === "exchange"}
+          onClick={goExchangeListPage}
+        >
+          교환
+        </NavBtn>
         <NavBtn>공지사항</NavBtn>
         <NavBtn>커뮤니티</NavBtn>
       </NavBarInner>
@@ -44,8 +62,20 @@ const NavBtn = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-weight: 600;
   transition: 0.3s;
+
+  ${({ isActive }) => {
+    if (isActive) {
+      return css`
+        font-weight: bold;
+        color: ${colors.COLOR_MAIN};
+      `;
+    } else {
+      return css`
+        font-weight: 600;
+      `;
+    }
+  }}
 
   &:hover {
     color: ${colors.COLOR_MAIN};

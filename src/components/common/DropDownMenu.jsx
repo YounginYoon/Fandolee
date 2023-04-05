@@ -1,17 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { colors } from "../../common/color";
 
+const itemHeight = "35px";
+
 const DropDownMenu = ({ list, selected, setSelected, width, margin = "0" }) => {
   const [open, setOpen] = useState(false);
+  const [boxHeight, setBoxHeight] = useState(itemHeight);
 
   const onClick = (item) => {
     setOpen(false);
     setSelected(item);
   };
+
+  useEffect(() => {
+    const len = list.length;
+    if (len >= 8) {
+      setBoxHeight(`calc(${itemHeight} * 8)`);
+    } else {
+      setBoxHeight(`calc(${itemHeight} * ${len})`);
+    }
+  }, [list]);
 
   return (
     <Container margin={margin}>
@@ -23,7 +35,7 @@ const DropDownMenu = ({ list, selected, setSelected, width, margin = "0" }) => {
       </SelectedBox>
 
       {open ? (
-        <SelectList width={width}>
+        <SelectList width={width} height={boxHeight}>
           {list.map((item, idx) => (
             <SelectItem key={`${item}_${idx}`} onClick={() => onClick(item)}>
               {item}
@@ -78,20 +90,23 @@ const Icon = styled.div`
 
 const SelectList = styled.div`
   position: absolute;
-  bottom: -202px;
+  bottom: -calc(${({ height }) => height} + 2px);
   left: 0;
   z-index: 100;
   background-color: white;
   border-radius: 3px;
   width: ${({ width }) => width};
-  height: 200px;
+  max-height: calc(${itemHeight} * 8);
+  height: max-content;
   overflow-y: auto;
+  border: 1px solid ${colors.COLOR_GRAY_BORDER};
+  box-sizing: border-box;
 `;
 
 const SelectItem = styled.p`
   width: 100%;
   box-sizing: border-box;
-  line-height: 35px;
+  line-height: ${itemHeight};
   padding: 0 15px;
   font-size: 14px;
   cursor: pointer;
