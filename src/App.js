@@ -26,20 +26,9 @@ import MyPage from "./pages/MyPage";
 import { MyTab } from "./constants/mypage";
 import ProfileContainer from "./components/mypage/profile/ProfileContainer";
 import ExchangeListPage from "./pages/ExchangeListPage";
+import LikeContainer from "./components/mypage/like/LikeContainer";
 
 const App = () => {
-  const test = async () => {
-    const product = db.collection("product");
-
-    const ret = await product.doc("6PK3dqb4N85M7LloAYNA").get();
-
-    console.log("ret: ", ret.data());
-  };
-
-  useEffect(() => {
-    test();
-  }, []);
-
   return (
     <RootLayout className="root-styles">
       {/* 스타일 리셋 */}
@@ -57,7 +46,7 @@ const App = () => {
           <Route path="mypage/:userId" element={<MyPage />}>
             <Route path={MyTab[0].tab} element={<ProfileContainer />} />
             <Route path={MyTab[1].tab} element={<div>채팅</div>} />
-            <Route path={MyTab[2].tab} element={<div>찜목록</div>} />
+            <Route path={MyTab[2].tab} element={<LikeContainer />} />
             <Route path={MyTab[3].tab} element={<div>거래내역</div>} />
           </Route>
         </Route>
