@@ -1,16 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
-import './App.css';
-import { Reset } from 'styled-reset';
-import styled from 'styled-components';
-import { colors } from './common/color';
+import "./App.css";
+import { Reset } from "styled-reset";
+import styled from "styled-components";
+import { colors } from "./common/color";
 
 // firestore 데이터 베이스
-import { db } from './config/firebase';
-import { Route, Routes } from 'react-router-dom';
+import { db } from "./config/firebase";
+import { Route, Routes } from "react-router-dom";
 
 // components
-import AuctionBiddingPage from './pages/AuctionBiddingPage';
+import AuctionBiddingPage from "./pages/AuctionBiddingPage";
 import Header from "./components/header/Header";
 import Footer, { footerHeight } from "./components/footer/Footer";
 import MainPage from "./pages/MainPage";
@@ -25,14 +25,15 @@ import UserPage from "./pages/UserPage";
 import MyPage from "./pages/MyPage";
 import { MyTab } from "./constants/mypage";
 import ProfileContainer from "./components/mypage/profile/ProfileContainer";
+import ExchangeListPage from "./pages/ExchangeListPage";
 
 const App = () => {
   const test = async () => {
-    const product = db.collection('product');
+    const product = db.collection("product");
 
-    const ret = await product.doc('6PK3dqb4N85M7LloAYNA').get();
+    const ret = await product.doc("6PK3dqb4N85M7LloAYNA").get();
 
-    console.log('ret: ', ret.data());
+    console.log("ret: ", ret.data());
   };
 
   useEffect(() => {
@@ -72,6 +73,11 @@ const App = () => {
           <Route path="auctionlist" element={<AuctionListPage />} />
           {/*경매 투찰 임시 페이지 */}
           <Route path="auctionbidding" element={<AuctionBiddingPage />} />
+        </Route>
+
+        <Route path="/exchange" element={<MainLayout />}>
+          {/* 교환 목록 페이지 */}
+          <Route path="list" element={<ExchangeListPage />} />
         </Route>
       </Routes>
 

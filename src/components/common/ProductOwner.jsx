@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { colors } from "../../common/color";
 
 const ProductOwner = ({ owner }) => {
   return (
@@ -21,8 +22,8 @@ const Container = styled.div`
 `;
 
 const ProfileImage = styled.img`
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   cursor: pointer;
 `;
@@ -32,4 +33,6 @@ const Ninckname = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 14px;
+  color: ${colors.COLOR_DARKGRAY_TEXT};
 `;

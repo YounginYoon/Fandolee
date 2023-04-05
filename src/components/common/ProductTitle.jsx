@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-const ProductTitle = ({ title }) => {
-  return <Title>NCT dream 버퍼링(Glitch Mode)</Title>;
+const ProductTitle = ({ title, fontWeight = "400" }) => {
+  return <Title fontWeight={fontWeight}>{title}</Title>;
 };
 
 export default ProductTitle;
@@ -12,5 +12,6 @@ const Title = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-top: 5px;
+  margin-top: 10px;
+  font-weight: ${({ fontWeight }) => fontWeight};
 `;

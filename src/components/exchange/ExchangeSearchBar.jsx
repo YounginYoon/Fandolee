@@ -1,71 +1,63 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import { colors } from "../../common/color";
-import { Category } from "../../constants/category";
-import { IdolList } from "../../constants/idol";
-import DropDownMenu from "../common/DropDownMenu";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
-import { db } from "../../config/firebase";
-import { getDocs, orderBy, query, where } from "firebase/firestore";
 
-const AuctionSearchBar = ({ setProducts }) => {
+import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch, faPen } from "@fortawesome/free-solid-svg-icons";
+
+import { colors } from "../../common/color";
+import { IdolList } from "../../constants/idol";
+import { Category } from "../../constants/category";
+
+import DropDownMenu from "../common/DropDownMenu";
+import { exchangeMethod } from "../../constants/exchangeMethod";
+import { regionList } from "../../constants/region";
+
+const ExchangeSearchBar = () => {
   const [idol, setIdol] = useState("내가 찾는 아이돌");
   const [category, setCategory] = useState("굿즈 종류");
-
-  const navigate = useNavigate();
-
-  const goAuctionUpPage = () => {
-    navigate("/auction/auctionUp");
-  };
-
-  const handleSearch = async () => {
-    const productDB = db.collection("product");
-
-    try {
-      const query = await query(
-        productDB,
-        where("category", "==", category),
-        where("idol", "==", idol),
-        orderBy("end_date")
-      );
-      const ret = await getDocs(query);
-      const products = ret.docs.map((doc) => ({
-        ...doc.data(),
-      }));
-      setProducts(products);
-    } catch (err) {
-      console.log("경매 목록 필터링 에러 ");
-    }
-  };
+  const [method, setMethod] = useState("교환방법");
+  const [region, setRegion] = useState("지역");
 
   return (
     <Container>
       <Inner>
         <Wrapper>
           <DropDownMenu
-            width="200px"
+            width="180px"
             margin="0 10px 0 0"
             list={IdolList}
             selected={idol}
             setSelected={setIdol}
           />
           <DropDownMenu
-            width="200px"
+            width="180px"
             margin="0 10px 0 0"
             list={Category}
             selected={category}
             setSelected={setCategory}
           />
+          <DropDownMenu
+            width="120px"
+            margin="0 10px 0 0"
+            list={exchangeMethod}
+            selected={method}
+            setSelected={setMethod}
+          />
+          <DropDownMenu
+            width="100px"
+            margin="0 10px 0 0"
+            list={regionList}
+            selected={region}
+            setSelected={setRegion}
+          />
 
-          <Btn onClick={handleSearch}>
+          <Btn>
             검색하기
             <FontAwesomeIcon icon={faSearch} style={{ paddingLeft: "7px" }} />
           </Btn>
         </Wrapper>
 
-        <Btn onClick={goAuctionUpPage}>
+        <Btn>
           글 올리기{" "}
           <FontAwesomeIcon icon={faPen} style={{ paddingLeft: "7px" }} />
         </Btn>
@@ -74,7 +66,7 @@ const AuctionSearchBar = ({ setProducts }) => {
   );
 };
 
-export default AuctionSearchBar;
+export default ExchangeSearchBar;
 
 const Container = styled.div`
   width: 100%;
