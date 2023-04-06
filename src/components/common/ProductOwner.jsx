@@ -5,7 +5,7 @@ import { colors } from "../../common/color";
 const ProductOwner = ({ owner }) => {
   return (
     <Container>
-      <ProfileImage src="../img/mon2.jpeg" />
+      <ProfileImage src="../../img/mon2.jpeg" />
 
       <Ninckname>닉네임</Ninckname>
     </Container>

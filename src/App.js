@@ -26,20 +26,12 @@ import MyPage from "./pages/MyPage";
 import { MyTab } from "./constants/mypage";
 import ProfileContainer from "./components/mypage/profile/ProfileContainer";
 import ExchangeListPage from "./pages/ExchangeListPage";
+import LikeContainer from "./components/mypage/like/LikeContainer";
+import ChattingList from "./components/mypage/chat/ChattingList";
+import TransactionList from "./components/mypage/transaction/TransactionList";
+import AuctionPostPage from "./pages/AuctionPostPage";
 
 const App = () => {
-  const test = async () => {
-    const product = db.collection("product");
-
-    const ret = await product.doc("6PK3dqb4N85M7LloAYNA").get();
-
-    console.log("ret: ", ret.data());
-  };
-
-  useEffect(() => {
-    test();
-  }, []);
-
   return (
     <RootLayout className="root-styles">
       {/* 스타일 리셋 */}
@@ -56,9 +48,9 @@ const App = () => {
           {/* 마이 페이지 */}
           <Route path="mypage/:userId" element={<MyPage />}>
             <Route path={MyTab[0].tab} element={<ProfileContainer />} />
-            <Route path={MyTab[1].tab} element={<div>채팅</div>} />
-            <Route path={MyTab[2].tab} element={<div>찜목록</div>} />
-            <Route path={MyTab[3].tab} element={<div>거래내역</div>} />
+            <Route path={MyTab[1].tab} element={<ChattingList />} />
+            <Route path={MyTab[2].tab} element={<LikeContainer />} />
+            <Route path={MyTab[3].tab} element={<TransactionList />} />
           </Route>
         </Route>
 
@@ -73,6 +65,8 @@ const App = () => {
           <Route path="auctionlist" element={<AuctionListPage />} />
           {/*경매 투찰 임시 페이지 */}
           <Route path="auctionbidding" element={<AuctionBiddingPage />} />
+          {/* 경매 게시글 업로드 페이지 */}
+          <Route path="post" element={<AuctionPostPage />} />
         </Route>
 
         <Route path="/exchange" element={<MainLayout />}>

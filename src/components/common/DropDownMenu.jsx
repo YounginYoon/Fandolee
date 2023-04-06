@@ -9,21 +9,11 @@ const itemHeight = "35px";
 
 const DropDownMenu = ({ list, selected, setSelected, width, margin = "0" }) => {
   const [open, setOpen] = useState(false);
-  const [boxHeight, setBoxHeight] = useState(itemHeight);
 
   const onClick = (item) => {
     setOpen(false);
     setSelected(item);
   };
-
-  useEffect(() => {
-    const len = list.length;
-    if (len >= 8) {
-      setBoxHeight(`calc(${itemHeight} * 8)`);
-    } else {
-      setBoxHeight(`calc(${itemHeight} * ${len})`);
-    }
-  }, [list]);
 
   return (
     <Container margin={margin}>
@@ -35,7 +25,7 @@ const DropDownMenu = ({ list, selected, setSelected, width, margin = "0" }) => {
       </SelectedBox>
 
       {open ? (
-        <SelectList width={width} height={boxHeight}>
+        <SelectList width={width}>
           {list.map((item, idx) => (
             <SelectItem key={`${item}_${idx}`} onClick={() => onClick(item)}>
               {item}
@@ -90,7 +80,7 @@ const Icon = styled.div`
 
 const SelectList = styled.div`
   position: absolute;
-  bottom: -calc(${({ height }) => height} + 2px);
+  top: 37px;
   left: 0;
   z-index: 100;
   background-color: white;
