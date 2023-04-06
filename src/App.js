@@ -29,6 +29,7 @@ import ExchangeListPage from "./pages/ExchangeListPage";
 import LikeContainer from "./components/mypage/like/LikeContainer";
 import ChattingList from "./components/mypage/chat/ChattingList";
 import TransactionList from "./components/mypage/transaction/TransactionList";
+import AuctionPostPage from "./pages/AuctionPostPage";
 
 const App = () => {
   return (
@@ -64,6 +65,8 @@ const App = () => {
           <Route path="auctionlist" element={<AuctionListPage />} />
           {/*경매 투찰 임시 페이지 */}
           <Route path="auctionbidding" element={<AuctionBiddingPage />} />
+          {/* 경매 게시글 업로드 페이지 */}
+          <Route path="post" element={<AuctionPostPage />} />
         </Route>
 
         <Route path="/exchange" element={<MainLayout />}>
