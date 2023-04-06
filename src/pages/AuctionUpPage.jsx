@@ -122,12 +122,18 @@ const AuctionUpPage = () => {
         });
       });
       //이미지 upload
+      
 
-      navigate(`/auction/auctionlist`);
+      //navigate(`/auction/auctionlist`);
     } catch (err) {
       console.log("posting error", err);
     }
   };
+
+  const onPost = async() => {
+    await addPost()
+    navigate(`/auction/auctionlist`);
+  }
   //달력 추가하기
   const [endDate, setEndDate] = useState(addDays(new Date() , 1));
   
@@ -217,7 +223,7 @@ const AuctionUpPage = () => {
           }}
         />
 
-        <button onClick={addPost}>업로드</button>
+        <button onClick={onPost}>업로드</button>
       </div>
     </div>
   );

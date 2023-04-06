@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { colors } from "../../common/color";
 import { Category } from "../../constants/category";
@@ -8,8 +8,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../config/firebase";
-import { getDocs, orderBy, query, where } from "firebase/firestore";
 
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 const AuctionSearchBar = ({ setProducts }) => {
   const [idol, setIdol] = useState("내가 찾는 아이돌");
   const [category, setCategory] = useState("굿즈 종류");
@@ -19,25 +19,32 @@ const AuctionSearchBar = ({ setProducts }) => {
   const goAuctionUpPage = () => {
     navigate("/auction/auctionUp");
   };
+  
+  useEffect(() => {
+    handleSearch();
+  }, []);
+  
 
   const handleSearch = async () => {
-    const productDB = db.collection("product");
+    const productDB = collection(db,"product");
 
     try {
-      const query = await query(
+      const q = await query(
         productDB,
         where("category", "==", category),
         where("idol", "==", idol),
         orderBy("end_date")
       );
-      const ret = await getDocs(query);
+      const ret = await getDocs(q);
       const products = ret.docs.map((doc) => ({
         ...doc.data(),
       }));
+      
       setProducts(products);
-    } catch (err) {
-      console.log("경매 목록 필터링 에러 ");
     }
+    catch(err) {
+      console.log("err:",err);
+    };
   };
 
   return (
