@@ -27,6 +27,8 @@ import { MyTab } from "./constants/mypage";
 import ProfileContainer from "./components/mypage/profile/ProfileContainer";
 import ExchangeListPage from "./pages/ExchangeListPage";
 import LikeContainer from "./components/mypage/like/LikeContainer";
+import ChattingList from "./components/mypage/chat/ChattingList";
+import TransactionList from "./components/mypage/transaction/TransactionList";
 
 const App = () => {
   return (
@@ -45,9 +47,9 @@ const App = () => {
           {/* 마이 페이지 */}
           <Route path="mypage/:userId" element={<MyPage />}>
             <Route path={MyTab[0].tab} element={<ProfileContainer />} />
-            <Route path={MyTab[1].tab} element={<div>채팅</div>} />
+            <Route path={MyTab[1].tab} element={<ChattingList />} />
             <Route path={MyTab[2].tab} element={<LikeContainer />} />
-            <Route path={MyTab[3].tab} element={<div>거래내역</div>} />
+            <Route path={MyTab[3].tab} element={<TransactionList />} />
           </Route>
         </Route>
 

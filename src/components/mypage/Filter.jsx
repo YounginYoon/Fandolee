@@ -11,6 +11,10 @@ const itemHeight = "35px";
 const Filter = ({ filter, setFilter, filterList }) => {
   const [click, setClick] = useState(false);
 
+  const onClick = (text) => {
+    setFilter(text);
+  };
+
   return (
     <Container>
       <FilterBox onClick={() => setClick(!click)}>
@@ -24,7 +28,9 @@ const Filter = ({ filter, setFilter, filterList }) => {
         {click ? (
           <FilterListBox>
             {filterList.map((text, idx) => (
-              <Item key={`${text}_${idx}`}>{text}</Item>
+              <Item key={`${text}_${idx}`} onClick={() => onClick(text)}>
+                {text}
+              </Item>
             ))}
           </FilterListBox>
         ) : null}
