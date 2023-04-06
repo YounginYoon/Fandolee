@@ -13,20 +13,27 @@ import PostTextArea from "../components/post/PostTextArea";
 import PostPrice from "../components/post/PostPrice";
 import PostDate from "../components/post/PostDate";
 
+import { db, storage } from "../config/firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
+import moment from "moment";
+import useUser from "../hooks/useUser";
+import { dateFormat } from "../common/date";
+
 const AuctionPostPage = () => {
+  const user = useUser();
   // 이미지 파일 state
   const [images, setImages] = useState([]);
   // inputs
   const [inputs, setInputs] = useState({
-    minPrice: 0,
-    maxPrice: 0,
+    minPrice: "",
+    maxPrice: "",
     info: "",
     title: "",
-    subtitle: "",
     likes: 0,
-    endDate: "",
+    endDate: dateFormat(new Date()),
   });
-  const { title, subtitle, info, likes, endDate, minPrice, maxPrice } = inputs;
+  const { title, info, likes, endDate, minPrice, maxPrice } = inputs;
   const [idol, setIdol] = useState("");
   const [category, setCategory] = useState("");
 
@@ -39,7 +46,70 @@ const AuctionPostPage = () => {
     });
   };
 
-  const onPost = () => {};
+  const onPost = async () => {
+    try {
+      console.log({ inputs, idol, category });
+      const productDB = db.collection("product");
+
+      if (images.length === 0) {
+        alert("이미지를 선택해주세요.");
+        return;
+      }
+
+      if (
+        !minPrice ||
+        !maxPrice ||
+        !info ||
+        !title ||
+        !endDate ||
+        !idol ||
+        !category
+      ) {
+        alert("모든 정보를 입력해주세요.");
+        return;
+      }
+
+      const timeStamp = moment().format("YYYY-MM-DD hh:mm:ss");
+
+      const imageRef = ref(
+        storage,
+        `product_image/${images[0].name}${timeStamp}`
+      );
+
+      const snapshot = await uploadBytes(imageRef, images[0]);
+
+      const url = await getDownloadURL(snapshot.ref);
+
+      const body = {
+        minPrice: parseInt(minPrice),
+        maxPrice: parseInt(maxPrice),
+        info,
+        idol,
+        image: url,
+        category,
+        title,
+        likes,
+        date: new Date(),
+        end_date: endDate,
+      };
+
+      await productDB
+        .add({
+          ...body,
+          uid: user.uid,
+        })
+        .then((doc) => {
+          console.log(doc);
+        })
+        .catch((err) => {
+          console.log("auction posting fail: ", err);
+        });
+
+      window.location.replace("/auction/auctionList");
+    } catch (err) {
+      console.log("post auction error: ", err);
+    }
+  };
 
   return (
     <PostContainer
@@ -69,12 +139,15 @@ const AuctionPostPage = () => {
       />
       <PostPrice
         label={"가격"}
-        placeholders={["최소 금액", "최대 금액"]}
-        names={["minPrice", "maxPrice"]}
-        values={[minPrice, maxPrice]}
-        onChnage={onChange}
+        minPrice={minPrice}
+        maxPrice={maxPrice}
+        onChange={onChange}
       />
-      <PostDate label="거래 완료 날짜" />
+      <PostDate
+        label="거래 완료 날짜"
+        endDate={endDate}
+        setInputs={setInputs}
+      />
       <PostTextArea
         label="설명"
         value={info}

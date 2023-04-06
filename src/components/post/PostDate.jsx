@@ -14,7 +14,7 @@ import styled from "styled-components";
 import { colors } from "../../common/color";
 import { dateFormat } from "../../common/date";
 
-const PostDate = ({ label }) => {
+const PostDate = ({ label, endDate, setInputs }) => {
   const today = new Date();
   const [openCalendar, setOpenCalendar] = useState(false);
   const [value, setValue] = useState(dateFormat(today));
@@ -31,14 +31,17 @@ const PostDate = ({ label }) => {
     if (dateFormat(date) < dateFormat(today)) {
       return;
     }
-    setValue(date);
+    setInputs((prev) => ({
+      ...prev,
+      endDate: date,
+    }));
     setOpenCalendar(false);
   };
 
   return (
     <PostInputBox label={label}>
       <DateDiv onClick={onClick}>
-        {moment(value).format("YYYY년 MM월 DD일")}
+        {moment(endDate).format("YYYY년 MM월 DD일")}
 
         <FontAwesomeIcon
           icon={faCalendarDays}
@@ -49,7 +52,7 @@ const PostDate = ({ label }) => {
         {openCalendar ? (
           <Calendar
             onChange={onChange}
-            value={value}
+            value={endDate}
             tileClassName={({ date, view }) => {
               if (today > date) {
                 return "highlight";

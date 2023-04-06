@@ -9,9 +9,9 @@ import { ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 import moment from "moment";
 //달력 추가하기 npm install 해야함
 import DatePicker from "react-datepicker";
-import { ko } from 'date-fns/esm/locale';
+import { ko } from "date-fns/esm/locale";
 import "react-datepicker/dist/react-datepicker.css";
-import { addDays } from 'date-fns';
+import { addDays } from "date-fns";
 
 const AuctionUpPage = () => {
   const navigate = useNavigate();
@@ -72,7 +72,7 @@ const AuctionUpPage = () => {
   //     });
   //   });
   // }, []);
-  
+
   const addPost = async () => {
     const postDB = db.collection("product");
 
@@ -102,7 +102,7 @@ const AuctionUpPage = () => {
             subtitle: input.subtitle,
             likes: 0,
             date: new Date(),
-            end_date:endDate,
+            end_date: endDate,
           };
 
           const user_info = {
@@ -129,8 +129,7 @@ const AuctionUpPage = () => {
     }
   };
   //달력 추가하기
-  const [endDate, setEndDate] = useState(addDays(new Date() , 1));
-  
+  const [endDate, setEndDate] = useState(addDays(new Date(), 1));
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -202,12 +201,12 @@ const AuctionUpPage = () => {
           placeholder="최대 금액"
         />
         <label>거래 종료 날짜 선택하기</label>
-        <DatePicker 
+        <DatePicker
           dateFormat="yyyy년 MM월 dd일"
-          selected={endDate} 
-          onChange={date => setEndDate(date)} 
+          selected={endDate}
+          onChange={(date) => setEndDate(date)}
           locale={ko}
-          minDate={addDays(new Date() , 1)}
+          minDate={addDays(new Date(), 1)}
         />
         <label>이미지 파일 선택하기</label>
         <input
@@ -224,4 +223,3 @@ const AuctionUpPage = () => {
 };
 
 export default AuctionUpPage;
-

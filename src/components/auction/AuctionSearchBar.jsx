@@ -17,7 +17,7 @@ const AuctionSearchBar = ({ setProducts }) => {
   const navigate = useNavigate();
 
   const goAuctionUpPage = () => {
-    navigate("/auction/auctionUp");
+    navigate("/auction/post");
   };
 
   const handleSearch = async () => {

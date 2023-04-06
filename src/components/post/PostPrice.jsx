@@ -7,21 +7,21 @@ import { colors } from "../../common/color";
 
 import PostInputBox from "./PostInputBox";
 
-const PostPrice = ({ label, placeholders, names, values, onChange }) => {
+const PostPrice = ({ label, minPrice, maxPrice, onChange }) => {
   return (
     <PostInputBox label={label}>
       <Wrapper>
         <PriceInput
-          placeholder={placeholders[0]}
-          name={names[0]}
-          values={values[0]}
+          placeholder={"최소 금액"}
+          name="minPrice"
+          value={minPrice}
           onChange={onChange}
         />
         <Text>~</Text>
         <PriceInput
-          placeholder={placeholders[1]}
-          name={names[1]}
-          values={values[1]}
+          placeholder={"최대 금액"}
+          name="maxPrice"
+          value={maxPrice}
           onChange={onChange}
         />
         <Text>원</Text>
