@@ -32,6 +32,7 @@ const AuctionListPage = () => {
   };
 
   useEffect(() => {
+    console.log("rendering");
     getAuctionList();
   }, []);
 

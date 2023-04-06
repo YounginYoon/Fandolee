@@ -10,7 +10,7 @@ import TagList from "../common/TagList";
 const ExchangeContainer = ({ product }) => {
   return (
     <ProductContainer>
-      <ProductImg image={"../img/mon2.jpeg"} />
+      <ProductImg image={"../../img/mon2.jpeg"} />
 
       <ProductOwner />
 
