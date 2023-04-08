@@ -90,7 +90,10 @@ const AuctionPostPage = () => {
         title,
         likes,
         date: new Date(),
-        end_date: endDate,
+        endDate: endDate,
+        isComplete:1,
+        biddingPrice:0,
+        biddingDate:new Date(),
       };
 
       await productDB

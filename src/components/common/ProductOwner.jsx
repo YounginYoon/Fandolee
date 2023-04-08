@@ -11,7 +11,7 @@ const ProductOwner = ({ owner }) => {
   
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
-
+  
   const PresentNickName = async() => {
     const docRef = doc(db,"users",owner);
     const docSnap = await getDoc(docRef);
@@ -22,7 +22,6 @@ const ProductOwner = ({ owner }) => {
      //만약 존재하면 콘솔창에 표시.
      if (docSnap.exists()){
        //console.log(docSnap.data().nickName);
-       
        setName(docSnap.data());
      }
     
@@ -43,7 +42,7 @@ const ProductOwner = ({ owner }) => {
       })
       
     } catch (e) {
-      console.log(e);
+      console.log("Get image err: ",e);
     }
   };
   useEffect(() => {
