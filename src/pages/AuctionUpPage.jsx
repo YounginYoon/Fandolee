@@ -102,7 +102,10 @@ const AuctionUpPage = () => {
             subtitle: input.subtitle,
             likes: 0,
             date: new Date(),
-            end_date: endDate,
+            endDate: endDate,
+            isComplete:1,
+            biddingPrice:0,
+            biddingDate:new Date(),
           };
 
           const user_info = {

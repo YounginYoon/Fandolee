@@ -30,7 +30,7 @@ import LikeContainer from "./components/mypage/like/LikeContainer";
 import ChattingList from "./components/mypage/chat/ChattingList";
 import TransactionList from "./components/mypage/transaction/TransactionList";
 import AuctionPostPage from "./pages/AuctionPostPage";
-
+import AuctionDetailPage from "./pages/AuctionDetailPage";
 const App = () => {
   return (
     <RootLayout className="root-styles">
@@ -60,9 +60,12 @@ const App = () => {
         </Route>
 
         <Route path="/auction" element={<MainLayout />}>
-          {/*경매 게시글 나열 페이지*/}
+          {/*경매 게시글 게시 페이지*/}
           <Route path="auctionUp" element={<AuctionUpPage />} />
+          {/*경매 게시글 나열 페이지*/}
           <Route path="auctionlist" element={<AuctionListPage />} />
+          {/*경매 게시글 상세 페이지*/}
+          <Route path="auctiondetail/:id" element={<AuctionDetailPage />} />
           {/*경매 투찰 임시 페이지 */}
           <Route path="auctionbidding" element={<AuctionBiddingPage />} />
           {/* 경매 게시글 업로드 페이지 */}

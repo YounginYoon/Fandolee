@@ -12,7 +12,7 @@ const AuctionContainer = ({ data }) => {
   //console.log("data: ", data);
   return (
     <ProductContainer>
-      <ProductImg image={data.image} />
+      <ProductImg product={data} />
 
       <ProductOwner owner={data.uid} />
 

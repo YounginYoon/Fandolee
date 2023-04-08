@@ -37,7 +37,7 @@ const AuctionSearchBar = ({ setProducts }) => {
       );
       const ret = await getDocs(q);
       const products = ret.docs.map((doc) => ({
-        ...doc.data(),
+        id : doc.id, ...doc.data()
       }));
       
       setProducts(products);
