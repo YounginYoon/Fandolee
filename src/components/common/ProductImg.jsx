@@ -7,29 +7,23 @@ import { faHeart as faHeartOutlined } from "@fortawesome/free-regular-svg-icons"
 import { useNavigate } from "react-router-dom";
 import { colors } from "../../common/color";
 
-
 const ProductImg = ({
   product,
   onClick = null,
   size = "M",
   onHeartClick = () => {},
 }) => {
-
-
-  const navigate = useNavigate();
-  const goAuctionDetailPage = ()=>{
-    navigate(`/auction/auctiondetail/${product.id}`);
-  };
   const [heart, setHeart] = useState(false);
 
   const handleHeart = () => {
     setHeart(!heart);
     onHeartClick();
   };
+
   return (
     <Container>
-      <Image src={product.image} onClick={goAuctionDetailPage} size={size} />
-      
+      <Image src={product.image} onClick={onClick} size={size} />
+
       <HeartBox onClick={handleHeart}>
         <FontAwesomeIcon icon={heart ? faHeart : faHeartOutlined} />
       </HeartBox>
