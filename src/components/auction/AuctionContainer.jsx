@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import { moneyFormat } from "../../common/money";
@@ -10,9 +11,14 @@ import ProductTitle from "../common/ProductTitle";
 
 const AuctionContainer = ({ data }) => {
   //console.log("data: ", data);
+  const navigate = useNavigate();
+  const goAuctionDetailPage = () => {
+    navigate(`/auction/auctiondetail/${data.id}`);
+  };
+
   return (
     <ProductContainer>
-      <ProductImg product={data} />
+      <ProductImg product={data} onClick={goAuctionDetailPage} />
 
       <ProductOwner owner={data.uid} />
 
