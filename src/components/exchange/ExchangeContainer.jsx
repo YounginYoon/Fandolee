@@ -12,7 +12,7 @@ const ExchangeContainer = ({ product }) => {
     <ProductContainer>
       <ProductImg product={{ image: "../../img/mon2.jpeg" }} />
 
-      <ProductOwner />
+      {/* <ProductOwner /> */}
 
       <ProductTitle title={"title"} fontWeight={"bold"} />
 

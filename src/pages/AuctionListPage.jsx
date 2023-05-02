@@ -22,11 +22,11 @@ const AuctionListPage = () => {
       const queryAll = await query(productAllDB, orderBy("end_date"));
       const data = await getDocs(queryAll);
       const newData = data.docs.map((doc) => ({
-        id : doc.id, ...doc.data()
+        id: doc.id,
+        ...doc.data(),
       }));
-      
-      
-      //console.log(newData);
+
+      console.log(newData);
 
       setProducts(newData);
     } catch (err) {

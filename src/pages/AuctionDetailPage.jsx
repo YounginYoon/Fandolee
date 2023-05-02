@@ -4,9 +4,10 @@ import styled from 'styled-components';
 import { db } from '../config/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { useNavigate, useParams } from 'react-router-dom';
-import ProductOwner from '../components/common/ProductOwner';
 import AuctionDetailInfo from '../components/auction/AuctionDetailInfo';
 import GreenLine from '../components/common/GreenLine';
+import Loading from '../components/common/Loading';
+import AuctionDetail from '../components/auction/AuctionDetail';
 
 const AuctionDetailPage = () => {
   const dataID = useParams();
@@ -35,7 +36,7 @@ const AuctionDetailPage = () => {
   }, []);
 
   if (!product) {
-    return <></>;
+    return <Loading />;
   }
 
   return (
@@ -43,22 +44,9 @@ const AuctionDetailPage = () => {
       <AuctionDetailInfo product={product} />
 
       <GreenLine />
-    </Container>
-    /*
-    <div>
-      <img src={product.image} style={{ width: 100, height: 100 }}></img>
 
-      <h1>{product.title}</h1>
-      <h2>
-        가격: {product.minPrice} ~ {product.maxPrice}
-      </h2>
-      <h2>굿즈 종류 : {product.category}</h2>
-      <h2>아이돌 : {product.idol}</h2>
-      <h2>좋아요 : {product.likes}</h2>
-      <button onClick={goAuctionBiddingPage}>경매참여</button>
-      <h2>상품 정보 : {product.info}</h2>
-    </div>
-    */
+      <AuctionDetail product={product} />
+    </Container>
   );
 };
 
