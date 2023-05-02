@@ -1,18 +1,23 @@
-import React from "react";
+import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faHeartOutline } from '@fortawesome/free-regular-svg-icons';
 
-import { colors } from "../../common/color";
-import { moneyFormat } from "../../common/money";
+import { colors } from '../../common/color';
+import { moneyFormat } from '../../common/money';
 
-import GreenLine from "../common/GreenLine";
-import { useState } from "react";
+import GreenLine from '../common/GreenLine';
+import { useState } from 'react';
 
 const AuctionDetailInfo = ({ product }) => {
   const [isLike, setIsLike] = useState(false);
+  const navigate = useNavigate();
+  const getDataID = useParams();
+
+  const dataID = getDataID.id;
   const {
     image,
     title,
@@ -30,6 +35,10 @@ const AuctionDetailInfo = ({ product }) => {
     biddingDate,
     biddingPrice,
   } = product;
+
+  const goAuctionBiddingPage = () => {
+    navigate(`/auction/auctionbidding/${dataID}`);
+  };
 
   return (
     <Container>
@@ -68,7 +77,7 @@ const AuctionDetailInfo = ({ product }) => {
         </InfoDiv>
 
         <BtnDiv>
-          <Btn>경매 참여</Btn>
+          <Btn onClick={goAuctionBiddingPage}>경매 참여</Btn>
           <HeartDiv>
             <FontAwesomeIcon
               onClick={() => setIsLike(!isLike)}
@@ -185,6 +194,6 @@ const Likes = styled.p`
 
 const heartStyle = {
   color: colors.COLOR_HEART,
-  fontSize: "28px",
-  cursor: "pointer",
+  fontSize: '28px',
+  cursor: 'pointer',
 };

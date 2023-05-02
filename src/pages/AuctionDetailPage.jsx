@@ -1,14 +1,12 @@
-<<<<<<< HEAD
 import React, { useEffect, useRef, useState } from 'react';
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { db } from "../config/firebase";
-import { doc, getDoc } from "firebase/firestore";
-import { useNavigate, useParams } from "react-router-dom";
-import ProductOwner from "../components/common/ProductOwner";
-import AuctionDetailInfo from "../components/auction/AuctionDetailInfo";
-import GreenLine from "../components/common/GreenLine";
+import { db } from '../config/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { useNavigate, useParams } from 'react-router-dom';
+import ProductOwner from '../components/common/ProductOwner';
+import AuctionDetailInfo from '../components/auction/AuctionDetailInfo';
+import GreenLine from '../components/common/GreenLine';
 
 const AuctionDetailPage = () => {
   const dataID = useParams();
@@ -18,12 +16,13 @@ const AuctionDetailPage = () => {
   const [product, setProduct] = useState(null);
 
   const DetailProduct = async () => {
-    const docRef = doc(db, "product", id);
+    const docRef = doc(db, 'product', id);
     const docSnap = await getDoc(docRef);
 
     try {
       //만약 존재하면 콘솔창에 표시.
       if (docSnap.exists()) {
+        console.log('detail data: ', docSnap.data());
         setProduct(docSnap.data());
       }
     } catch (error) {
@@ -31,14 +30,21 @@ const AuctionDetailPage = () => {
     }
   };
 
-  const goAuctionBiddingPage = () => {
-    navigate(`/auction/auctionbidding/${id}`);
-  };
   useEffect(() => {
     DetailProduct();
   }, []);
 
+  if (!product) {
+    return <></>;
+  }
+
   return (
+    <Container>
+      <AuctionDetailInfo product={product} />
+
+      <GreenLine />
+    </Container>
+    /*
     <div>
       <img src={product.image} style={{ width: 100, height: 100 }}></img>
 
@@ -52,6 +58,7 @@ const AuctionDetailPage = () => {
       <button onClick={goAuctionBiddingPage}>경매참여</button>
       <h2>상품 정보 : {product.info}</h2>
     </div>
+    */
   );
 };
 
