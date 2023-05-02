@@ -7,52 +7,27 @@ import { doc, getDoc } from "firebase/firestore";
 import { db, storage } from "../../config/firebase";
 import { getDownloadURL, ref } from "firebase/storage";
 import Bamboo from "./Bamboo";
+import useOwner from "../../hooks/useOwner";
+import Loading from "./Loading";
+import { useNavigate } from "react-router-dom";
 
 const ProductOwnerInfo = ({ uid }) => {
-  const [owner, setOwner] = useState(null);
-  const [profileImage, setProfileImage] = useState(null);
+  const navigate = useNavigate();
+  const [owner, profileImage] = useOwner(uid);
 
-  const getOwner = async () => {
-    const docRef = doc(db, "users", uid);
-
-    try {
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        console.log("owner: ", docSnap.data());
-        setOwner(docSnap.data());
-      }
-    } catch (err) {
-      console.log("ProductOwnerInfo error: ", err);
-    }
+  const goOwnerPage = () => {
+    navigate(`/user/${uid}`);
   };
-
-  const getImage = async () => {
-    try {
-      const imageRef = ref(storage, `profile_image/${uid}`);
-      await getDownloadURL(imageRef).then((url) => {
-        // console.log("url: ", url);
-        setProfileImage(url);
-      });
-    } catch (err) {
-      console.log("get profile image err: ", err);
-    }
-  };
-
-  useEffect(() => {
-    getOwner();
-    getImage();
-  }, [uid]);
 
   if (!owner || !profileImage) {
-    return <></>;
+    return <Loading />;
   }
 
   return (
     <Container>
       <DetailTitle>판매자 정보</DetailTitle>
 
-      <ProfileImage src={profileImage} />
+      <ProfileImage onClick={goOwnerPage} src={profileImage} />
 
       <NickName>{owner.nickName}</NickName>
 
@@ -88,6 +63,7 @@ const ProfileImage = styled.img`
   object-fit: cover;
   border-radius: 50%;
   cursor: pointer;
+  border: 2px solid ${colors.COLOR_GRAY_BORDER};
 `;
 
 const NickName = styled.p`

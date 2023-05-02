@@ -20,7 +20,7 @@ const AuctionContainer = ({ data }) => {
     <ProductContainer>
       <ProductImg product={data} onClick={goAuctionDetailPage} />
 
-      <ProductOwner owner={data.uid} />
+      <ProductOwner uid={data.uid} />
 
       <ProductTitle title={data.title} />
 
