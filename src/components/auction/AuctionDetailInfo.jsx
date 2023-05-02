@@ -11,8 +11,10 @@ import { moneyFormat } from "../../common/money";
 import GreenLine from "../common/GreenLine";
 import { useState } from "react";
 import Tag from "../common/Tag";
+import { useNavigate } from "react-router-dom";
 
 const AuctionDetailInfo = ({ product }) => {
+  const navigate = useNavigate();
   const [isLike, setIsLike] = useState(false);
   const {
     image,
@@ -56,7 +58,9 @@ const AuctionDetailInfo = ({ product }) => {
         </InfoDiv>
 
         <BtnDiv>
-          <Btn>경매 참여</Btn>
+          <Btn onClick={() => navigate(`/chat/auction?aid=${id}&cid=${1}`)}>
+            경매 참여
+          </Btn>
           <HeartDiv>
             <FontAwesomeIcon
               onClick={() => setIsLike(!isLike)}
