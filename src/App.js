@@ -41,7 +41,7 @@ const App = () => {
         <Route path="/" element={<MainLayout />}>
           {/* 메인 홈 페이지 */}
           <Route path="" element={<MainPage />} />
-          {/* 프로필 페이지 */}
+          {/* 프로필 페이지 - not used */}
           <Route path="profile/:userId" element={<ProfilePage />} />
           {/* 유저 페이지 */}
           <Route path="user/:userId" element={<UserPage />} />
