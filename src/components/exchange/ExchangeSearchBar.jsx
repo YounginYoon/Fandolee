@@ -9,10 +9,13 @@ import { IdolList } from "../../constants/idol";
 import { Category } from "../../constants/category";
 
 import DropDownMenu from "../common/DropDownMenu";
-import { exchangeMethod } from "../../constants/exchangeMethod";
-import { regionList } from "../../constants/region";
+import { TransactionType } from "../../constants/transactionType";
+import { Region } from "../../constants/region";
+import { useNavigate } from "react-router-dom";
 
 const ExchangeSearchBar = () => {
+  const navigate = useNavigate();
+
   const [idol, setIdol] = useState("내가 찾는 아이돌");
   const [category, setCategory] = useState("굿즈 종류");
   const [method, setMethod] = useState("교환방법");
@@ -39,14 +42,14 @@ const ExchangeSearchBar = () => {
           <DropDownMenu
             width="120px"
             margin="0 10px 0 0"
-            list={exchangeMethod}
+            list={TransactionType}
             selected={method}
             setSelected={setMethod}
           />
           <DropDownMenu
             width="100px"
             margin="0 10px 0 0"
-            list={regionList}
+            list={Region}
             selected={region}
             setSelected={setRegion}
           />
@@ -57,7 +60,7 @@ const ExchangeSearchBar = () => {
           </Btn>
         </Wrapper>
 
-        <Btn>
+        <Btn onClick={() => navigate("/exchange/post")}>
           글 올리기{" "}
           <FontAwesomeIcon icon={faPen} style={{ paddingLeft: "7px" }} />
         </Btn>

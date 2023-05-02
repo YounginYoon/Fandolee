@@ -15,7 +15,10 @@ const useOwner = (uid) => {
 
     try {
       if (docSnap.exists()) {
-        setOwner(docSnap.data());
+        const data = docSnap.data();
+        const uid = docSnap.id;
+        // console.log({ ...data, uid });
+        setOwner({ ...data, uid });
       }
     } catch (err) {
       console.log("useOwner error: ", err);

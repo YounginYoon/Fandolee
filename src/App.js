@@ -31,6 +31,7 @@ import ChattingList from "./components/mypage/chat/ChattingList";
 import TransactionList from "./components/mypage/transaction/TransactionList";
 import AuctionPostPage from "./pages/AuctionPostPage";
 import AuctionDetailPage from "./pages/AuctionDetailPage";
+import ExchangePostPage from "./pages/ExchangePostPage";
 const App = () => {
   return (
     <RootLayout className="root-styles">
@@ -41,7 +42,7 @@ const App = () => {
         <Route path="/" element={<MainLayout />}>
           {/* 메인 홈 페이지 */}
           <Route path="" element={<MainPage />} />
-          {/* 프로필 페이지 */}
+          {/* 프로필 페이지 - not used */}
           <Route path="profile/:userId" element={<ProfilePage />} />
           {/* 유저 페이지 */}
           <Route path="user/:userId" element={<UserPage />} />
@@ -75,6 +76,8 @@ const App = () => {
         <Route path="/exchange" element={<MainLayout />}>
           {/* 교환 목록 페이지 */}
           <Route path="list" element={<ExchangeListPage />} />
+          {/* 교환 업로드 페이지 */}
+          <Route path="post" element={<ExchangePostPage />} />
         </Route>
       </Routes>
 
