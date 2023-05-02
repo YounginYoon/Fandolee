@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ProductOwner from "../components/common/ProductOwner";
 import AuctionDetailInfo from "../components/auction/AuctionDetailInfo";
 import GreenLine from "../components/common/GreenLine";
+import Loading from "../components/common/Loading";
 
 const AuctionDetailPage = () => {
   const dataID = useParams();
@@ -35,7 +36,7 @@ const AuctionDetailPage = () => {
   }, []);
 
   if (!product) {
-    return <></>;
+    return <Loading />;
   }
 
   return (
