@@ -5,9 +5,20 @@ import styled from "styled-components";
 import ProductDetailInfo from "../common/ProductDetailInfo";
 import ProductOwnerInfo from "../common/ProductOwnerInfo";
 
+import { authService } from "../../config/firebase";
+
 const AuctionDetail = ({ product }) => {
+
+  const user = authService.currentUser;
+  
+
   return (
+    
     <Container>
+
+      <div>
+          {product.uid === user.uid && <button>edit</button>}
+      </div>
       <ProductDetailInfo product={product} />
 
       <ProductOwnerInfo uid={product.uid} />
