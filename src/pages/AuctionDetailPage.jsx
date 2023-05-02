@@ -1,39 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import { db } from "../config/firebase";
-import { doc, getDoc } from "firebase/firestore";
 import { useNavigate, useParams } from "react-router-dom";
 import AuctionDetailInfo from "../components/auction/AuctionDetailInfo";
 import GreenLine from "../components/common/GreenLine";
 import Loading from "../components/common/Loading";
 import AuctionDetail from "../components/auction/AuctionDetail";
+import useProduct from "../hooks/useProduct";
 
 const AuctionDetailPage = () => {
-  const dataID = useParams();
+  const params = useParams();
 
-  const id = dataID.id;
+  const id = params.id;
+  const product = useProduct(id);
 
-  const [product, setProduct] = useState(null);
-
-  const DetailProduct = async () => {
-    const docRef = doc(db, "product", id);
-    const docSnap = await getDoc(docRef);
-
-    try {
-      //만약 존재하면 콘솔창에 표시.
-      if (docSnap.exists()) {
-        console.log("detail data: ", docSnap.data());
-        setProduct(docSnap.data());
-      }
-    } catch (error) {
-      console.log("detail Page : ", error);
-    }
-  };
-
-  useEffect(() => {
-    DetailProduct();
-  }, []);
+  // console.log("product: ", product);
 
   if (!product) {
     return <Loading />;

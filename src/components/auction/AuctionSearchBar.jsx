@@ -19,17 +19,12 @@ const AuctionSearchBar = ({ setProducts }) => {
   const goAuctionUpPage = () => {
     navigate("/auction/post");
   };
-  
-  useEffect(() => {
-    handleSearch();
-  }, []);
-  
 
   const handleSearch = async () => {
-    const productDB = collection(db,"product");
+    const productDB = collection(db, "product");
 
     try {
-      const q = await query(
+      const q = query(
         productDB,
         where("category", "==", category),
         where("idol", "==", idol),
@@ -37,14 +32,14 @@ const AuctionSearchBar = ({ setProducts }) => {
       );
       const ret = await getDocs(q);
       const products = ret.docs.map((doc) => ({
-        id : doc.id, ...doc.data()
+        id: doc.id,
+        ...doc.data(),
       }));
-      
+
       setProducts(products);
+    } catch (err) {
+      console.log("err:", err);
     }
-    catch(err) {
-      console.log("err:",err);
-    };
   };
 
   return (

@@ -4,6 +4,8 @@ import ProductListLayout from "../common/ProductListLayout";
 import AuctionContainer from "./AuctionContainer";
 
 const AuctionList = ({ products }) => {
+  // console.log("auctionList: ", products);
+
   return (
     <ProductListLayout>
       {products.map((product, index) => (
