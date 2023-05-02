@@ -91,6 +91,7 @@ const SelectList = styled.div`
   overflow-y: auto;
   border: 1px solid ${colors.COLOR_GRAY_BORDER};
   box-sizing: border-box;
+  box-shadow: 5px 10px 10px 0 rgba(176, 176, 176, 0.5);
 `;
 
 const SelectItem = styled.p`

@@ -11,26 +11,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import useOwner from "../../hooks/useOwner";
 import Loading from "../common/Loading";
 
-const UserHeader = () => {
-  const user = useUser();
-  const params = useParams();
+const UserHeader = ({ owner, profileImage, isAdmin }) => {
   const navigate = useNavigate();
-
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  const [owner, profileImage] = useOwner(params.userId);
-
-  useEffect(() => {
-    if (user.uid === params.userId) {
-      setIsAdmin(true);
-    } else {
-      setIsAdmin(false);
-    }
-  }, [user, params]);
-
-  if (!owner || !profileImage) {
-    return <Loading />;
-  }
 
   return (
     <Container>
@@ -43,7 +25,7 @@ const UserHeader = () => {
 
             {isAdmin ? (
               <MyPageBtn
-                onClick={() => navigate(`/mypage/${user.uid}/profile`)}
+                onClick={() => navigate(`/mypage/${owner.uid}/profile`)}
               >
                 <MyPage>마이 페이지</MyPage>
                 <FontAwesomeIcon icon={faChevronRight} />

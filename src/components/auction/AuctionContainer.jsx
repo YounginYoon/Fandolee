@@ -10,7 +10,6 @@ import ProductOwner from "../common/ProductOwner";
 import ProductTitle from "../common/ProductTitle";
 
 const AuctionContainer = ({ data }) => {
-  //console.log("data: ", data);
   const navigate = useNavigate();
   const goAuctionDetailPage = () => {
     navigate(`/auction/auctiondetail/${data.id}`);
