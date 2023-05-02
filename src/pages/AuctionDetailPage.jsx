@@ -8,6 +8,7 @@ import ProductOwner from "../components/common/ProductOwner";
 import AuctionDetailInfo from "../components/auction/AuctionDetailInfo";
 import GreenLine from "../components/common/GreenLine";
 import Loading from "../components/common/Loading";
+import AuctionDetail from "../components/auction/AuctionDetail";
 
 const AuctionDetailPage = () => {
   const dataID = useParams();
@@ -44,6 +45,8 @@ const AuctionDetailPage = () => {
       <AuctionDetailInfo product={product} />
 
       <GreenLine />
+
+      <AuctionDetail product={product} />
     </Container>
   );
 };
