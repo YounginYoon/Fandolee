@@ -5,8 +5,10 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import AuctionBiddingChat from '../components/auction/AuctionBiddingChat';
-import AuctionBiddingDetail from '../components/auction/AuctionBiddingDetail';
+import ProductChatInfo from '../components/common/ProductChatInfo';
 import ChatProductHeader from '../components/common/ChatProductHeader';
+import GreenLine from '../components/common/GreenLine';
+import Footer from '../components/footer/Footer';
 
 const AuctionBiddingPage = () => {
   const productData = useParams();
@@ -15,7 +17,7 @@ const AuctionBiddingPage = () => {
     <div className="productInformation">
       <ChatProductHeader productData={productData} />
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <AuctionBiddingDetail />
+        <ProductChatInfo productData={productData} postingMode={'auction'} />
         <AuctionBiddingChat productData={productData} />
       </div>
     </div>

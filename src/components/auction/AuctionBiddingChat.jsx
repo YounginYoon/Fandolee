@@ -91,7 +91,7 @@ const AuctionBiddingChat = ({ productData }) => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <div style={{ width: '1000px', border: 'solid red 1px' }}>
+      <div style={{ width: '500px', border: 'solid red 1px' }}>
         <div style={{ padding: '10px' }}>
           <p>경매 현황</p>
           <p>투찰 최소가: {minPrice}</p>
