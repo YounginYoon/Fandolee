@@ -8,6 +8,8 @@ import { colors } from "../../common/color";
 import Bamboo from "../common/Bamboo";
 import useUser from "../../hooks/useUser";
 import { useNavigate, useParams } from "react-router-dom";
+import useOwner from "../../hooks/useOwner";
+import Loading from "../common/Loading";
 
 const UserHeader = () => {
   const user = useUser();
@@ -15,6 +17,8 @@ const UserHeader = () => {
   const navigate = useNavigate();
 
   const [isAdmin, setIsAdmin] = useState(false);
+
+  const [owner, profileImage] = useOwner(params.userId);
 
   useEffect(() => {
     if (user.uid === params.userId) {
@@ -24,14 +28,18 @@ const UserHeader = () => {
     }
   }, [user, params]);
 
+  if (!owner || !profileImage) {
+    return <Loading />;
+  }
+
   return (
     <Container>
       <Inner>
-        <ProfileImage src="../img/mon1.jpeg" />
+        <ProfileImage src={profileImage} />
 
         <InfoDiv>
           <NicknameDiv>
-            <Nickname>닉네임</Nickname>
+            <Nickname>{owner.nickName}</Nickname>
 
             {isAdmin ? (
               <MyPageBtn
@@ -68,6 +76,7 @@ const ProfileImage = styled.img`
   height: 150px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid ${colors.COLOR_GRAY_BORDER};
 `;
 
 const InfoDiv = styled.div`

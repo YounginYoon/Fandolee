@@ -10,6 +10,7 @@ import { moneyFormat } from "../../common/money";
 
 import GreenLine from "../common/GreenLine";
 import { useState } from "react";
+import Tag from "../common/Tag";
 
 const AuctionDetailInfo = ({ product }) => {
   const [isLike, setIsLike] = useState(false);
@@ -46,24 +47,11 @@ const AuctionDetailInfo = ({ product }) => {
           <GreenLine />
 
           <TagsDiv>
-            <TagBox>
-              <Tag>굿즈 종류</Tag>
-              <TagText>{category}</TagText>
-            </TagBox>
+            <Tag label="굿즈 종류" text={category} />
 
-            {idol ? (
-              <TagBox>
-                <Tag>아이돌</Tag>
-                <TagText>{idol}</TagText>
-              </TagBox>
-            ) : null}
+            {idol ? <Tag label="아이돌" text={idol} /> : null}
 
-            {member ? (
-              <TagBox>
-                <Tag>멤버</Tag>
-                <TagText>{member}</TagText>
-              </TagBox>
-            ) : null}
+            {member ? <Tag label="멤버" text={member} /> : null}
           </TagsDiv>
         </InfoDiv>
 
@@ -130,26 +118,6 @@ const Price = styled.p`
 const TagsDiv = styled.div`
   margin-top: 7.5px;
 `;
-
-const TagBox = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const Tag = styled.div`
-  font-size: 12px;
-  color: ${colors.COLOR_DARKGRAY_TEXT};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80px;
-  height: 28px;
-  background-color: ${colors.COLOR_LIGHTGREEN_BACKGROUND};
-  border-radius: 20px;
-  margin: 2.5px 15px 2.5px 0;
-`;
-
-const TagText = styled.p``;
 
 const BtnDiv = styled.div`
   display: flex;

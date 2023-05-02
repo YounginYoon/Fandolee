@@ -1,64 +1,31 @@
-import React, { useEffect,  useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { colors } from "../../common/color";
-import {  doc ,getDoc } from "firebase/firestore";
-import { ref,  getDownloadURL } from "firebase/storage";
-import { db , storage } from "../../config/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { ref, getDownloadURL } from "firebase/storage";
+import { db, storage } from "../../config/firebase";
+import useOwner from "../../hooks/useOwner";
+import Loading from "./Loading";
+import { useNavigate } from "react-router-dom";
 
+const ProductOwner = ({ uid }) => {
+  const navigate = useNavigate();
 
-const ProductOwner = ({ owner }) => {
-  //owner = data.uid 가 들어있음
-  
-  const [name, setName] = useState("");
-  const [url, setUrl] = useState("");
-  
-  const PresentNickName = async() => {
-    const docRef = doc(db,"users",owner);
-    const docSnap = await getDoc(docRef);
-  
+  const [owner, profileImage] = useOwner(uid);
 
-   try{
-      
-     //만약 존재하면 콘솔창에 표시.
-     if (docSnap.exists()){
-       //console.log(docSnap.data().nickName);
-       setName(docSnap.data());
-     }
-    
-   }catch(error){
-     console.log("productOwner: ",error)
-    }
-
-    
-
-  }
-  const getImage = async() => {
-    
-    try {
-      const imageRef = ref(storage, `profile_image/${owner}`);
-      await getDownloadURL(imageRef).then((x) =>{
-        setUrl(x);
-        //if (x) console.log('imageUrl:', url);
-      })
-      
-    } catch (e) {
-      console.log("Get image err: ",e);
-    }
+  const goOwnerPage = () => {
+    navigate(`/user/${uid}`);
   };
-  useEffect(() => {
-    //console.log("닉네임표시: ");
-    PresentNickName();
-    getImage();
-  }, []);
 
-  
+  if (!owner || !profileImage) {
+    return <></>;
+  }
 
   return (
     <Container>
-      <ProfileImage src={url} />
+      <ProfileImage src={profileImage} onClick={goOwnerPage} />
 
-      <Ninckname>{name.nickName}</Ninckname>
-      
+      <Ninckname>{owner.nickName}</Ninckname>
     </Container>
   );
 };

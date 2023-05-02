@@ -4,9 +4,10 @@ import styled from "styled-components";
 import { db } from "../config/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useNavigate, useParams } from "react-router-dom";
-import ProductOwner from "../components/common/ProductOwner";
 import AuctionDetailInfo from "../components/auction/AuctionDetailInfo";
 import GreenLine from "../components/common/GreenLine";
+import Loading from "../components/common/Loading";
+import AuctionDetail from "../components/auction/AuctionDetail";
 
 const AuctionDetailPage = () => {
   const dataID = useParams();
@@ -35,7 +36,7 @@ const AuctionDetailPage = () => {
   }, []);
 
   if (!product) {
-    return <></>;
+    return <Loading />;
   }
 
   return (
@@ -43,6 +44,8 @@ const AuctionDetailPage = () => {
       <AuctionDetailInfo product={product} />
 
       <GreenLine />
+
+      <AuctionDetail product={product} />
     </Container>
   );
 };
