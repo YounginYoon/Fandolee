@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
-import { useNavigate, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import AuctionDetailInfo from "../components/auction/AuctionDetailInfo";
 import GreenLine from "../components/common/GreenLine";
 import Loading from "../components/common/Loading";
@@ -12,9 +12,10 @@ const AuctionDetailPage = () => {
   const params = useParams();
 
   const id = params.id;
+  
   const product = useProduct(id);
 
-  // console.log("product: ", product);
+  console.log("product: ", product);
 
   if (!product) {
     return <Loading />;

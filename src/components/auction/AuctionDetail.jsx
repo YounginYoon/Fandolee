@@ -1,24 +1,61 @@
-import React from "react";
+import React, {useEffect} from "react";
 
 import { colors } from "../../common/color";
 import styled from "styled-components";
 import ProductDetailInfo from "../common/ProductDetailInfo";
 import ProductOwnerInfo from "../common/ProductOwnerInfo";
-
 import { authService } from "../../config/firebase";
+import { useNavigate } from "react-router-dom";
+
+import { db } from "../../config/firebase";
+
+function deleteDocument(docId) {
+  const confirmDelete = window.confirm("삭제하시겠습니까?");
+
+  const productDB = db.collection("product");
+
+  if (confirmDelete) {
+    productDB.doc(docId).delete()
+      .then(() => {
+        console.log("문서가 삭제되었습니다.");
+      })
+      .catch((error) => {
+        console.error("삭제 중 에러가 발생했습니다.", error);
+      });
+  }
+}
+
 
 const AuctionDetail = ({ product }) => {
-
+  //작성자와 현재 로그인한 사용자가 일치하는지 확인하기 위함
   const user = authService.currentUser;
+  const navigate = useNavigate();
+  const goModifyPage = () =>{
+    navigate(`./modify`)
+  };
+
+  useEffect(() => {
+    if (!user) {
+      alert('로그인을 먼저 해주세요.');
+      navigate(-1);
+    };
+  })
   
 
+  const handleDelete = () =>{
+    deleteDocument(product.id);
+    navigate(-1);
+  }
   return (
     
     <Container>
 
       <div>
-          {product.uid === user.uid && <button>edit</button>}
+          {user && product.uid === user.uid && 
+          <button data={product} onClick={goModifyPage}>edit</button>}
+          {user && product.uid === user.uid && <button onClick={handleDelete}>delete</button>}
       </div>
+      
       <ProductDetailInfo product={product} />
 
       <ProductOwnerInfo uid={product.uid} />

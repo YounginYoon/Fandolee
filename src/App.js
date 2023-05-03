@@ -33,6 +33,7 @@ import AuctionPostPage from "./pages/AuctionPostPage";
 import AuctionDetailPage from "./pages/AuctionDetailPage";
 import ExchangePostPage from "./pages/ExchangePostPage";
 import AuctionChattingPage from "./pages/AuctionChattingPage";
+import AuctionModifyPage from "./pages/AuctionModifyPage";
 const App = () => {
   return (
     <RootLayout className="root-styles">
@@ -68,6 +69,8 @@ const App = () => {
           <Route path="auctionlist" element={<AuctionListPage />} />
           {/*경매 게시글 상세 페이지*/}
           <Route path="auctiondetail/:id" element={<AuctionDetailPage />} />
+          {/*경매 게시글 수정 페이지*/}
+          <Route path="auctiondetail/:id/modify" element={<AuctionModifyPage/>} />
           {/*경매 투찰 임시 페이지 */}
           <Route path="auctionbidding" element={<AuctionBiddingPage />} />
           {/* 경매 게시글 업로드 페이지 */}

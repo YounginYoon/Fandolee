@@ -15,16 +15,26 @@ import PostDate from "../components/post/PostDate";
 
 import { db, storage } from "../config/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-
+import { useParams } from "react-router-dom";
 import moment from "moment";
 import useUser from "../hooks/useUser";
 import { dateFormat } from "../common/date";
+import useProduct from "../hooks/useProduct";
+import Loading from "../components/common/Loading";
 
-const AuctionPostPage = () => {
+const AuctionModifyPage = () => {
+  const params = useParams();
+  const id = params.id;
+  const productDB = db.collection("product");
+  const product = useProduct(id);
+
+  //console.log(product.title);
   const user = useUser();
   // 이미지 파일 state
   const [images, setImages] = useState([]);
-  // inputs
+  const [idol, setIdol] = useState("");
+  const [category, setCategory] = useState("");
+ 
   const [inputs, setInputs] = useState({
     minPrice: "",
     maxPrice: "",
@@ -33,9 +43,13 @@ const AuctionPostPage = () => {
     likes: 0,
     endDate: dateFormat(new Date()),
   });
+
+  if (!product) {
+    return <Loading />;
+  }
+ 
+  
   const { title, info, likes, endDate, minPrice, maxPrice } = inputs;
-  const [idol, setIdol] = useState("");
-  const [category, setCategory] = useState("");
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -49,7 +63,7 @@ const AuctionPostPage = () => {
   const onPost = async () => {
     try {
       console.log({ inputs, idol, category });
-      const productDB = db.collection("product");
+      
 
       if (images.length === 0) {
         alert("이미지를 선택해주세요.");
@@ -96,8 +110,8 @@ const AuctionPostPage = () => {
         biddingDate: new Date(),
       };
 
-      await productDB
-        .add({
+      await productDB.doc(id)
+        .update({
           ...body,
           uid: user.uid,
         })
@@ -162,6 +176,6 @@ const AuctionPostPage = () => {
   );
 };
 
-export default AuctionPostPage;
+export default AuctionModifyPage;
 
 const Container = styled.div``;
