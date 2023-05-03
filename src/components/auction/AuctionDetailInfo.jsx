@@ -12,6 +12,7 @@ import GreenLine from "../common/GreenLine";
 import { useState } from "react";
 import Tag from "../common/Tag";
 import { useNavigate } from "react-router-dom";
+import { remainDate, timestampToDateFormat } from "../../common/date";
 
 const AuctionDetailInfo = ({ product }) => {
   const navigate = useNavigate();
@@ -36,6 +37,18 @@ const AuctionDetailInfo = ({ product }) => {
 
   return (
     <Container>
+      <EndDateDiv>
+        <EndDateText>
+          낙찰까지{" "}
+          <span style={{ color: colors.COLOR_RED_TEXT }}>
+            {remainDate(endDate)}일
+          </span>{" "}
+          남았습니다.
+        </EndDateText>
+
+        <EndDateBox>낙찰 예정일 {timestampToDateFormat(endDate)}</EndDateBox>
+      </EndDateDiv>
+
       <Image src={image} />
 
       <SubContainer>
@@ -82,8 +95,35 @@ const Container = styled.div`
   border-radius: 10px;
   border: 3px solid ${colors.COLOR_MAIN};
   width: max-content;
-  margin: 50px auto;
+  margin: 80px auto 50px;
   display: flex;
+  position: relative;
+`;
+
+const EndDateDiv = styled.div`
+  position: absolute;
+  left: 0;
+  top: -40px;
+  width: 100%;
+  //   background-color: orange;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+`;
+
+const EndDateText = styled.div`
+  font-size: 12px;
+  font-weight: bold;
+`;
+
+const EndDateBox = styled.div`
+  background-color: ${colors.COLOR_RED_BACKGROUND};
+  color: white;
+  font-weight: bold;
+  padding: 0 15px;
+  border-radius: 5px;
+  font-size: 14px;
+  line-height: 30px;
 `;
 
 const Image = styled.img`
