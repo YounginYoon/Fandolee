@@ -3,11 +3,16 @@ import React from "react";
 import styled from "styled-components";
 import { colors } from "../../common/color";
 
-const Tag = ({ label, text, color = colors.COLOR_LIGHTGREEN_BACKGROUND }) => {
+const Tag = ({
+  label,
+  text,
+  color = colors.COLOR_LIGHTGREEN_BACKGROUND,
+  textColor,
+}) => {
   return (
     <TagBox>
       <TagLabel color={color}>{label}</TagLabel>
-      <TagText>{text}</TagText>
+      <TagText style={textColor ? { color: textColor } : {}}>{text}</TagText>
     </TagBox>
   );
 };
