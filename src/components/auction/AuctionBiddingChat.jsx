@@ -18,27 +18,37 @@ const AuctionBiddingChat = ({ productData }) => {
   const [chatText, setChatText] = useState('');
   const [chatList, setChatList] = useState([]);
   const [biddingChat, setBiddingChat] = useState('');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
+  const [biddingMinPrice, setBiddingMinPrice] = useState(0);
+  const [biddingMaxPrice, setBiddingMaxPrice] = useState(0);
 
   useEffect(() => {
     const chatRef = realTimeDatabase
       .ref(`biddingChatRoom/${productData.id}`)
-      .orderByChild('timestamp');
+      .orderByChild('biddingPrice');
+
     chatRef.on('value', (snapshot) => {
       const chats = snapshot.val();
       const chatArray = [];
-      const prices = Object.values(chats).map((chat) => chat.biddingPrice);
-      for (let id in chats) {
-        chatArray.push({ id, ...chats[id] });
-        if (chats[id].username === user.uid) {
-          setBiddingChat(chats[id].biddingPrice);
+      let prices = [];
+
+      if (chats) {
+        prices = Object.values(chats).map((chat) => chat.biddingPrice);
+        for (let id in chats) {
+          chatArray.push({ id, ...chats[id] });
+          if (chats[id].username === user.uid) {
+            setBiddingChat(chats[id].biddingPrice);
+          }
         }
       }
       setChatList(chatArray);
-      setMinPrice(Math.min(...prices));
-      setMaxPrice(Math.max(...prices));
-      //console.log(prices);
+      //console.log(chatArray);
+      if (prices.length <= 0) {
+        setBiddingMinPrice(0);
+        setBiddingMaxPrice(0);
+      } else {
+        setBiddingMinPrice(Math.min(...prices));
+        setBiddingMaxPrice(Math.max(...prices));
+      }
     });
   }, []);
 
@@ -49,14 +59,15 @@ const AuctionBiddingChat = ({ productData }) => {
     product.get().then((res) => {
       const minPrice = res.data().minPrice;
       const maxPrice = res.data().maxPrice;
-      const latestPrice =
-        chatList.length > 0
-          ? chatList[chatList.length - 1].biddingPrice
-          : minPrice;
+      // const latestPrice =
+      //   chatList.length > 0
+      //     ? chatList[chatList.length - 1].biddingPrice
+      //     : minPrice - 1;
 
       const chat = {
         // 전송할 금액의 정보를 담음
         username: user.uid,
+        nickname: user.displayName,
         biddingPrice: parseInt(chatText),
         timestamp: Date.now(),
       };
@@ -69,8 +80,8 @@ const AuctionBiddingChat = ({ productData }) => {
       } else if (chat.biddingPrice > maxPrice) {
         window.confirm(`${maxPrice}원보다 작은 금액을 입력하세요.`);
         return;
-      } else if (chat.biddingPrice <= latestPrice) {
-        window.confirm(`${latestPrice}원보다 큰 금액을 입력하세요.`);
+      } else if (chat.biddingPrice <= biddingMaxPrice) {
+        window.confirm(`${biddingMaxPrice}원보다 큰 금액을 입력하세요.`);
         return;
       } else {
         chatSetRef.set(chat);
@@ -94,8 +105,8 @@ const AuctionBiddingChat = ({ productData }) => {
       <div style={{ width: '500px', border: 'solid red 1px' }}>
         <div style={{ padding: '10px' }}>
           <p>경매 현황</p>
-          <p>투찰 최소가: {minPrice}</p>
-          <p>투찰 최대가: {maxPrice}</p>
+          <p>투찰 최소가: {biddingMinPrice}</p>
+          <p>투찰 최대가: {biddingMaxPrice}</p>
         </div>
         {chatList.map((chat) => (
           <li
@@ -108,7 +119,11 @@ const AuctionBiddingChat = ({ productData }) => {
               margin: '10px',
             }}
           >
-            <div>{chat.username}</div>
+            {user.uid !== chat.username ? (
+              <div>{chat.nickname}</div>
+            ) : (
+              <div></div>
+            )}
             <div>{chat.biddingPrice}</div>
           </li>
         ))}
@@ -121,12 +136,25 @@ const AuctionBiddingChat = ({ productData }) => {
           </div>
         ) : (
           <div>
-            <input
-              value={chatText}
-              onChange={(e) => setChatText(e.target.value)}
-              onKeyUp={onKeyUp}
-            />
-            <button onClick={handleChatSend}>전송</button>
+            {productData.uid !== user.uid ? (
+              <input
+                value={chatText}
+                onChange={(e) => setChatText(e.target.value)}
+                onKeyUp={onKeyUp}
+              />
+            ) : (
+              <input
+                value={chatText}
+                placeholder="상품 등록자는 채팅에 참여할 수 없습니다."
+                style={{ width: '300px' }}
+                disabled
+              />
+            )}
+            {productData.uid !== user.uid ? (
+              <button onClick={handleChatSend}>전송</button>
+            ) : (
+              <div></div>
+            )}
           </div>
         )}
       </div>
@@ -134,4 +162,4 @@ const AuctionBiddingChat = ({ productData }) => {
   );
 };
 
-export default AuctionBiddingChat;
+export { AuctionBiddingChat as default };

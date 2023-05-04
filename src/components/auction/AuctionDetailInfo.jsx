@@ -12,7 +12,7 @@ import { moneyFormat } from '../../common/money';
 import GreenLine from '../common/GreenLine';
 import { useState } from 'react';
 import Tag from '../common/Tag';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const AuctionDetailInfo = ({ product }) => {
   const navigate = useNavigate();
@@ -39,6 +39,7 @@ const AuctionDetailInfo = ({ product }) => {
   } = product;
 
   const goAuctionBiddingPage = () => {
+    console.log(dataID);
     navigate(`/auction/auctionbidding/${dataID}`);
   };
 
@@ -66,7 +67,8 @@ const AuctionDetailInfo = ({ product }) => {
         </InfoDiv>
 
         <BtnDiv>
-          <Btn onClick={() => navigate(`/chat/auction?aid=${id}&cid=${1}`)}>
+          <Btn onClick={() => navigate(`/auction/auctionbidding/${dataID}`)}>
+            {/* <Btn onClick={() => navigate(`/chat/auction?aid=${id}&cid=${1}`)}> */}
             경매 참여
           </Btn>
           <HeartDiv>

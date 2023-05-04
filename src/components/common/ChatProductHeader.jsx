@@ -26,7 +26,7 @@ const ChatProductHeader = ({ productData }) => {
 
         const writerRef = doc(db, 'users', docSnap.data().uid);
         const writerDocSnap = await getDoc(writerRef);
-        setWriterName(writerDocSnap.data().userName);
+        setWriterName(writerDocSnap.data().nickName);
 
         const writerImageRef = ref(
           storage,
