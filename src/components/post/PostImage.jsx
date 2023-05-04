@@ -11,13 +11,8 @@ const PostImage = ({ images, setImages }) => {
 
   const fileInputRef = useRef(null);
 
-  const input1Ref = useRef(null);
-  const input2Ref = useRef(null);
-  const input3Ref = useRef(null);
-
   // 이미지 소스 set
   const onUpload = (e) => {
-    console.log("onChange");
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -28,6 +23,7 @@ const PostImage = ({ images, setImages }) => {
         setImageSrcs([...imageSrcs, ret]);
         setImages([...images, file]);
         resolve();
+        e.target.value = "";
       };
     });
   };
@@ -47,35 +43,21 @@ const PostImage = ({ images, setImages }) => {
     setImages(newImages);
   };
 
-  useEffect(() => {
-    console.log(images);
-  }, [images]);
+  // useEffect(() => {
+  //   console.log(images);
+  // }, [images]);
 
   return (
     <Container>
       <input
         type="file"
         accept="image/*"
-        ref={input1Ref}
-        style={{ display: "none" }}
-        onChange={onUpload}
-      />
-      <input
-        type="file"
-        accept="image/*"
-        ref={input2Ref}
-        style={{ display: "none" }}
-        onChange={onUpload}
-      />
-      <input
-        type="file"
-        accept="image/*"
-        ref={input3Ref}
+        ref={fileInputRef}
         style={{ display: "none" }}
         onChange={onUpload}
       />
 
-      <ImageContainer onClick={() => input1Ref.current?.click()}>
+      <ImageContainer onClick={() => onClick(0)}>
         {imageSrcs.length > 0 ? (
           <>
             <Image src={imageSrcs[0]} />
@@ -90,7 +72,7 @@ const PostImage = ({ images, setImages }) => {
 
       {imageSrcs.length > 0 ? (
         <ImageWrapper>
-          <SubImageContainer onClick={() => input2Ref.current?.click()}>
+          <SubImageContainer onClick={() => onClick(1)}>
             {imageSrcs.length <= 1 ? (
               <FontAwesomeIcon icon={faPlus} />
             ) : (
@@ -104,7 +86,7 @@ const PostImage = ({ images, setImages }) => {
           </SubImageContainer>
 
           {imageSrcs.length >= 2 ? (
-            <SubImageContainer onClick={() => input3Ref.current?.click()}>
+            <SubImageContainer onClick={() => onClick(2)}>
               {imageSrcs.length < 3 ? (
                 <FontAwesomeIcon icon={faPlus} />
               ) : (
