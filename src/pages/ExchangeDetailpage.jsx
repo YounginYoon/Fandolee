@@ -1,20 +1,21 @@
-
 import React from "react";
 import styled from "styled-components";
 
-import { useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import AuctionDetailInfo from "../components/auction/AuctionDetailInfo";
 import GreenLine from "../components/common/GreenLine";
 import Loading from "../components/common/Loading";
 import AuctionDetail from "../components/auction/AuctionDetail";
-import useProduct from "../hooks/useProduct";
-
-const AuctionDetailPage = () => {
+import useExchange from "../hooks/useExchange";
+import ExchangeDetailInfo from "../components/exchange/ExchangeDetailInfo";
+const ExchangeDetailPage = () => {
   const params = useParams();
 
   const id = params.id;
+  
+  const product = useExchange(id);
 
-  const product = useProduct(id);
+ //console.log("product: ", product);
 
   if (!product) {
     return <Loading />;
@@ -22,15 +23,11 @@ const AuctionDetailPage = () => {
 
   return (
     <Container>
-      <AuctionDetailInfo product={product} />
-
-      <GreenLine />
-
-      <AuctionDetail product={product} />
+      <ExchangeDetailInfo product={product} />
     </Container>
   );
 };
 
-export default AuctionDetailPage;
+export default ExchangeDetailPage;
 
 const Container = styled.div``;

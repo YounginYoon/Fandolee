@@ -4,10 +4,11 @@ import ProductListLayout from "../common/ProductListLayout";
 import ExchangeContainer from "./ExchangeContainer";
 
 const ExchangeList = ({ products }) => {
+  //console.log("exchange list : ", products);
   return (
     <ProductListLayout>
-      {products.map((product, idx) => (
-        <ExchangeContainer key={idx} product={product} />
+      {products.map((product, index) => (
+        <ExchangeContainer data={product} key={index} />
       ))}
     </ProductListLayout>
   );
