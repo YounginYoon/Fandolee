@@ -34,6 +34,8 @@ import AuctionDetailPage from "./pages/AuctionDetailPage";
 import ExchangePostPage from "./pages/ExchangePostPage";
 import AuctionChattingPage from "./pages/AuctionChattingPage";
 import AuctionModifyPage from "./pages/AuctionModifyPage";
+import ExchangeDetailPage from "./pages/ExchangeDetailpage";
+
 const App = () => {
   return (
     <RootLayout className="root-styles">
@@ -82,6 +84,8 @@ const App = () => {
           <Route path="list" element={<ExchangeListPage />} />
           {/* 교환 업로드 페이지 */}
           <Route path="post" element={<ExchangePostPage />} />
+          {/* 교환 상세 페이지 */}
+          <Route path="exchangedetail/:id" element ={<ExchangeDetailPage/>}/>
         </Route>
 
         {/* 채팅 */}
