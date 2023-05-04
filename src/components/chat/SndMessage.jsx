@@ -1,15 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 import { colors } from "../../common/color";
+import { timestampToDateTimeFormat } from "../../common/date";
 
-const SndMessage = () => {
+const SndMessage = ({ chat }) => {
+  const { id, biddingPrice, username, nickname, timestamp } = chat;
+
   return (
     <Container>
-      <Date>2023-05-01 18:40</Date>
+      <Date>{timestampToDateTimeFormat(timestamp)}</Date>
 
-      <Message>
-        안녕하세요ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ
-      </Message>
+      <Message>{biddingPrice} 원</Message>
     </Container>
   );
 };
@@ -28,7 +29,7 @@ const Container = styled.div`
 
 const Date = styled.p`
   color: ${colors.COLOR_DARKGRAY_TEXT};
-  font-size: 12px;
+  font-size: 10px;
   margin-right: 7px;
 `;
 

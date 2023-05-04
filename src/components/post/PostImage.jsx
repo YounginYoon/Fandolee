@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 
 import { colors } from "../../common/color";
 
@@ -23,13 +23,29 @@ const PostImage = ({ images, setImages }) => {
         setImageSrcs([...imageSrcs, ret]);
         setImages([...images, file]);
         resolve();
+        e.target.value = "";
       };
     });
   };
 
-  useEffect(() => {
-    console.log(images);
-  }, [images]);
+  const onClick = (index) => {
+    if (imageSrcs.length <= index) {
+      fileInputRef.current?.click();
+      return;
+    }
+  };
+
+  const onDelete = (index) => {
+    const newImageSrcs = imageSrcs.filter((_, idx) => idx !== index);
+    const newImages = images.filter((_, idx) => idx !== index);
+    // console.log(newImageSrcs);
+    setImageSrcs(newImageSrcs);
+    setImages(newImages);
+  };
+
+  // useEffect(() => {
+  //   console.log(images);
+  // }, [images]);
 
   return (
     <Container>
@@ -41,9 +57,14 @@ const PostImage = ({ images, setImages }) => {
         onChange={onUpload}
       />
 
-      <ImageContainer onClick={() => fileInputRef.current?.click()}>
+      <ImageContainer onClick={() => onClick(0)}>
         {imageSrcs.length > 0 ? (
-          <Image src={imageSrcs[0]} />
+          <>
+            <Image src={imageSrcs[0]} />
+            <DeleteIcon onClick={() => onDelete(0)}>
+              <FontAwesomeIcon icon={faCircleXmark} />
+            </DeleteIcon>
+          </>
         ) : (
           <FontAwesomeIcon icon={faPlus} />
         )}
@@ -51,20 +72,30 @@ const PostImage = ({ images, setImages }) => {
 
       {imageSrcs.length > 0 ? (
         <ImageWrapper>
-          <SubImageContainer onClick={() => fileInputRef.current?.click()}>
+          <SubImageContainer onClick={() => onClick(1)}>
             {imageSrcs.length <= 1 ? (
               <FontAwesomeIcon icon={faPlus} />
             ) : (
-              <Image src={imageSrcs[1]} />
+              <>
+                <Image src={imageSrcs[1]} />
+                <DeleteIcon onClick={() => onDelete(1)}>
+                  <FontAwesomeIcon icon={faCircleXmark} />
+                </DeleteIcon>
+              </>
             )}
           </SubImageContainer>
 
           {imageSrcs.length >= 2 ? (
-            <SubImageContainer onClick={() => fileInputRef.current?.click()}>
+            <SubImageContainer onClick={() => onClick(2)}>
               {imageSrcs.length < 3 ? (
                 <FontAwesomeIcon icon={faPlus} />
               ) : (
-                <Image src={imageSrcs[2]} />
+                <>
+                  <Image src={imageSrcs[2]} />
+                  <DeleteIcon onClick={() => onDelete(2)}>
+                    <FontAwesomeIcon icon={faCircleXmark} />
+                  </DeleteIcon>
+                </>
               )}
             </SubImageContainer>
           ) : null}
@@ -127,4 +158,15 @@ const SubImageContainer = styled.div`
   font-size: 25px;
   color: ${colors.COLOR_GRAY_BORDER};
   position: relative;
+`;
+
+const DeleteIcon = styled.div`
+  position: absolute;
+  // background-color: orange;
+  top: 5%;
+  right: 5%;
+  z-index: 10;
+  cursor: pointer;
+  font-size: 18px;
+  color: ${colors.COLOR_RED_TEXT};
 `;

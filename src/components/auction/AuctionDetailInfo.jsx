@@ -22,9 +22,7 @@ const AuctionDetailInfo = ({ product }) => {
   const user = useUser();
 
   const [isLike, setIsLike] = useState(false);
-  const getDataID = useParams();
 
-  const dataID = getDataID.id;
   const {
     image,
     title,
@@ -43,9 +41,8 @@ const AuctionDetailInfo = ({ product }) => {
     biddingPrice,
   } = product;
 
-  const goAuctionBiddingPage = () => {
-    console.log(dataID);
-    navigate(`/auction/auctionbidding/${dataID}`);
+  const goAuctionChatting = () => {
+    navigate(`/auction/${id}/chat`);
   };
 
   const onDelete = async () => {
@@ -115,10 +112,8 @@ const AuctionDetailInfo = ({ product }) => {
         </InfoDiv>
 
         <BtnDiv>
-          <Btn onClick={() => navigate(`/auction/auctionbidding/${dataID}`)}>
-            {/* <Btn onClick={() => navigate(`/chat/auction?aid=${id}&cid=${1}`)}> */}
-            경매 참여
-          </Btn>
+          {/* <Btn onClick={() => navigate(`/auction/auctionbidding/${dataID}`)}> */}
+          <Btn onClick={goAuctionChatting}>경매 참여</Btn>
           <HeartDiv>
             <FontAwesomeIcon
               onClick={() => setIsLike(!isLike)}
