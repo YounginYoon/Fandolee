@@ -8,7 +8,7 @@ const RecommendPrice = () => {
     <Container>
       <RecommendBox>
         <FandolBox>
-          <FandolImg src="../img/fandol.png" />
+          <FandolImg src="/img/fandol.png" />
           <FandolText>팬봇 추천</FandolText>
         </FandolBox>
 

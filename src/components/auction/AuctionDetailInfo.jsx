@@ -1,21 +1,29 @@
 import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faGear, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 
 import { colors } from "../../common/color";
 import { moneyFormat } from "../../common/money";
 
+import { useEffect } from "react";
 import GreenLine from "../common/GreenLine";
 import { useState } from "react";
 import Tag from "../common/Tag";
-import { useNavigate } from "react-router-dom";
+import { remainDate, timestampToDateFormat } from "../../common/date";
+import { db } from "../../config/firebase";
+import useUser from "../../hooks/useUser";
 
 const AuctionDetailInfo = ({ product }) => {
   const navigate = useNavigate();
+  const user = useUser();
   const [isLike, setIsLike] = useState(false);
+  const getDataID = useParams();
+
+  const dataID = getDataID.id;
   const {
     image,
     title,
@@ -34,11 +42,59 @@ const AuctionDetailInfo = ({ product }) => {
     biddingPrice,
   } = product;
 
+  const goAuctionBiddingPage = () => {
+    console.log(dataID);
+    navigate(`/auction/auctionbidding/${dataID}`);
+  };
+
+  const onDelete = async () => {
+    if (!window.confirm("해당 게시글을 삭제하시겠습니까?")) {
+      return;
+    }
+
+    try {
+      const productDB = db.collection("product");
+
+      await productDB.doc(id).delete();
+
+      navigate(-1);
+    } catch (err) {
+      console.log("delete product error: ", err);
+    }
+  };
+
+  const onUpdate = async () => {
+    navigate("./modify", { product });
+  };
+
   return (
     <Container>
+      <EndDateDiv>
+        <EndDateText>
+          낙찰까지{" "}
+          <span style={{ color: colors.COLOR_RED_TEXT }}>
+            {remainDate(endDate)}일
+          </span>{" "}
+          남았습니다.
+        </EndDateText>
+
+        <EndDateBox>낙찰 예정일 {timestampToDateFormat(endDate)}</EndDateBox>
+      </EndDateDiv>
+
       <Image src={image} />
 
       <SubContainer>
+        {uid === user.uid && (
+          <IconDiv>
+            <Icon onClick={onUpdate}>
+              <FontAwesomeIcon icon={faGear} />
+            </Icon>
+            <Icon onClick={onDelete}>
+              <FontAwesomeIcon icon={faTrash} />
+            </Icon>
+          </IconDiv>
+        )}
+
         <InfoDiv>
           <Title>{title}</Title>
 
@@ -58,7 +114,8 @@ const AuctionDetailInfo = ({ product }) => {
         </InfoDiv>
 
         <BtnDiv>
-          <Btn onClick={() => navigate(`/chat/auction?aid=${id}&cid=${1}`)}>
+          <Btn onClick={() => navigate(`/auction/auctionbidding/${dataID}`)}>
+            {/* <Btn onClick={() => navigate(`/chat/auction?aid=${id}&cid=${1}`)}> */}
             경매 참여
           </Btn>
           <HeartDiv>
@@ -82,8 +139,35 @@ const Container = styled.div`
   border-radius: 10px;
   border: 3px solid ${colors.COLOR_MAIN};
   width: max-content;
-  margin: 50px auto;
+  margin: 80px auto 50px;
   display: flex;
+  position: relative;
+`;
+
+const EndDateDiv = styled.div`
+  position: absolute;
+  left: 0;
+  top: -40px;
+  width: 100%;
+  //   background-color: orange;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+`;
+
+const EndDateText = styled.div`
+  font-size: 12px;
+  font-weight: bold;
+`;
+
+const EndDateBox = styled.div`
+  background-color: ${colors.COLOR_RED_BACKGROUND};
+  color: white;
+  font-weight: bold;
+  padding: 0 15px;
+  border-radius: 5px;
+  font-size: 14px;
+  line-height: 30px;
 `;
 
 const Image = styled.img`
@@ -101,6 +185,28 @@ const SubContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
+`;
+
+const IconDiv = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  //   background-color: orange;
+  font-size: 18px;
+`;
+
+const Icon = styled.div`
+  margin-left: 10px;
+  cursor: pointer;
+  color: ${colors.COLOR_DARKGRAY_BACKGROUND};
+  transition: 0.4s;
+
+  &:hover {
+    color: #333;
+  }
 `;
 
 const InfoDiv = styled.div``;
@@ -110,6 +216,7 @@ const Title = styled.p`
   font-size: 18px;
   margin-bottom: 15px;
   margin-top: 10px;
+  //   background-color: orange;
 `;
 
 const Price = styled.p`
