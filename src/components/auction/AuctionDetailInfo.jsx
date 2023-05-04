@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,10 +9,10 @@ import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 import { colors } from "../../common/color";
 import { moneyFormat } from "../../common/money";
 
+import { useEffect } from "react";
 import GreenLine from "../common/GreenLine";
 import { useState } from "react";
 import Tag from "../common/Tag";
-import { useNavigate } from "react-router-dom";
 import { remainDate, timestampToDateFormat } from "../../common/date";
 import { db } from "../../config/firebase";
 import useUser from "../../hooks/useUser";
@@ -20,6 +21,9 @@ const AuctionDetailInfo = ({ product }) => {
   const navigate = useNavigate();
   const user = useUser();
   const [isLike, setIsLike] = useState(false);
+  const getDataID = useParams();
+
+  const dataID = getDataID.id;
   const {
     image,
     title,
@@ -37,6 +41,11 @@ const AuctionDetailInfo = ({ product }) => {
     biddingDate,
     biddingPrice,
   } = product;
+
+  const goAuctionBiddingPage = () => {
+    console.log(dataID);
+    navigate(`/auction/auctionbidding/${dataID}`);
+  };
 
   const onDelete = async () => {
     if (!window.confirm("해당 게시글을 삭제하시겠습니까?")) {
@@ -105,7 +114,8 @@ const AuctionDetailInfo = ({ product }) => {
         </InfoDiv>
 
         <BtnDiv>
-          <Btn onClick={() => navigate(`/chat/auction?aid=${id}&cid=${1}`)}>
+          <Btn onClick={() => navigate(`/auction/auctionbidding/${dataID}`)}>
+            {/* <Btn onClick={() => navigate(`/chat/auction?aid=${id}&cid=${1}`)}> */}
             경매 참여
           </Btn>
           <HeartDiv>

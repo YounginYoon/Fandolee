@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import "./App.css";
-import { Reset } from "styled-reset";
-import styled from "styled-components";
-import { colors } from "./common/color";
+import './App.css';
+import { Reset } from 'styled-reset';
+import styled from 'styled-components';
+import { colors } from './common/color';
 
 // firestore 데이터 베이스
-import { db } from "./config/firebase";
-import { Route, Routes } from "react-router-dom";
+import { db } from './config/firebase';
+import { Route, Routes } from 'react-router-dom';
 
 // components
 import AuctionBiddingPage from "./pages/AuctionBiddingPage";
@@ -34,6 +34,8 @@ import AuctionDetailPage from "./pages/AuctionDetailPage";
 import ExchangePostPage from "./pages/ExchangePostPage";
 import AuctionChattingPage from "./pages/AuctionChattingPage";
 import AuctionModifyPage from "./pages/AuctionModifyPage";
+import ExchangeDetailPage from "./pages/ExchangeDetailpage";
+
 const App = () => {
   return (
     <RootLayout className="root-styles">
@@ -72,7 +74,7 @@ const App = () => {
           {/*경매 게시글 수정 페이지*/}
           <Route path="auctiondetail/:id/modify" element={<AuctionModifyPage/>} />
           {/*경매 투찰 임시 페이지 */}
-          <Route path="auctionbidding" element={<AuctionBiddingPage />} />
+          <Route path="auctionbidding/:id" element={<AuctionBiddingPage />} />
           {/* 경매 게시글 업로드 페이지 */}
           <Route path="post" element={<AuctionPostPage />} />
         </Route>
@@ -82,6 +84,8 @@ const App = () => {
           <Route path="list" element={<ExchangeListPage />} />
           {/* 교환 업로드 페이지 */}
           <Route path="post" element={<ExchangePostPage />} />
+          {/* 교환 상세 페이지 */}
+          <Route path="exchangedetail/:id" element ={<ExchangeDetailPage/>}/>
         </Route>
 
         {/* 채팅 */}
