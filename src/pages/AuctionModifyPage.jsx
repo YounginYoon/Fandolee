@@ -21,6 +21,7 @@ import useUser from "../hooks/useUser";
 import { dateFormat } from "../common/date";
 import useProduct from "../hooks/useProduct";
 import Loading from "../components/common/Loading";
+import { useEffect } from "react";
 
 const AuctionModifyPage = () => {
   const params = useParams();
@@ -42,10 +43,6 @@ const AuctionModifyPage = () => {
     likes: 0,
     endDate: dateFormat(new Date()),
   });
-
-  if (!product) {
-    return <Loading />;
-  }
 
   const { title, info, likes, endDate, minPrice, maxPrice } = inputs;
 
@@ -127,6 +124,16 @@ const AuctionModifyPage = () => {
       console.log("post auction error: ", err);
     }
   };
+
+  useEffect(() => {
+    if (product) {
+      console.log("product: ", product);
+    }
+  }, [product]);
+
+  if (!product) {
+    return <Loading />;
+  }
 
   return (
     <PostContainer

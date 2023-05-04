@@ -9,7 +9,7 @@ const RecommendedProducts = () => {
 
       <ProductsDiv>
         <ProductBox>
-          <ProductImg src="img/goods1.jpeg" />
+          <ProductImg src="/img/goods1.jpeg" />
 
           {/* <OwnerDiv>
             <OwnerProfileImg />
@@ -20,23 +20,23 @@ const RecommendedProducts = () => {
         </ProductBox>
 
         <ProductBox>
-          <ProductImg src="img/goods2.jpeg" />
+          <ProductImg src="/img/goods2.jpeg" />
         </ProductBox>
 
         <ProductBox>
-          <ProductImg src="img/goods3.jpeg" />
+          <ProductImg src="/img/goods3.jpeg" />
         </ProductBox>
 
         <ProductBox>
-          <ProductImg src="img/goods4.jpeg" />
+          <ProductImg src="/img/goods4.jpeg" />
         </ProductBox>
 
         <ProductBox>
-          <ProductImg src="img/goods5.jpeg" />
+          <ProductImg src="/img/goods5.jpeg" />
         </ProductBox>
 
         <ProductBox>
-          <ProductImg src="img/goods6.jpeg" />
+          <ProductImg src="/img/goods6.jpeg" />
         </ProductBox>
       </ProductsDiv>
     </Container>

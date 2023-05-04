@@ -58,7 +58,7 @@ const ChattingWrap = styled.div`
   height: 600px;
   position: relative;
 
-  background-image: url("../../img/fandol.png");
+  background-image: url("/img/fandol.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 25%;
