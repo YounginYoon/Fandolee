@@ -20,11 +20,7 @@ import useUser from "../../hooks/useUser";
 const AuctionDetailInfo = ({ product }) => {
   const navigate = useNavigate();
   const user = useUser();
-  if (!user){
-    alert("로그인을 하세요.");
-    window.location.replace("/user/login");
-   
-  }
+
   const [isLike, setIsLike] = useState(false);
   const getDataID = useParams();
 
