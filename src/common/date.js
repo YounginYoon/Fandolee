@@ -22,3 +22,8 @@ export const remainDate = (timestamp) => {
 
   return diffDate;
 };
+
+export const timestampToDateTimeFormat = (timestamp) => {
+  const date = new Date(timestamp);
+  return moment(date).format("YYYY-MM-DD HH:mm");
+};

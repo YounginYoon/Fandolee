@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
-import './App.css';
-import { Reset } from 'styled-reset';
-import styled from 'styled-components';
-import { colors } from './common/color';
+import "./App.css";
+import { Reset } from "styled-reset";
+import styled from "styled-components";
+import { colors } from "./common/color";
 
 // firestore 데이터 베이스
-import { db } from './config/firebase';
-import { Route, Routes } from 'react-router-dom';
+import { db } from "./config/firebase";
+import { Route, Routes } from "react-router-dom";
 
 // components
 import AuctionBiddingPage from "./pages/AuctionBiddingPage";
@@ -72,11 +72,16 @@ const App = () => {
           {/*경매 게시글 상세 페이지*/}
           <Route path="auctiondetail/:id" element={<AuctionDetailPage />} />
           {/*경매 게시글 수정 페이지*/}
-          <Route path="auctiondetail/:id/modify" element={<AuctionModifyPage/>} />
+          <Route
+            path="auctiondetail/:id/modify"
+            element={<AuctionModifyPage />}
+          />
           {/*경매 투찰 임시 페이지 */}
           <Route path="auctionbidding/:id" element={<AuctionBiddingPage />} />
           {/* 경매 게시글 업로드 페이지 */}
           <Route path="post" element={<AuctionPostPage />} />
+          {/* 경매 채팅 페이지 */}
+          <Route path=":id/chat" element={<AuctionChattingPage />} />
         </Route>
 
         <Route path="/exchange" element={<MainLayout />}>
@@ -85,14 +90,7 @@ const App = () => {
           {/* 교환 업로드 페이지 */}
           <Route path="post" element={<ExchangePostPage />} />
           {/* 교환 상세 페이지 */}
-          <Route path="exchangedetail/:id" element ={<ExchangeDetailPage/>}/>
-        </Route>
-
-        {/* 채팅 */}
-        <Route path="/chat" element={<MainLayout />}>
-          <Route path="auction" element={<AuctionChattingPage />} />
-          <Route path="bidding" element={<div>bidding chatting</div>} />
-          <Route path="exchange" element={<div>exchange chatting</div>} />
+          <Route path="exchangedetail/:id" element={<ExchangeDetailPage />} />
         </Route>
       </Routes>
 
