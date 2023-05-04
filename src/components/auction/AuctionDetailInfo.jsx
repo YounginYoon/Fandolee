@@ -20,6 +20,11 @@ import useUser from "../../hooks/useUser";
 const AuctionDetailInfo = ({ product }) => {
   const navigate = useNavigate();
   const user = useUser();
+  if (!user){
+    alert("로그인을 하세요.");
+    window.location.replace("/user/login");
+   
+  }
   const [isLike, setIsLike] = useState(false);
   const getDataID = useParams();
 
@@ -84,7 +89,7 @@ const AuctionDetailInfo = ({ product }) => {
       <Image src={image} />
 
       <SubContainer>
-        {uid === user.uid && (
+        {user && uid === user.uid && (
           <IconDiv>
             <Icon onClick={onUpdate}>
               <FontAwesomeIcon icon={faGear} />
