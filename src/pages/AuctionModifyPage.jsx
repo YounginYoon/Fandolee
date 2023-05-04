@@ -25,7 +25,6 @@ import Loading from "../components/common/Loading";
 const AuctionModifyPage = () => {
   const params = useParams();
   const id = params.id;
-  const productDB = db.collection("product");
   const product = useProduct(id);
 
   //console.log(product.title);
@@ -34,7 +33,7 @@ const AuctionModifyPage = () => {
   const [images, setImages] = useState([]);
   const [idol, setIdol] = useState("");
   const [category, setCategory] = useState("");
- 
+
   const [inputs, setInputs] = useState({
     minPrice: "",
     maxPrice: "",
@@ -47,8 +46,7 @@ const AuctionModifyPage = () => {
   if (!product) {
     return <Loading />;
   }
- 
-  
+
   const { title, info, likes, endDate, minPrice, maxPrice } = inputs;
 
   const onChange = (e) => {
@@ -61,9 +59,10 @@ const AuctionModifyPage = () => {
   };
 
   const onPost = async () => {
+    const productDB = db.collection("product");
+
     try {
       console.log({ inputs, idol, category });
-      
 
       if (images.length === 0) {
         alert("이미지를 선택해주세요.");
@@ -110,7 +109,8 @@ const AuctionModifyPage = () => {
         biddingDate: new Date(),
       };
 
-      await productDB.doc(id)
+      await productDB
+        .doc(id)
         .update({
           ...body,
           uid: user.uid,

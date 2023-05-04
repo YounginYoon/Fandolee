@@ -2,7 +2,7 @@ import React from "react";
 
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faGear, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 
 import { colors } from "../../common/color";
@@ -13,9 +13,12 @@ import { useState } from "react";
 import Tag from "../common/Tag";
 import { useNavigate } from "react-router-dom";
 import { remainDate, timestampToDateFormat } from "../../common/date";
+import { db } from "../../config/firebase";
+import useUser from "../../hooks/useUser";
 
 const AuctionDetailInfo = ({ product }) => {
   const navigate = useNavigate();
+  const user = useUser();
   const [isLike, setIsLike] = useState(false);
   const {
     image,
@@ -35,6 +38,26 @@ const AuctionDetailInfo = ({ product }) => {
     biddingPrice,
   } = product;
 
+  const onDelete = async () => {
+    if (!window.confirm("해당 게시글을 삭제하시겠습니까?")) {
+      return;
+    }
+
+    try {
+      const productDB = db.collection("product");
+
+      await productDB.doc(id).delete();
+
+      navigate(-1);
+    } catch (err) {
+      console.log("delete product error: ", err);
+    }
+  };
+
+  const onUpdate = async () => {
+    navigate("./modify", { product });
+  };
+
   return (
     <Container>
       <EndDateDiv>
@@ -52,6 +75,17 @@ const AuctionDetailInfo = ({ product }) => {
       <Image src={image} />
 
       <SubContainer>
+        {uid === user.uid && (
+          <IconDiv>
+            <Icon onClick={onUpdate}>
+              <FontAwesomeIcon icon={faGear} />
+            </Icon>
+            <Icon onClick={onDelete}>
+              <FontAwesomeIcon icon={faTrash} />
+            </Icon>
+          </IconDiv>
+        )}
+
         <InfoDiv>
           <Title>{title}</Title>
 
@@ -141,6 +175,28 @@ const SubContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
+`;
+
+const IconDiv = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  //   background-color: orange;
+  font-size: 18px;
+`;
+
+const Icon = styled.div`
+  margin-left: 10px;
+  cursor: pointer;
+  color: ${colors.COLOR_DARKGRAY_BACKGROUND};
+  transition: 0.4s;
+
+  &:hover {
+    color: #333;
+  }
 `;
 
 const InfoDiv = styled.div``;
@@ -150,6 +206,7 @@ const Title = styled.p`
   font-size: 18px;
   margin-bottom: 15px;
   margin-top: 10px;
+  //   background-color: orange;
 `;
 
 const Price = styled.p`
