@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Loading = () => {
   return (
     <Container>
-      <Spinner src="../../img/Spinner.gif" />
+      <Spinner src="/img/Spinner.gif" />
     </Container>
   );
 };

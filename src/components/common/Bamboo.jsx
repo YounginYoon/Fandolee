@@ -3,12 +3,16 @@ import React from "react";
 import styled from "styled-components";
 import { colors } from "../../common/color";
 
-const Bamboo = ({ bamboo }) => {
+const Bamboo = ({ bamboo, size = "L" }) => {
   return (
     <BambooDiv>
-      <BambooNum>{bamboo}</BambooNum>
+      <BambooNum
+        style={size === "S" ? { fontSize: "14px", marginBottom: "5px" } : {}}
+      >
+        {bamboo}
+      </BambooNum>
 
-      <BambooBar>
+      <BambooBar style={BambooSizeTable[size]}>
         <BambooStat bamboo={bamboo} />
       </BambooBar>
     </BambooDiv>
@@ -16,6 +20,17 @@ const Bamboo = ({ bamboo }) => {
 };
 
 export default Bamboo;
+
+const BambooSizeTable = {
+  S: {
+    width: "200px",
+    height: "18px",
+  },
+  L: {
+    width: "400px",
+    height: "25px",
+  },
+};
 
 const BambooDiv = styled.div`
   display: flex;
@@ -30,9 +45,7 @@ const BambooNum = styled.p`
 `;
 
 const BambooBar = styled.div`
-  background-color: ${colors.COLOR_FOOTER};
-  width: 400px;
-  height: 25px;
+  background-color: rgba(82, 156, 64, 0.17);
   border-radius: 20px;
 `;
 

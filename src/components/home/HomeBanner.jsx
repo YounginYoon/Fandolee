@@ -20,13 +20,13 @@ const HomeBanner = () => {
   return (
     <StyledSlider {...sliderParams}>
       <SliderBox>
-        <SliderImage src="img/mon1.jpeg" />
+        <SliderImage src="/img/mon1.jpeg" />
       </SliderBox>
       <SliderBox>
-        <SliderImage src="img/mon2.jpeg" />
+        <SliderImage src="/img/mon2.jpeg" />
       </SliderBox>
       <SliderBox>
-        <SliderImage src="img/mon3.jpeg" />
+        <SliderImage src="/img/mon3.jpeg" />
       </SliderBox>
     </StyledSlider>
   );
