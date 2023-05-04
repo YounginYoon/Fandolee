@@ -1,5 +1,5 @@
 import React from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import ChattingHeader from "../components/chat/ChattingHeader";
 import ChattingInfo from "../components/chat/ChattingInfo";
@@ -12,12 +12,10 @@ import { colors } from "../common/color";
 import ChattingRoom from "../components/chat/ChattingRoom";
 
 const AuctionChattingPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const auctionId = searchParams.get("aid");
-  const chattingId = searchParams.get("cid");
-  //   console.log({ auctionId, chattingId });
+  const params = useParams();
+  const productId = params.id;
 
-  const product = useProduct(auctionId);
+  const product = useProduct(productId);
 
   // 낙찰 완료하기 버튼 클릭 이벤트 콜백
   const onBtnClick = () => {};
@@ -51,7 +49,7 @@ const AuctionChattingPage = () => {
           <Tag label="현재 최대 금액" text={`${0} 원`} textColor="#F41010" />
         </ChattingInfo>
 
-        <ChattingRoom />
+        <ChattingRoom product={product} />
       </Wrapper>
     </>
   );

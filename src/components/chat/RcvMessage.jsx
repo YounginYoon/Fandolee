@@ -1,15 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 import { colors } from "../../common/color";
+import { timestampToDateTimeFormat } from "../../common/date";
 
-const RcvMessage = () => {
+const RcvMessage = ({ chat }) => {
+  const { id, biddingPrice, username, nickname, timestamp } = chat;
   return (
     <Container>
-      <Message>
-        안녕하세요ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ
-      </Message>
+      <Nickname>{nickname}</Nickname>
+      <ChatDiv>
+        <Message>{biddingPrice} 원</Message>
 
-      <Date>2023-05-01 18:40</Date>
+        <Date>{timestampToDateTimeFormat(timestamp)}</Date>
+      </ChatDiv>
     </Container>
   );
 };
@@ -17,18 +20,29 @@ const RcvMessage = () => {
 export default RcvMessage;
 
 const Container = styled.div`
+  //   background-color: orange;
+  padding: 10px 0;
+  box-sizing: border-box;
+  width: 100%;
+`;
+const Nickname = styled.p`
+  font-size: 14px;
+  margin-bottom: 7px;
+  margin-left: 7px;
+  //   color: ${colors.COLOR_MAIN};
+`;
+
+const ChatDiv = styled.div`
   box-sizing: border-box;
   width: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
-  //   background-color: orange;
-  padding: 10px 0;
 `;
 
 const Date = styled.p`
   color: ${colors.COLOR_DARKGRAY_TEXT};
-  font-size: 12px;
+  font-size: 10px;
   margin-left: 7px;
 `;
 
