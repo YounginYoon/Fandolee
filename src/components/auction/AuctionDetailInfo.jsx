@@ -1,17 +1,15 @@
-import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-
+import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faGear, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 
+import { colors } from "../../common/color";
+import { moneyFormat } from "../../common/money";
 
-import { colors } from '../../common/color';
-import { moneyFormat } from '../../common/money';
-
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import GreenLine from "../common/GreenLine";
 import { useState } from "react";
 import Tag from "../common/Tag";
@@ -44,10 +42,10 @@ const AuctionDetailInfo = ({ product }) => {
     biddingPrice,
   } = product;
 
-
   const goAuctionBiddingPage = () => {
     console.log(dataID);
     navigate(`/auction/auctionbidding/${dataID}`);
+  };
 
   const onDelete = async () => {
     if (!window.confirm("해당 게시글을 삭제하시겠습니까?")) {
@@ -266,6 +264,6 @@ const Likes = styled.p`
 
 const heartStyle = {
   color: colors.COLOR_HEART,
-  fontSize: '28px',
-  cursor: 'pointer',
+  fontSize: "28px",
+  cursor: "pointer",
 };
