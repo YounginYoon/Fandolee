@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 
 import { colors } from "../../common/color";
 
@@ -11,8 +11,13 @@ const PostImage = ({ images, setImages }) => {
 
   const fileInputRef = useRef(null);
 
+  const input1Ref = useRef(null);
+  const input2Ref = useRef(null);
+  const input3Ref = useRef(null);
+
   // 이미지 소스 set
   const onUpload = (e) => {
+    console.log("onChange");
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -27,6 +32,21 @@ const PostImage = ({ images, setImages }) => {
     });
   };
 
+  const onClick = (index) => {
+    if (imageSrcs.length <= index) {
+      fileInputRef.current?.click();
+      return;
+    }
+  };
+
+  const onDelete = (index) => {
+    const newImageSrcs = imageSrcs.filter((_, idx) => idx !== index);
+    const newImages = images.filter((_, idx) => idx !== index);
+    // console.log(newImageSrcs);
+    setImageSrcs(newImageSrcs);
+    setImages(newImages);
+  };
+
   useEffect(() => {
     console.log(images);
   }, [images]);
@@ -36,14 +56,33 @@ const PostImage = ({ images, setImages }) => {
       <input
         type="file"
         accept="image/*"
-        ref={fileInputRef}
+        ref={input1Ref}
+        style={{ display: "none" }}
+        onChange={onUpload}
+      />
+      <input
+        type="file"
+        accept="image/*"
+        ref={input2Ref}
+        style={{ display: "none" }}
+        onChange={onUpload}
+      />
+      <input
+        type="file"
+        accept="image/*"
+        ref={input3Ref}
         style={{ display: "none" }}
         onChange={onUpload}
       />
 
-      <ImageContainer onClick={() => fileInputRef.current?.click()}>
+      <ImageContainer onClick={() => input1Ref.current?.click()}>
         {imageSrcs.length > 0 ? (
-          <Image src={imageSrcs[0]} />
+          <>
+            <Image src={imageSrcs[0]} />
+            <DeleteIcon onClick={() => onDelete(0)}>
+              <FontAwesomeIcon icon={faCircleXmark} />
+            </DeleteIcon>
+          </>
         ) : (
           <FontAwesomeIcon icon={faPlus} />
         )}
@@ -51,20 +90,30 @@ const PostImage = ({ images, setImages }) => {
 
       {imageSrcs.length > 0 ? (
         <ImageWrapper>
-          <SubImageContainer onClick={() => fileInputRef.current?.click()}>
+          <SubImageContainer onClick={() => input2Ref.current?.click()}>
             {imageSrcs.length <= 1 ? (
               <FontAwesomeIcon icon={faPlus} />
             ) : (
-              <Image src={imageSrcs[1]} />
+              <>
+                <Image src={imageSrcs[1]} />
+                <DeleteIcon onClick={() => onDelete(1)}>
+                  <FontAwesomeIcon icon={faCircleXmark} />
+                </DeleteIcon>
+              </>
             )}
           </SubImageContainer>
 
           {imageSrcs.length >= 2 ? (
-            <SubImageContainer onClick={() => fileInputRef.current?.click()}>
+            <SubImageContainer onClick={() => input3Ref.current?.click()}>
               {imageSrcs.length < 3 ? (
                 <FontAwesomeIcon icon={faPlus} />
               ) : (
-                <Image src={imageSrcs[2]} />
+                <>
+                  <Image src={imageSrcs[2]} />
+                  <DeleteIcon onClick={() => onDelete(2)}>
+                    <FontAwesomeIcon icon={faCircleXmark} />
+                  </DeleteIcon>
+                </>
               )}
             </SubImageContainer>
           ) : null}
@@ -127,4 +176,15 @@ const SubImageContainer = styled.div`
   font-size: 25px;
   color: ${colors.COLOR_GRAY_BORDER};
   position: relative;
+`;
+
+const DeleteIcon = styled.div`
+  position: absolute;
+  // background-color: orange;
+  top: 5%;
+  right: 5%;
+  z-index: 10;
+  cursor: pointer;
+  font-size: 18px;
+  color: ${colors.COLOR_RED_TEXT};
 `;
