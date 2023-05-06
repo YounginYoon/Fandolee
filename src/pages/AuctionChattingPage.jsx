@@ -10,6 +10,7 @@ import { moneyFormat } from "../common/money";
 import { timestampToDateFormat } from "../common/date";
 import { colors } from "../common/color";
 import ChattingRoom from "../components/chat/ChattingRoom";
+import { useState } from "react";
 
 const AuctionChattingPage = () => {
   const params = useParams();
