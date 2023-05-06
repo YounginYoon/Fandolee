@@ -22,6 +22,7 @@ import { dateFormat } from "../common/date";
 import useProduct from "../hooks/useProduct";
 import Loading from "../components/common/Loading";
 import { useEffect } from "react";
+import { addDays } from "date-fns"
 
 const AuctionModifyPage = () => {
   const params = useParams();
@@ -41,11 +42,32 @@ const AuctionModifyPage = () => {
     info: "",
     title: "",
     likes: 0,
-    endDate: dateFormat(new Date()),
+    endDate: dateFormat(addDays(new Date(),1)),
   });
 
   const { title, info, likes, endDate, minPrice, maxPrice } = inputs;
+  
+  useEffect(() => {
+    if (product) {
+      setInputs({
+        minPrice: product.minPrice,
+        maxPrice: product.maxPrice,
+        info: product.info,
+        title: product.title,
+        likes: product.likes,
+        endDate: dateFormat(addDays(new Date(),1))
+      });
+      setCategory(product.category);
+      setImages(product.image);
+      setIdol(product.idol);
+    }
+  }, [product]);
 
+
+  if (!product) {
+    return <Loading />;
+  }
+  
   const onChange = (e) => {
     const { name, value } = e.target;
 
@@ -99,7 +121,6 @@ const AuctionModifyPage = () => {
         category,
         title,
         likes,
-        date: new Date(),
         endDate: endDate,
         isComplete: 1,
         biddingPrice: 0,
@@ -125,15 +146,7 @@ const AuctionModifyPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (product) {
-      console.log("product: ", product);
-    }
-  }, [product]);
-
-  if (!product) {
-    return <Loading />;
-  }
+ 
 
   return (
     <PostContainer

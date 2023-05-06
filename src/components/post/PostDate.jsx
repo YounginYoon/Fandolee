@@ -14,8 +14,10 @@ import styled from "styled-components";
 import { colors } from "../../common/color";
 import { dateFormat } from "../../common/date";
 
+import { addDays } from "date-fns"
+
 const PostDate = ({ label, endDate, setInputs }) => {
-  const today = new Date();
+  const today = addDays(new Date(),1);
   const [openCalendar, setOpenCalendar] = useState(false);
   const [value, setValue] = useState(dateFormat(today));
 

@@ -5,6 +5,7 @@ import ProductContainer from "../common/ProductContainer";
 import ProductImg from "../common/ProductImg";
 import ProductOwner from "../common/ProductOwner";
 import ProductTitle from "../common/ProductTitle";
+import ExchangeMember from "../common/ExchangeMember";
 import { ImageSizeTable } from "../common/ProductImg";
 import TagList from "../common/TagList";
 
@@ -22,7 +23,9 @@ const ExchangeContainer = ({ data }) => {
 
       <ProductTitle title={data.title}/>
 
-      <TagList width={ImageSizeTable["M"]} tags={["서울", "대면교환"]} />
+      <ExchangeMember memberA={data.haveMember} memberB={data.wantMember}/>
+
+      <TagList width={ImageSizeTable["M"]} tags={[data.region, data.transactionType]} />
     </ProductContainer>
   );
 };

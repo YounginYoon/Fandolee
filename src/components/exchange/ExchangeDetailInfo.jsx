@@ -21,12 +21,15 @@ const AuctionDetailInfo = ({ product }) => {
     title,
     category,
     idol,
-    member,
+    haveMember,
+    wantMember,
     info,
     id,
     uid,
     likes,
-    isComplete
+    isComplete,
+    region,
+    transactionType
   } = product;
 
   return (
@@ -44,8 +47,11 @@ const AuctionDetailInfo = ({ product }) => {
             <Tag label="굿즈 종류" text={category} />
 
             {idol ? <Tag label="아이돌" text={idol} /> : null}
-
-            {member ? <Tag label="멤버" text={member} /> : null}
+            {haveMember ? <Tag label="보유 멤버" text={haveMember} /> : null}
+            {wantMember ? <Tag label="교환 멤버" text={wantMember} /> : null}
+            {region ? <Tag label="지역" text={region} /> : null}
+            {transactionType ? <Tag label="교환방법" text={transactionType} /> : null}
+            {info ?  <Tag label="설명" text={info} /> : null}
           </TagsDiv>
         </InfoDiv>
 
