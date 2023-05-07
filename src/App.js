@@ -35,6 +35,7 @@ import ExchangePostPage from "./pages/ExchangePostPage";
 import AuctionChattingPage from "./pages/AuctionChattingPage";
 import AuctionModifyPage from "./pages/AuctionModifyPage";
 import ExchangeDetailPage from "./pages/ExchangeDetailpage";
+import ExchangeModifyPage from "./pages/ExchangeModifyPage";
 
 const App = () => {
   return (
@@ -91,6 +92,10 @@ const App = () => {
           <Route path="post" element={<ExchangePostPage />} />
           {/* 교환 상세 페이지 */}
           <Route path="exchangedetail/:id" element={<ExchangeDetailPage />} />
+          <Route
+            path="exchangedetail/:id/modify"
+            element={<ExchangeModifyPage />}
+          />
         </Route>
       </Routes>
 
