@@ -63,20 +63,26 @@ const ExchangePostPage = () => {
       }
 
       const timeStamp = moment().format("YYYY-MM-DD hh:mm:ss");
+      const imageUrls =[];
 
-      const imageRef = ref(
+      for(let i=0; i<images.length;i++){
+        const imageRef = ref(
         storage,
-        `exchange_image/${images[0].name}${timeStamp}`
+        `exchange_image/${images[i].name}${timeStamp}`
       );
 
-      const snapshot = await uploadBytes(imageRef, images[0]);
+      const snapshot = await uploadBytes(imageRef, images[i]);
 
       const url = await getDownloadURL(snapshot.ref);
+
+      imageUrls.push(url);
+      }
+      
 
       const body = {
         info,
         idol,
-        image: url,
+        image: imageUrls,
         category,
         title,
         likes,

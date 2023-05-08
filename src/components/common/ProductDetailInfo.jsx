@@ -12,7 +12,9 @@ const ProductDetailInfo = ({ product }) => {
     <Container>
       <DetailTitle>상품 정보</DetailTitle>
 
-      <ProductImage src={image} />
+      <ProductImage src={image[0]} />
+      {image[1] ? <ProductImage src={image[1]} /> : null }
+      {image[2] ? <ProductImage src={image[2]} /> : null }
 
       <Tag label="굿즈 종류" text={category} />
 

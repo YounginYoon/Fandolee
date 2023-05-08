@@ -71,22 +71,28 @@ const AuctionPostPage = () => {
       }
 
       const timeStamp = moment().format("YYYY-MM-DD hh:mm:ss");
+      const imageUrls =[];
 
-      const imageRef = ref(
-        storage,
-        `product_image/${images[0].name}${timeStamp}`
-      );
+      for(let i=0; i<images.length;i++){
+        const imageRef = ref(
+          storage,
+          `product_image/${images[i].name}${timeStamp}`
+        );
+  
+        const snapshot = await uploadBytes(imageRef, images[i]);
+  
+        const url = await getDownloadURL(snapshot.ref);
 
-      const snapshot = await uploadBytes(imageRef, images[0]);
-
-      const url = await getDownloadURL(snapshot.ref);
+        imageUrls.push(url);
+      }
+      
 
       const body = {
         minPrice: parseInt(minPrice),
         maxPrice: parseInt(maxPrice),
         info,
         idol,
-        image: url,
+        image: imageUrls,
         category,
         title,
         likes,

@@ -58,7 +58,7 @@ const AuctionDetailInfo = ({ product }) => {
 
   return (
     <Container>
-      <Image src={image} />
+      <Image src={image[0]} />
 
       <SubContainer>
         {user && uid === user.uid && (
