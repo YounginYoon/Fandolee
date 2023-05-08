@@ -85,7 +85,7 @@ const AuctionDetailInfo = ({ product }) => {
         <EndDateBox>낙찰 예정일 {timestampToDateFormat(endDate)}</EndDateBox>
       </EndDateDiv>
 
-      <Image src={image} />
+      <Image src={image[0]} />
 
       <SubContainer>
         {user && uid === user.uid && (
