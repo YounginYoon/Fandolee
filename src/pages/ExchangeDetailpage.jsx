@@ -9,6 +9,7 @@ import AuctionDetail from "../components/auction/AuctionDetail";
 import useExchange from "../hooks/useExchange";
 import ExchangeDetailInfo from "../components/exchange/ExchangeDetailInfo";
 import ExchangeDetail from "../components/exchange/ExchangeDetail";
+
 const ExchangeDetailPage = () => {
   const params = useParams();
 
