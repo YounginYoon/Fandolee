@@ -26,7 +26,7 @@ const ExchangeDetailInfo = ({ product }) => {
 
   const [isLike, setIsLike] = useState(false);
   const {
-    image,
+    images,
     title,
     category,
     idol,
@@ -62,7 +62,7 @@ const ExchangeDetailInfo = ({ product }) => {
 
   return (
     <Container>
-      <Image src={image[0]} />
+      <Image src={images[0]} />
 
       <SubContainer>
         {user && uid === user.uid && (
