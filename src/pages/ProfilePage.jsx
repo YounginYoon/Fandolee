@@ -8,14 +8,14 @@ import { db } from "../config/firebase";
 
 const ProfilePage = () => {
   const params = useParams();
-  const { userId } = params;
+  const { uid } = params;
 
   const [profile, setProfile] = useState({});
 
   const getUserData = async () => {
     try {
       const users = db.collection("users");
-      const ret = await users.doc(userId).get();
+      const ret = await users.doc(uid).get();
 
       console.log(ret.data());
       setProfile(ret.data());
@@ -26,7 +26,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     getUserData();
-  }, [userId]);
+  }, [uid]);
 
   return (
     <ProfileDiv>

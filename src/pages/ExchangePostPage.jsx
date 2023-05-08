@@ -24,10 +24,10 @@ const ExchangePostPage = () => {
     title: "",
     info: "",
     likes: 0,
-    haveMember:"",
-    wantMember:""
+    haveMember: "",
+    wantMember: "",
   });
-  const { title, info,likes,haveMember,wantMember } = inputs;
+  const { title, info, likes, haveMember, wantMember } = inputs;
   const [idol, setIdol] = useState("");
   const [category, setCategory] = useState("");
   const [region, setRegion] = useState("");
@@ -54,8 +54,8 @@ const ExchangePostPage = () => {
         !info ||
         !title ||
         !idol ||
-        !category||
-        !transactionType||
+        !category ||
+        !transactionType ||
         !region
       ) {
         alert("모든 정보를 입력해주세요.");
@@ -91,7 +91,7 @@ const ExchangePostPage = () => {
         transactionType,
         region,
         haveMember,
-        wantMember
+        wantMember,
       };
 
       await productDB
@@ -124,7 +124,7 @@ const ExchangePostPage = () => {
         value={title}
         name="title"
         onChange={onChange}
-        placeholder="상품명을 입력해주세요.('보유멤버->교환멤버')"
+        placeholder="상품명을 입력해주세요."
       />
       <PostDropDown
         list={Category}

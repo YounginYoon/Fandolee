@@ -20,7 +20,7 @@ const AuctionListPage = () => {
     const productAllDB = collection(db, "product");
 
     try {
-      const queryAll = query(productAllDB, orderBy("endDate", "asc"));
+      const queryAll = query(productAllDB, orderBy("date", "desc"));
       const data = await getDocs(queryAll);
 
       const newData = data.docs.map((doc) => ({

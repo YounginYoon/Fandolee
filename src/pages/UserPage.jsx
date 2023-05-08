@@ -6,6 +6,7 @@ import { useOutlet, useParams } from "react-router-dom";
 import styled from "styled-components";
 import AuctionList from "../components/auction/AuctionList";
 import Loading from "../components/common/Loading";
+import ExchangeList from "../components/exchange/ExchangeList";
 
 import UserHeader from "../components/user/UserHeader";
 import UserNav from "../components/user/UserNav";
@@ -19,16 +20,17 @@ const UserPage = () => {
   const user = useUser();
   const params = useParams();
 
-  const [owner, profileImage] = useOwner(params.userId);
+  const [owner, profileImage] = useOwner(params.uid);
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [currentTab, setCurrentTab] = useState(taps.auction);
   const [auctions, setAuctions] = useState(null);
+  const [exchanges, setExchanges] = useState(null);
 
   const getAuctionList = async () => {
     const productRef = collection(db, "product");
     try {
-      const q = query(productRef, where("uid", "==", params.userId));
+      const q = query(productRef, where("uid", "==", params.uid));
       const snapshot = await getDocs(q);
 
       const data = snapshot.docs.map((doc) => ({
@@ -42,18 +44,36 @@ const UserPage = () => {
       console.log("user page getAuctionList error: ", err);
     }
   };
+  const getExchangeList = async () => {
+    const exchangeRef = collection(db, "exchange");
+
+    try {
+      const q = query(exchangeRef, where("uid", "==", params.uid));
+      const snapshot = await getDocs(q);
+
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setExchanges(data);
+    } catch (err) {
+      console.log("user page getExchangeList err: ", err);
+    }
+  };
 
   useEffect(() => {
     getAuctionList();
+    getExchangeList();
 
-    if (user.uid === params.userId) {
+    if (user.uid === params.uid) {
       setIsAdmin(true);
     } else {
       setIsAdmin(false);
     }
   }, [user, params]);
 
-  if (!owner || !profileImage || !auctions) {
+  if (!owner || !profileImage || !auctions || !exchanges) {
     return <Loading />;
   }
 
@@ -66,7 +86,7 @@ const UserPage = () => {
       {currentTab === taps.auction ? (
         <AuctionList products={auctions} />
       ) : currentTab === taps.exchange ? (
-        <div>exchange tab</div>
+        <ExchangeList products={exchanges} />
       ) : null}
     </Container>
   );

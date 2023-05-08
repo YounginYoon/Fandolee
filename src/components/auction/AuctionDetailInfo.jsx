@@ -37,9 +37,11 @@ const AuctionDetailInfo = ({ product }) => {
     likes,
     isComplete,
     endDate,
+    date,
     biddingDate,
     biddingPrice,
   } = product;
+  const _remainDate = remainDate(endDate);
 
   const goAuctionChatting = () => {
     navigate(`/auction/${id}/chat`);
@@ -68,13 +70,17 @@ const AuctionDetailInfo = ({ product }) => {
   return (
     <Container>
       <EndDateDiv>
-        <EndDateText>
-          낙찰까지{" "}
-          <span style={{ color: colors.COLOR_RED_TEXT }}>
-            {remainDate(endDate)}일
-          </span>{" "}
-          남았습니다.
-        </EndDateText>
+        {_remainDate < 0 ? (
+          <EndDateText>경매가 종료된 상품입니다.</EndDateText>
+        ) : (
+          <EndDateText>
+            낙찰까지{" "}
+            <span style={{ color: colors.COLOR_RED_TEXT }}>
+              {_remainDate}일
+            </span>{" "}
+            남았습니다.
+          </EndDateText>
+        )}
 
         <EndDateBox>낙찰 예정일 {timestampToDateFormat(endDate)}</EndDateBox>
       </EndDateDiv>
@@ -124,6 +130,8 @@ const AuctionDetailInfo = ({ product }) => {
           </HeartDiv>
         </BtnDiv>
       </SubContainer>
+
+      <UploadDate>게시일: {timestampToDateFormat(date)}</UploadDate>
     </Container>
   );
 };
@@ -138,6 +146,18 @@ const Container = styled.div`
   margin: 80px auto 50px;
   display: flex;
   position: relative;
+`;
+
+const UploadDate = styled.div`
+  font-size: 10px;
+  color: ${colors.COLOR_DARKGRAY_TEXT};
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  line-height: 35px;
+  position: absolute;
+  left: 0;
+  bottom: -35px;
 `;
 
 const EndDateDiv = styled.div`

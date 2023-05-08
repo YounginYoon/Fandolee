@@ -2,7 +2,12 @@ import React from "react";
 
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faGear, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHeart,
+  faGear,
+  faTrash,
+  faArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 
 import { colors } from "../../common/color";
@@ -15,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import useUser from "../../hooks/useUser";
 import { db } from "../../config/firebase";
 
-const AuctionDetailInfo = ({ product }) => {
+const ExchangeDetailInfo = ({ product }) => {
   const navigate = useNavigate();
   const user = useUser();
 
@@ -33,7 +38,7 @@ const AuctionDetailInfo = ({ product }) => {
     likes,
     isComplete,
     region,
-    transactionType
+    transactionType,
   } = product;
 
   const onDelete = async () => {
@@ -55,7 +60,6 @@ const AuctionDetailInfo = ({ product }) => {
     navigate("./modify", { product });
   };
 
-
   return (
     <Container>
       <Image src={image[0]} />
@@ -74,6 +78,27 @@ const AuctionDetailInfo = ({ product }) => {
         <InfoDiv>
           <Title>{title}</Title>
 
+          {haveMember ? (
+            <ExchangeMemberDiv>
+              <ExchangeMember>
+                <ExchangeText>보유 멤버</ExchangeText>
+                {haveMember}
+              </ExchangeMember>
+
+              {wantMember ? (
+                <>
+                  <FontAwesomeIcon
+                    style={{ fontSize: "20px", margin: "0 10px" }}
+                    icon={faArrowRight}
+                  />
+                  <ExchangeMember>
+                    <ExchangeText>교환 멤버</ExchangeText>
+                    {wantMember}
+                  </ExchangeMember>
+                </>
+              ) : null}
+            </ExchangeMemberDiv>
+          ) : null}
 
           <GreenLine />
 
@@ -81,21 +106,40 @@ const AuctionDetailInfo = ({ product }) => {
             <Tag label="굿즈 종류" text={category} />
 
             {idol ? <Tag label="아이돌" text={idol} /> : null}
-            {haveMember ? <Tag label="보유 멤버" text={haveMember} /> : null}
-            {wantMember ? <Tag label="교환 멤버" text={wantMember} /> : null}
-            {region ? <Tag label="지역" text={region} /> : null}
-            {transactionType ? <Tag label="교환방법" text={transactionType} /> : null}
-            {info ?  <Tag label="설명" text={info} /> : null}
+            {region ? (
+              <Tag
+                label="지역"
+                text={region}
+                color={colors.COLOR_GRAYTAG_BACKGROUND}
+              />
+            ) : null}
+            {transactionType ? (
+              <Tag
+                label="교환방법"
+                text={transactionType}
+                color={colors.COLOR_GRAYTAG_BACKGROUND}
+              />
+            ) : null}
           </TagsDiv>
         </InfoDiv>
 
-        
+        <BtnDiv>
+          <Btn onClick={() => {}}>교환 채팅</Btn>
+          <HeartDiv>
+            <FontAwesomeIcon
+              onClick={() => setIsLike(!isLike)}
+              icon={isLike ? faHeart : faHeartOutline}
+              style={heartStyle}
+            />
+            <Likes>{likes ? likes : 0}</Likes>
+          </HeartDiv>
+        </BtnDiv>
       </SubContainer>
     </Container>
   );
 };
 
-export default AuctionDetailInfo;
+export default ExchangeDetailInfo;
 
 const Container = styled.div`
   padding: 15px;
@@ -121,6 +165,7 @@ const SubContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
 `;
 const IconDiv = styled.div`
   position: absolute;
@@ -128,7 +173,7 @@ const IconDiv = styled.div`
   right: 0;
   display: flex;
   align-items: center;
-  //   background-color: orange;
+  // background-color: orange;
   font-size: 18px;
 `;
 
@@ -152,11 +197,24 @@ const Title = styled.p`
   margin-top: 10px;
 `;
 
-const Price = styled.p`
+const ExchangeMemberDiv = styled.div`
   font-weight: bold;
   font-size: 26px;
   color: ${colors.COLOR_MAIN};
   margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+`;
+
+const ExchangeMember = styled.p`
+  display: flex;
+  align-items: center;
+`;
+
+const ExchangeText = styled.span`
+  font-size: 12px;
+  color: ${colors.COLOR_DARKGRAY_TEXT};
+  margin-right: 7px;
 `;
 
 const TagsDiv = styled.div`
@@ -166,6 +224,7 @@ const TagsDiv = styled.div`
 const BtnDiv = styled.div`
   display: flex;
   align-items: center;
+  margin-top: 10px;
 `;
 
 const Btn = styled.div`

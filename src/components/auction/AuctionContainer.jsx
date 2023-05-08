@@ -25,7 +25,7 @@ const AuctionContainer = ({ data }) => {
 
       <MoneyContainer>
         <Money>{moneyFormat(data.minPrice)}</Money> 원 ~
-        <Money>{moneyFormat(data.maxPrice)}</Money> 원
+        <Money> {moneyFormat(data.maxPrice)}</Money> 원
       </MoneyContainer>
     </ProductContainer>
   );
