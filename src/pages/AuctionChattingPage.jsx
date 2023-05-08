@@ -47,7 +47,6 @@ const AuctionChattingPage = () => {
             text={timestampToDateFormat(product.endDate)}
             textColor={colors.COLOR_MAIN}
           />
-          <Tag label="현재 최대 금액" text={`${0} 원`} textColor="#F41010" />
         </ChattingInfo>
 
         <ChattingRoom product={product} />
