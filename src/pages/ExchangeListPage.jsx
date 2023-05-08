@@ -4,7 +4,7 @@ import ExchangeList from "../components/exchange/ExchangeList";
 import ExchangeSearchBar from "../components/exchange/ExchangeSearchBar";
 
 import { db  } from "../config/firebase";
-import { collection, query,  getDocs } from "firebase/firestore";
+import { collection, query,  getDocs ,orderBy } from "firebase/firestore";
 
 import Loading from "../components/common/Loading";
 
@@ -19,7 +19,7 @@ const ExchangeListPage = () => {
     const productAllDB = collection(db, "exchange");
 
     try {
-      const queryAll = query(productAllDB);
+      const queryAll = query(productAllDB, orderBy("date","asc"));
       const data = await getDocs(queryAll);
 
       const newData = data.docs.map((doc) => ({
@@ -45,7 +45,7 @@ const ExchangeListPage = () => {
 
   return (
     <Container>
-      <ExchangeSearchBar />
+      <ExchangeSearchBar setProducts={setProducts} />
 
       <ExchangeList products={products} />
     </Container>

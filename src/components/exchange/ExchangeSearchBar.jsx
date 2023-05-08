@@ -12,14 +12,41 @@ import DropDownMenu from "../common/DropDownMenu";
 import { TransactionType } from "../../constants/transactionType";
 import { Region } from "../../constants/region";
 import { useNavigate } from "react-router-dom";
+import { db } from "../../config/firebase";
 
-const ExchangeSearchBar = () => {
-  const navigate = useNavigate();
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 
+const ExchangeSearchBar = ({setProducts}) => {
+ 
   const [idol, setIdol] = useState("내가 찾는 아이돌");
   const [category, setCategory] = useState("굿즈 종류");
   const [method, setMethod] = useState("교환방법");
   const [region, setRegion] = useState("지역");
+
+
+  const navigate = useNavigate();
+
+  const handleSearch = async () => {
+    const productDB = collection(db, "exchange");
+
+    try {
+      const q = query(
+        productDB,
+        where("category", "==", category),
+        where("idol", "==", idol),
+        orderBy("date")
+      );
+      const ret = await getDocs(q);
+      const products = ret.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setProducts(products);
+    } catch (err) {
+      console.log("err:", err);
+    }
+  };
 
   return (
     <Container>
@@ -54,7 +81,7 @@ const ExchangeSearchBar = () => {
             setSelected={setRegion}
           />
 
-          <Btn>
+          <Btn onClick={handleSearch}>
             검색하기
             <FontAwesomeIcon icon={faSearch} style={{ paddingLeft: "7px" }} />
           </Btn>
