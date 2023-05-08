@@ -20,6 +20,7 @@ import useUser from "../../hooks/useUser";
 const AuctionDetailInfo = ({ product }) => {
   const navigate = useNavigate();
   const user = useUser();
+
   const [isLike, setIsLike] = useState(false);
 
   const {
@@ -81,7 +82,7 @@ const AuctionDetailInfo = ({ product }) => {
       <Image src={image} />
 
       <SubContainer>
-        {uid === user.uid && (
+        {user && uid === user.uid && (
           <IconDiv>
             <Icon onClick={onUpdate}>
               <FontAwesomeIcon icon={faGear} />

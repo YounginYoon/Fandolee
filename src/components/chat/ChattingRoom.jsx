@@ -1,20 +1,20 @@
-import { onValue, orderByChild, query, ref } from "firebase/database";
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import styled, { css } from "styled-components";
-import { colors } from "../../common/color";
-import { db, realTimeDatabase } from "../../config/firebase";
-import useUser from "../../hooks/useUser";
-import RcvMessage from "./RcvMessage";
-import SndMessage from "./SndMessage";
+import { onValue, orderByChild, query, ref } from 'firebase/database';
+import React from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import styled, { css } from 'styled-components';
+import { colors } from '../../common/color';
+import { db, realTimeDatabase } from '../../config/firebase';
+import useUser from '../../hooks/useUser';
+import RcvMessage from './RcvMessage';
+import SndMessage from './SndMessage';
 
 const ChattingRoom = ({ product }) => {
   const user = useUser();
   const isMyAuction = user.uid === product.uid;
   // 투찰가 입력 인풋
-  const [input, setInput] = useState("");
-  const [biddingChat, setBiddingChat] = useState("");
+  const [input, setInput] = useState('');
+  const [biddingChat, setBiddingChat] = useState('');
   // 채팅 메시지 리스트
   const [chatList, setChatList] = useState([]);
   // 경매 현황: 최소, 최대 금액
@@ -26,11 +26,11 @@ const ChattingRoom = ({ product }) => {
     const regex = /^[0-9]+$/;
 
     if (biddingChat) {
-      alert("투찰은 1회만 가능합니다.");
+      alert('투찰은 1회만 가능합니다.');
     } else if (!input) {
-      alert("금액을 입력하세요");
+      alert('금액을 입력하세요');
     } else if (!regex.test(input)) {
-      alert("숫자만 입력해주세요");
+      alert('숫자만 입력해주세요');
     } else if (input < minPrice) {
       alert(`${minPrice} 원부터 입력 가능합니다.`);
     } else if (input > maxPrice) {
@@ -45,7 +45,7 @@ const ChattingRoom = ({ product }) => {
   };
 
   const handleChatSend = async () => {
-    const productDB = db.collection("product").doc(product.id);
+    const productDB = db.collection('product').doc(product.id);
     const chatSetRef = realTimeDatabase.ref(
       `biddingChatRoom/${product.id}/${user.uid}`
     );
@@ -65,7 +65,7 @@ const ChattingRoom = ({ product }) => {
     if (!checkValidation(minPrice, maxPrice)) return;
 
     chatSetRef.set(chat);
-    setInput("");
+    setInput('');
     const snapshot = await chatSetRef.get();
     setBiddingChat(snapshot.val().biddingPrice);
     alert(`${chat.biddingPrice} 원 투찰이 완료되었습니다!`);
@@ -76,7 +76,7 @@ const ChattingRoom = ({ product }) => {
     setInput(value);
   };
   const onKeyUp = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       handleChatSend();
     }
   };
@@ -84,13 +84,18 @@ const ChattingRoom = ({ product }) => {
   useEffect(() => {
     const chatRef = realTimeDatabase
       .ref(`biddingChatRoom/${product.id}`)
-      .orderByChild("timestamp");
+      .orderByChild('timestamp');
 
-    chatRef.on("value", (snapshot) => {
-      const chats = snapshot.val();
+    chatRef.on('value', (snapshot) => {
+      const chats = [];
+      snapshot.forEach((child) => {
+        const message = child.val();
+        chats.push({ key: child.key, ...message });
+      });
+      chats.sort((a, b) => a.timestamp - b.timestamp);
+
       const chatArray = [];
       let prices = [];
-
       if (chats) {
         prices = Object.values(chats).map((chat) => chat.biddingPrice);
         for (let id in chats) {
@@ -102,7 +107,6 @@ const ChattingRoom = ({ product }) => {
       }
 
       setChatList(chatArray);
-
       if (prices.length <= 0) {
         setBiddingMinPrice(0);
         setBiddingMaxPrice(0);
@@ -118,7 +122,7 @@ const ChattingRoom = ({ product }) => {
       <ChattingWrap>
         <Chatting>
           {chatList.map((chat) =>
-            chat.id === user.uid ? (
+            chat.key === user.uid ? (
               <SndMessage
                 key={`send${chat.id}_${chat.biddingPrice}`}
                 chat={chat}
@@ -141,10 +145,10 @@ const ChattingRoom = ({ product }) => {
           onKeyUp={onKeyUp}
           placeholder={
             isMyAuction
-              ? "상품 등록자는 채팅에 참여할 수 없습니다."
+              ? '상품 등록자는 채팅에 참여할 수 없습니다.'
               : biddingChat
               ? biddingChat
-              : ""
+              : ''
           }
         />
 
@@ -176,7 +180,7 @@ const ChattingWrap = styled.div`
   height: 600px;
   position: relative;
 
-  background-image: url("/img/fandol.png");
+  background-image: url('/img/fandol.png');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 25%;

@@ -3,6 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { db, realTimeDatabase } from '../../config/firebase';
+import { updateDoc, serverTimestamp } from 'firebase/firestore';
+
 import { useEffect } from 'react';
 import { useState } from 'react';
 
@@ -10,9 +12,7 @@ import useUser from '../../hooks/useUser';
 
 const AuctionBiddingChat = ({ productData }) => {
   const user = useUser();
-  const chatRef = realTimeDatabase
-    .ref(`biddingChatRoom/${productData.id}`)
-    .orderByChild('biddingPrice');
+  //const chatRef = realTimeDatabase.ref(`biddingChatRoom/${productData.id}`);
   const product = db.collection('product').doc(productData.id);
 
   const [chatText, setChatText] = useState('');
@@ -22,9 +22,7 @@ const AuctionBiddingChat = ({ productData }) => {
   const [biddingMaxPrice, setBiddingMaxPrice] = useState(0);
 
   useEffect(() => {
-    const chatRef = realTimeDatabase
-      .ref(`biddingChatRoom/${productData.id}`)
-      .orderByChild('biddingPrice');
+    const chatRef = realTimeDatabase.ref(`biddingChatRoom/${productData.id}`);
 
     chatRef.on('value', (snapshot) => {
       const chats = snapshot.val();
