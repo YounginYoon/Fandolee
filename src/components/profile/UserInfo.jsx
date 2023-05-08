@@ -16,14 +16,14 @@ import { faWindows } from "@fortawesome/free-brands-svg-icons";
 
 const UserInfo = () => {
   const params = useParams();
-  const { userId } = params;
+  const { uid } = params;
   const userSessionStorage = useUser();
 
   const fileInputRef = useRef(null);
   const [imageUpload, setImageUpload] = useState("");
   const [deleteImage, setDeleteImage] = useState("");
 
-  const imageRef = ref(storage, `profile_image/${userId}`);
+  const imageRef = ref(storage, `profile_image/${uid}`);
 
   const handleClickFileInput = () => {
     fileInputRef.current?.click();

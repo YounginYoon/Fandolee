@@ -10,6 +10,7 @@ import { moneyFormat } from "../common/money";
 import { timestampToDateFormat } from "../common/date";
 import { colors } from "../common/color";
 import ChattingRoom from "../components/chat/ChattingRoom";
+import { useState } from "react";
 
 const AuctionChattingPage = () => {
   const params = useParams();
@@ -46,7 +47,6 @@ const AuctionChattingPage = () => {
             text={timestampToDateFormat(product.endDate)}
             textColor={colors.COLOR_MAIN}
           />
-          <Tag label="현재 최대 금액" text={`${0} 원`} textColor="#F41010" />
         </ChattingInfo>
 
         <ChattingRoom product={product} />
