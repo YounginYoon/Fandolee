@@ -131,13 +131,18 @@ const ChattingRoom = ({ product }) => {
     <Container>
       {openBidding ? (
         <CurrentAuctionDiv onClick={onClickOpenBidding}>
-          <BiddingPriceDiv>
-            <BiddingLabel>투찰 최소가</BiddingLabel>
-            <BiddingPrice>{moneyFormat(biddingMinPrice)} 원</BiddingPrice>
-          </BiddingPriceDiv>
+          <CurrentAuctionText>경매 현황</CurrentAuctionText>
 
           <BiddingPriceDiv>
-            <BiddingLabel>투찰 최대가</BiddingLabel>
+            <BiddingLabel style={{ color: colors.COLOR_BLUE_TEXT }}>
+              투찰 최소가
+            </BiddingLabel>
+            <BiddingPrice>{moneyFormat(biddingMinPrice)} 원</BiddingPrice>
+          </BiddingPriceDiv>
+          <BiddingPriceDiv>
+            <BiddingLabel style={{ color: colors.COLOR_RED_TEXT }}>
+              투찰 최대가
+            </BiddingLabel>
             <BiddingPrice>{moneyFormat(biddingMaxPrice)} 원</BiddingPrice>
           </BiddingPriceDiv>
         </CurrentAuctionDiv>
@@ -237,6 +242,12 @@ const CurrentAuctionDiv = styled.div`
   cursor: pointer;
 `;
 
+const CurrentAuctionText = styled.p`
+  color: ${colors.COLOR_MAIN};
+  font-weight: bold;
+  font-size: 16px;
+`;
+
 const BiddingPriceDiv = styled.div`
   display: flex;
   align-items: center;
@@ -245,7 +256,7 @@ const BiddingPriceDiv = styled.div`
 const BiddingLabel = styled.p`
   font-size: 13px;
   margin-right: 10px;
-  color: ${colors.COLOR_MAIN};
+  //   color: ${colors.COLOR_MAIN};
 `;
 
 const BiddingPrice = styled.p`
