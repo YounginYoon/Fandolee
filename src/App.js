@@ -35,6 +35,7 @@ import ExchangePostPage from "./pages/ExchangePostPage";
 import AuctionChattingPage from "./pages/AuctionChattingPage";
 import AuctionModifyPage from "./pages/AuctionModifyPage";
 import ExchangeDetailPage from "./pages/ExchangeDetailpage";
+import ExchangeModifyPage from "./pages/ExchangeModifyPage";
 
 const App = () => {
   return (
@@ -47,11 +48,11 @@ const App = () => {
           {/* 메인 홈 페이지 */}
           <Route path="" element={<MainPage />} />
           {/* 프로필 페이지 - not used */}
-          <Route path="profile/:userId" element={<ProfilePage />} />
+          <Route path="profile/:uid" element={<ProfilePage />} />
           {/* 유저 페이지 */}
-          <Route path="user/:userId" element={<UserPage />} />
+          <Route path="user/:uid" element={<UserPage />} />
           {/* 마이 페이지 */}
-          <Route path="mypage/:userId" element={<MyPage />}>
+          <Route path="mypage/:uid" element={<MyPage />}>
             <Route path={MyTab[0].tab} element={<ProfileContainer />} />
             <Route path={MyTab[1].tab} element={<ChattingList />} />
             <Route path={MyTab[2].tab} element={<LikeContainer />} />
@@ -91,6 +92,10 @@ const App = () => {
           <Route path="post" element={<ExchangePostPage />} />
           {/* 교환 상세 페이지 */}
           <Route path="exchangedetail/:id" element={<ExchangeDetailPage />} />
+          <Route
+            path="exchangedetail/:id/modify"
+            element={<ExchangeModifyPage />}
+          />
         </Route>
       </Routes>
 

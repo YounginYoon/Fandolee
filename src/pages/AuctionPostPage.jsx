@@ -19,6 +19,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import moment from 'moment';
 import useUser from '../hooks/useUser';
 import { dateFormat } from '../common/date';
+import { addDays } from 'date-fns';
 
 const AuctionPostPage = () => {
   const user = useUser();
@@ -31,7 +32,7 @@ const AuctionPostPage = () => {
     info: '',
     title: '',
     likes: 0,
-    endDate: dateFormat(new Date()),
+    endDate: dateFormat(addDays(new Date(), 1)),
   });
   const { title, info, likes, endDate, minPrice, maxPrice } = inputs;
   const [idol, setIdol] = useState('');
@@ -70,28 +71,33 @@ const AuctionPostPage = () => {
       }
 
       const timeStamp = moment().format('YYYY-MM-DD hh:mm:ss');
+      const imageUrls = [];
 
-      const imageRef = ref(
-        storage,
-        `product_image/${images[0].name}${timeStamp}`
-      );
+      for (let i = 0; i < images.length; i++) {
+        const imageRef = ref(
+          storage,
+          `product_image/${images[i].name}${timeStamp}`
+        );
 
-      const snapshot = await uploadBytes(imageRef, images[0]);
+        const snapshot = await uploadBytes(imageRef, images[i]);
 
-      const url = await getDownloadURL(snapshot.ref);
+        const url = await getDownloadURL(snapshot.ref);
+
+        imageUrls.push(url);
+      }
 
       const body = {
         minPrice: parseInt(minPrice),
         maxPrice: parseInt(maxPrice),
         info,
         idol,
-        image: url,
+        images: imageUrls,
         category,
         title,
         likes,
         date: new Date(),
         endDate: endDate,
-        isComplete: 1,
+        isComplete: 0,
         biddingPrice: 0,
         biddingDate: new Date(),
       };

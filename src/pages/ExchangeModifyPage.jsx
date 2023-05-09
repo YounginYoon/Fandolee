@@ -1,87 +1,79 @@
-import React, { useState } from "react";
-
-import styled from "styled-components";
+import React, { useState , useEffect} from "react";
 
 import { IdolList } from "../constants/idol";
 import { Category } from "../constants/category";
+import { TransactionType } from "../constants/transactionType";
+import { Region } from "../constants/region";
 
 import PostContainer from "../components/post/PostContainer";
-import PostInputBox from "../components/post/PostInputBox";
 import PostInputText from "../components/post/PostInputText";
 import PostDropDown from "../components/post/PostDropDown";
 import PostTextArea from "../components/post/PostTextArea";
-import PostPrice from "../components/post/PostPrice";
-import PostDate from "../components/post/PostDate";
 
-import { db, storage } from "../config/firebase";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useParams } from "react-router-dom";
-import moment from "moment";
 import useUser from "../hooks/useUser";
-import { dateFormat } from "../common/date";
-import useProduct from "../hooks/useProduct";
+import { db, storage } from "../config/firebase";
+import { useParams } from "react-router-dom";
+import useExchange from "../hooks/useExchange";
 import Loading from "../components/common/Loading";
-import { useEffect } from "react";
-import { addDays } from "date-fns"
+import moment from "moment";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
-const AuctionModifyPage = () => {
+const ExchangeModifyPage = () => {
   const params = useParams();
   const id = params.id;
-  const product = useProduct(id);
+  const product = useExchange(id);
 
-  //console.log(product.title);
   const user = useUser();
+
   // 이미지 파일 state
   const [images, setImages] = useState([]);
+  // inputs
+  const [inputs, setInputs] = useState({
+    title: "",
+    info: "",
+    likes: 0,
+    haveMember:"",
+    wantMember:""
+  });
+  const { title, info,likes,haveMember,wantMember } = inputs;
   const [idol, setIdol] = useState("");
   const [category, setCategory] = useState("");
+  const [region, setRegion] = useState("");
+  const [transactionType, setTransactionType] = useState("");
 
-  const [inputs, setInputs] = useState({
-    minPrice: "",
-    maxPrice: "",
-    info: "",
-    title: "",
-    likes: 0,
-    endDate: dateFormat(addDays(new Date(),1)),
-  });
 
-  const { title, info, likes, endDate, minPrice, maxPrice } = inputs;
-  
   useEffect(() => {
-    if (product) {
-      setInputs({
-        minPrice: product.minPrice,
-        maxPrice: product.maxPrice,
-        info: product.info,
-        title: product.title,
-        likes: product.likes,
-        endDate: dateFormat(addDays(new Date(),1))
-      });
-      setCategory(product.category);
-      setImages(product.image);
-      setIdol(product.idol);
+    if(product){
+        setInputs({
+            title: product.title,
+            info: product.info,
+            likes: product.likes,
+            haveMember: product.haveMember,
+            wantMember: product.wantMember
+        });
+        setIdol(product.idol);
+        setCategory(product.category);
+        setRegion(product.region);
+        setTransactionType(product.transactionType);
     }
   }, [product]);
-
 
   if (!product) {
     return <Loading />;
   }
-  
+
+
   const onChange = (e) => {
     const { name, value } = e.target;
-
     setInputs({
       ...inputs,
       [name]: value,
     });
   };
-
   const onPost = async () => {
-    const productDB = db.collection("product");
-
     try {
-      console.log({ inputs, idol, category });
+      //console.log({ inputs, idol, category });
+      const productDB = db.collection("exchange");
 
       if (images.length === 0) {
         alert("이미지를 선택해주세요.");
@@ -89,13 +81,12 @@ const AuctionModifyPage = () => {
       }
 
       if (
-        !minPrice ||
-        !maxPrice ||
         !info ||
         !title ||
-        !endDate ||
         !idol ||
-        !category
+        !category||
+        !transactionType||
+        !region
       ) {
         alert("모든 정보를 입력해주세요.");
         return;
@@ -105,7 +96,7 @@ const AuctionModifyPage = () => {
 
       const imageRef = ref(
         storage,
-        `product_image/${images[0].name}${timeStamp}`
+        `exchange_image/${images[0].name}${timeStamp}`
       );
 
       const snapshot = await uploadBytes(imageRef, images[0]);
@@ -113,18 +104,18 @@ const AuctionModifyPage = () => {
       const url = await getDownloadURL(snapshot.ref);
 
       const body = {
-        minPrice: parseInt(minPrice),
-        maxPrice: parseInt(maxPrice),
         info,
         idol,
         image: url,
         category,
         title,
         likes,
-        endDate: endDate,
+        date: new Date(),
         isComplete: 1,
-        biddingPrice: 0,
-        biddingDate: new Date(),
+        transactionType,
+        region,
+        haveMember,
+        wantMember
       };
 
       await productDB
@@ -137,20 +128,18 @@ const AuctionModifyPage = () => {
           console.log(doc);
         })
         .catch((err) => {
-          console.log("auction posting fail: ", err);
+          console.log("exchange posting fail: ", err);
         });
 
-      window.location.replace("/auction/auctionList");
+      window.location.replace("/exchange/list");
     } catch (err) {
-      console.log("post auction error: ", err);
+      console.log("post exchange error: ", err);
     }
   };
 
- 
-
   return (
     <PostContainer
-      recommend={true}
+      recommend={false}
       onPost={onPost}
       images={images}
       setImages={setImages}
@@ -160,7 +149,7 @@ const AuctionModifyPage = () => {
         value={title}
         name="title"
         onChange={onChange}
-        placeholder="상품명을 입력해주세요.(30자 이내)"
+        placeholder="상품명을 입력해주세요.('보유멤버->교환멤버')"
       />
       <PostDropDown
         list={Category}
@@ -174,16 +163,31 @@ const AuctionModifyPage = () => {
         selected={idol}
         setSelected={setIdol}
       />
-      <PostPrice
-        label={"가격"}
-        minPrice={minPrice}
-        maxPrice={maxPrice}
+      <PostInputText
+        label={"보유 멤버"}
+        value={haveMember}
+        name="haveMember"
         onChange={onChange}
+        placeholder="보유 멤버 명을 기입해주세요."
       />
-      <PostDate
-        label="거래 완료 날짜"
-        endDate={endDate}
-        setInputs={setInputs}
+      <PostInputText
+        label={"교환 멤버"}
+        value={wantMember}
+        name="wantMember"
+        onChange={onChange}
+        placeholder="교환원하는 멤버 명을 기입해주세요."
+      />
+      <PostDropDown
+        list={Region}
+        label="지역"
+        selected={region}
+        setSelected={setRegion}
+      />
+      <PostDropDown
+        list={TransactionType}
+        label="교환방법"
+        selected={transactionType}
+        setSelected={setTransactionType}
       />
       <PostTextArea
         label="설명"
@@ -196,6 +200,4 @@ const AuctionModifyPage = () => {
   );
 };
 
-export default AuctionModifyPage;
-
-const Container = styled.div``;
+export default ExchangeModifyPage;

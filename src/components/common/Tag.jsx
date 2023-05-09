@@ -32,7 +32,7 @@ const TagLabel = styled.div`
   justify-content: center;
   align-items: center;
   width: 75px;
-  height: 25px;
+  height: 23px;
   background-color: ${({ color }) => color};
   border-radius: 20px;
   margin: 2.5px 15px 2.5px 0;

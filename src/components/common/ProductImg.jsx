@@ -22,7 +22,7 @@ const ProductImg = ({
 
   return (
     <Container>
-      <Image src={product.image} onClick={onClick} size={size} />
+      <Image src={product.images[0]} onClick={onClick} size={size} />
 
       <HeartBox onClick={handleHeart}>
         <FontAwesomeIcon icon={heart ? faHeart : faHeartOutlined} />

@@ -6,13 +6,15 @@ import styled from "styled-components";
 import Tag from "./Tag";
 
 const ProductDetailInfo = ({ product }) => {
-  const { image, category, idol, member, info, region, transactionType } =
+  const { images, category, idol, member, info, region, transactionType } =
     product;
   return (
     <Container>
       <DetailTitle>상품 정보</DetailTitle>
 
-      <ProductImage src={image} />
+      <ProductImage src={images[0]} />
+      {images[1] ? <ProductImage src={images[1]} /> : null}
+      {images[2] ? <ProductImage src={images[2]} /> : null}
 
       <Tag label="굿즈 종류" text={category} />
 

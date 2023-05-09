@@ -23,9 +23,11 @@ const ExchangePostPage = () => {
   const [inputs, setInputs] = useState({
     title: "",
     info: "",
-    likes: 0
+    likes: 0,
+    haveMember: "",
+    wantMember: "",
   });
-  const { title, info,likes } = inputs;
+  const { title, info, likes, haveMember, wantMember } = inputs;
   const [idol, setIdol] = useState("");
   const [category, setCategory] = useState("");
   const [region, setRegion] = useState("");
@@ -40,7 +42,7 @@ const ExchangePostPage = () => {
   };
   const onPost = async () => {
     try {
-      console.log({ inputs, idol, category });
+      //console.log({ inputs, idol, category });
       const productDB = db.collection("exchange");
 
       if (images.length === 0) {
@@ -52,32 +54,43 @@ const ExchangePostPage = () => {
         !info ||
         !title ||
         !idol ||
-        !category
+        !category ||
+        !transactionType ||
+        !region
       ) {
         alert("모든 정보를 입력해주세요.");
         return;
       }
 
       const timeStamp = moment().format("YYYY-MM-DD hh:mm:ss");
+      const imageUrls = [];
 
-      const imageRef = ref(
-        storage,
-        `exchange_image/${images[0].name}${timeStamp}`
-      );
+      for (let i = 0; i < images.length; i++) {
+        const imageRef = ref(
+          storage,
+          `exchange_image/${images[i].name}${timeStamp}`
+        );
 
-      const snapshot = await uploadBytes(imageRef, images[0]);
+        const snapshot = await uploadBytes(imageRef, images[i]);
 
-      const url = await getDownloadURL(snapshot.ref);
+        const url = await getDownloadURL(snapshot.ref);
+
+        imageUrls.push(url);
+      }
 
       const body = {
         info,
         idol,
-        image: url,
+        images: imageUrls,
         category,
         title,
         likes,
         date: new Date(),
-        isComplete: 1,
+        isComplete: 0,
+        transactionType,
+        region,
+        haveMember,
+        wantMember,
       };
 
       await productDB
@@ -110,7 +123,7 @@ const ExchangePostPage = () => {
         value={title}
         name="title"
         onChange={onChange}
-        placeholder="상품명을 입력해주세요.(30자 이내)"
+        placeholder="상품명을 입력해주세요."
       />
       <PostDropDown
         list={Category}
@@ -123,6 +136,20 @@ const ExchangePostPage = () => {
         label="아이돌"
         selected={idol}
         setSelected={setIdol}
+      />
+      <PostInputText
+        label={"보유 멤버"}
+        value={haveMember}
+        name="haveMember"
+        onChange={onChange}
+        placeholder="보유 멤버 명을 기입해주세요."
+      />
+      <PostInputText
+        label={"교환 멤버"}
+        value={wantMember}
+        name="wantMember"
+        onChange={onChange}
+        placeholder="교환원하는 멤버 명을 기입해주세요."
       />
       <PostDropDown
         list={Region}
