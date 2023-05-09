@@ -1,8 +1,12 @@
-import React from "react";
-import styled from "styled-components";
-import { colors } from "../../../common/color";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { colors } from '../../../common/color';
 
-import ChattingBox from "./ChattingBox";
+import ChattingBox from './ChattingBox';
+import { db, realTimeDatabase } from '../../../config/firebase';
+
+import useUser from '../../../hooks/useUser';
+import { useEffect } from 'react';
 
 const AuctionChattingBox = ({}) => {
   return (

@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import PostInputBox, { postInputWidth } from "./PostInputBox";
-import styled from "styled-components";
-import { colors } from "../../common/color";
+import PostInputBox, { postInputWidth } from './PostInputBox';
+import styled from 'styled-components';
+import { colors } from '../../common/color';
 
 const PostInputText = ({ onChange, value, label, name, placeholder }) => {
   return (

@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 
-import styled from "styled-components";
-import { colors } from "../../../common/color";
-import ProductOwner from "../../common/ProductOwner";
+import styled from 'styled-components';
+import { colors } from '../../../common/color';
+import ProductOwner from '../../common/ProductOwner';
 
 const ChattingBox = ({ children }) => {
   const ref = useRef();

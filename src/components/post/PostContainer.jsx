@@ -1,29 +1,34 @@
-import React from "react";
-import styled from "styled-components";
-import { colors } from "../../common/color";
-import PostImage from "./PostImage";
-import RecommendPrice from "./RecommendPrice";
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import { colors } from '../../common/color';
+import PostImage from './PostImage';
+import RecommendPrice from './RecommendPrice';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
 
-const PostContainer = ({ children, recommend, onPost, images, setImages }) => {
+const PostContainer = ({
+  children,
+  recommend,
+  onPost,
+  images,
+  setImages,
+  title,
+}) => {
   return (
     <>
       <Header>
         <HeaderText>
-          {recommend ? "경매" : "교환"} 게시글 업로드
-          <FontAwesomeIcon icon={faPen} style={{ marginLeft: "10px" }} />
+          {recommend ? '경매' : '교환'} 게시글 업로드
+          <FontAwesomeIcon icon={faPen} style={{ marginLeft: '10px' }} />
         </HeaderText>
       </Header>
       <Container>
         <Wrapper>
           <ImageWrapper>
             <PostImage images={images} setImages={setImages} />
-
             {recommend ? <RecommendPrice /> : null}
           </ImageWrapper>
-
           <ChildrenWrapper>{children}</ChildrenWrapper>
         </Wrapper>
 
