@@ -1,17 +1,24 @@
-import React from "react";
-import styled from "styled-components";
-import { colors } from "../../common/color";
-import PostImage from "./PostImage";
-import RecommendPrice from "./RecommendPrice";
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import { colors } from '../../common/color';
+import PostImage from './PostImage';
+import RecommendPrice from './RecommendPrice';
 
-const PostContainer = ({ children, recommend, onPost, images, setImages }) => {
+const PostContainer = ({
+  children,
+  recommend,
+  onPost,
+  images,
+  setImages,
+  title,
+}) => {
   return (
     <Container>
       <Wrapper>
         <ImageWrapper>
           <PostImage images={images} setImages={setImages} />
 
-          {recommend ? <RecommendPrice /> : null}
+          {recommend ? <RecommendPrice title={title} /> : null}
         </ImageWrapper>
 
         <ChildrenWrapper>{children}</ChildrenWrapper>

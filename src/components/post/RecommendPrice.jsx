@@ -1,9 +1,30 @@
-import React from "react";
-import styled from "styled-components";
-import { colors } from "../../common/color";
-import { moneyFormat } from "../../common/money";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { colors } from '../../common/color';
+import { moneyFormat } from '../../common/money';
+import { db } from '../../config/firebase';
+import useUser from '../../hooks/useUser';
 
-const RecommendPrice = () => {
+const RecommendPrice = ({ title }) => {
+  const user = useUser();
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(0);
+  const [isComplete, setIsComplete] = useState(false);
+
+  const body = {
+    title: title,
+    uid: user.uid,
+    recommendMaxPrice: parseInt(maxPrice),
+    recommendMinPrice: parseInt(minPrice),
+    isComplete: isComplete,
+  };
+
+  const sendRecommend = async () => {
+    const recommendPrice = db.collection('recommendPrice');
+    await recommendPrice.add({ ...body });
+    console.log('send success');
+  };
+
   return (
     <Container>
       <RecommendBox>
@@ -22,7 +43,7 @@ const RecommendPrice = () => {
         </TextBox>
       </RecommendBox>
 
-      <RecommendBtn>가격 추천 받기</RecommendBtn>
+      <RecommendBtn onClick={sendRecommend}>가격 추천 받기</RecommendBtn>
     </Container>
   );
 };
