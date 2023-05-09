@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { colors } from "../../common/color";
 
 const ChattingInfo = ({ product, btnText, onBtnClick, children }) => {
-  const { image, info } = product;
+  const { images, info } = product;
   return (
     <Container>
-      <ProductImage src={image} />
+      <ProductImage src={images[0]} />
 
       <Btn>{btnText}</Btn>
 
