@@ -1,17 +1,36 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { colors } from '../../../common/color';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { colors } from "../../../common/color";
 
-import ChattingBox from './ChattingBox';
-import { db, realTimeDatabase } from '../../../config/firebase';
+import ChattingBox from "./ChattingBox";
+import { db, realTimeDatabase } from "../../../config/firebase";
 
-import useUser from '../../../hooks/useUser';
-import { useEffect } from 'react';
+import useUser from "../../../hooks/useUser";
+import { useEffect } from "react";
+import useProduct from "../../../hooks/useProduct";
+import { useNavigate } from "react-router-dom";
 
-const AuctionChattingBox = ({}) => {
+const AuctionChattingBox = ({ id }) => {
+  const product = useProduct(id);
+
+  // console.log("AuctionChattingBox product: ", product);
+
+  const navigate = useNavigate();
+  const goAuctionChat = () => {
+    navigate(`/auction/${id}/chat`);
+  };
+
+  if (!product) {
+    return <></>;
+  }
+
   return (
-    <ChattingBox>
-      <Status>경매 진행 중</Status>
+    <ChattingBox
+      uid={product.uid}
+      title={product.title}
+      onClick={goAuctionChat}
+    >
+      <Status>{product.isComplete === 0 ? "경매 진행 중" : "경매 종료"}</Status>
     </ChattingBox>
   );
 };
