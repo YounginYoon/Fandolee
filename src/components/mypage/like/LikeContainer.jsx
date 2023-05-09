@@ -42,13 +42,13 @@ const LikeContainer = () => {
     <Container>
       <Filter filter={filter} setFilter={setFilter} filterList={filterList} />
       <ProductListLayout>
-        {dummy.map((data, idx) =>
+        {/* {dummy.map((data, idx) =>
           data.type === "auction" ? (
             <AuctionContainer key={data._id} data={data} />
           ) : (
             <ExchangeContainer key={data._id} product={data} />
           )
-        )}
+        )} */}
       </ProductListLayout>
     </Container>
   );
