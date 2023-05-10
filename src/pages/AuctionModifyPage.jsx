@@ -178,7 +178,7 @@ const AuctionModifyPage = () => {
         label={"가격"}
         minPrice={minPrice}
         maxPrice={maxPrice}
-        onChange={onChange}
+        
       />
       <PostDate
         label="거래 완료 날짜"
