@@ -17,7 +17,7 @@ const ProductOwner = ({ uid }) => {
     navigate(`/user/${uid}`);
   };
 
-  if (!owner || !profileImage) {
+  if (!owner) {
     return <></>;
   }
 

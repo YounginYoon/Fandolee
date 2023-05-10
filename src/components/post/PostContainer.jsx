@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { colors } from '../../common/color';
 import PostImage from './PostImage';
@@ -6,6 +6,7 @@ import RecommendPrice from './RecommendPrice';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 import { db } from '../../config/firebase';
 
@@ -18,6 +19,16 @@ const PostContainer = ({
   title,
   category,
 }) => {
+  const navigate = useNavigate();
+
+  const onCanceled = () => {
+    if (recommend) {
+      navigate('/auction/list');
+    } else {
+      navigate('/exchange/list');
+    }
+  };
+
   return (
     <>
       <Header>
@@ -38,7 +49,9 @@ const PostContainer = ({
         </Wrapper>
 
         <BtnWrapper>
-          <Btn bgColor={colors.COLOR_GRAY_BACKGROUND}>취소</Btn>
+          <Btn onClick={onCanceled} bgColor={colors.COLOR_GRAY_BACKGROUND}>
+            취소
+          </Btn>
           <Btn onClick={onPost} bgColor={colors.COLOR_MAIN}>
             게시
           </Btn>

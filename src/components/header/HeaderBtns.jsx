@@ -14,7 +14,7 @@ import UserInfo from "../profile/UserInfo";
 const HeaderBtns = () => {
   const navigate = useNavigate();
   const user = useUser();
-  const [url, setUrl] = useState("");
+  const [url, setUrl] = useState("/img/user.png");
 
   const onLogout = async () => {
     if (!window.confirm("로그아웃 하시겠습니까?")) {
@@ -65,11 +65,7 @@ const HeaderBtns = () => {
       {user ? (
         <>
           <User>
-            {url ? (
-              <ProfileImage src={url} onClick={goProfilePage} />
-            ) : (
-              <ProfileImage onClick={goProfilePage} />
-            )}
+            <ProfileImage src={url} onClick={goProfilePage} />
 
             <HeaderBtn onClick={goProfilePage}>{user.displayName}</HeaderBtn>
           </User>

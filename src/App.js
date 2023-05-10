@@ -69,7 +69,7 @@ const App = () => {
           {/*경매 게시글 게시 페이지*/}
           <Route path="auctionUp" element={<AuctionUpPage />} />
           {/*경매 게시글 나열 페이지*/}
-          <Route path="auctionlist" element={<AuctionListPage />} />
+          <Route path="list" element={<AuctionListPage />} />
           {/*경매 게시글 상세 페이지*/}
           <Route path="auctiondetail/:id" element={<AuctionDetailPage />} />
           {/*경매 게시글 수정 페이지*/}

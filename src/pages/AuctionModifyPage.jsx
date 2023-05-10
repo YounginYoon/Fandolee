@@ -22,7 +22,7 @@ import { dateFormat } from "../common/date";
 import useProduct from "../hooks/useProduct";
 import Loading from "../components/common/Loading";
 import { useEffect } from "react";
-import { addDays } from "date-fns"
+import { addDays } from "date-fns";
 
 const AuctionModifyPage = () => {
   const params = useParams();
@@ -42,11 +42,11 @@ const AuctionModifyPage = () => {
     info: "",
     title: "",
     likes: 0,
-    endDate: dateFormat(addDays(new Date(),1)),
+    endDate: dateFormat(addDays(new Date(), 1)),
   });
 
   const { title, info, likes, endDate, minPrice, maxPrice } = inputs;
-  
+
   useEffect(() => {
     if (product) {
       setInputs({
@@ -55,7 +55,7 @@ const AuctionModifyPage = () => {
         info: product.info,
         title: product.title,
         likes: product.likes,
-        endDate: dateFormat(addDays(new Date(),1))
+        endDate: dateFormat(addDays(new Date(), 1)),
       });
       setCategory(product.category);
       setImages(product.image);
@@ -63,11 +63,10 @@ const AuctionModifyPage = () => {
     }
   }, [product]);
 
-
   if (!product) {
     return <Loading />;
   }
-  
+
   const onChange = (e) => {
     const { name, value } = e.target;
 
@@ -140,13 +139,11 @@ const AuctionModifyPage = () => {
           console.log("auction posting fail: ", err);
         });
 
-      window.location.replace("/auction/auctionList");
+      window.location.replace("/auction/list");
     } catch (err) {
       console.log("post auction error: ", err);
     }
   };
-
- 
 
   return (
     <PostContainer
@@ -174,12 +171,7 @@ const AuctionModifyPage = () => {
         selected={idol}
         setSelected={setIdol}
       />
-      <PostPrice
-        label={"가격"}
-        minPrice={minPrice}
-        maxPrice={maxPrice}
-        onChange={onChange}
-      />
+      <PostPrice label={"가격"} minPrice={minPrice} maxPrice={maxPrice} />
       <PostDate
         label="거래 완료 날짜"
         endDate={endDate}

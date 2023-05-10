@@ -103,9 +103,9 @@ const AuctionUpPage = () => {
             likes: 0,
             date: new Date(),
             endDate: endDate,
-            isComplete:1,
-            biddingPrice:0,
-            biddingDate:new Date(),
+            isComplete: 1,
+            biddingPrice: 0,
+            biddingDate: new Date(),
           };
 
           const user_info = {
@@ -125,18 +125,15 @@ const AuctionUpPage = () => {
         });
       });
       //이미지 upload
-      
-
-      //navigate(`/auction/auctionlist`);
     } catch (err) {
       console.log("posting error", err);
     }
   };
 
-  const onPost = async() => {
-    await addPost()
-    navigate(`/auction/auctionlist`);
-  }
+  const onPost = async () => {
+    await addPost();
+    navigate(`/auction/list`);
+  };
   //달력 추가하기
   const [endDate, setEndDate] = useState(addDays(new Date(), 1));
 
