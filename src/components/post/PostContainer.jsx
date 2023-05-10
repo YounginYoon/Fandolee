@@ -18,6 +18,14 @@ const PostContainer = ({
 }) => {
   const navigate = useNavigate();
 
+  const onCanceled = () => {
+    if (recommend) {
+      navigate("/auction/list");
+    } else {
+      navigate("/exchange/list");
+    }
+  };
+
   return (
     <>
       <Header>
@@ -36,10 +44,7 @@ const PostContainer = ({
         </Wrapper>
 
         <BtnWrapper>
-          <Btn
-            onClick={() => navigate("../")}
-            bgColor={colors.COLOR_GRAY_BACKGROUND}
-          >
+          <Btn onClick={onCanceled} bgColor={colors.COLOR_GRAY_BACKGROUND}>
             취소
           </Btn>
           <Btn onClick={onPost} bgColor={colors.COLOR_MAIN}>
