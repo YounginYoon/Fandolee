@@ -30,7 +30,7 @@ const useOwner = (uid) => {
       const url = await getDownloadURL(imageRef);
       setProfileImage(url);
     } catch (err) {
-      console.log("useOwner profileImage err: ", err);
+      console.log("useOwner getImage err: ", err);
     }
   };
 
