@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { colors } from '../../common/color';
 import PostImage from './PostImage';
@@ -7,6 +7,8 @@ import RecommendPrice from './RecommendPrice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 
+import { db } from '../../config/firebase';
+
 const PostContainer = ({
   children,
   recommend,
@@ -14,6 +16,7 @@ const PostContainer = ({
   images,
   setImages,
   title,
+  category,
 }) => {
   return (
     <>
@@ -27,7 +30,9 @@ const PostContainer = ({
         <Wrapper>
           <ImageWrapper>
             <PostImage images={images} setImages={setImages} />
-            {recommend ? <RecommendPrice /> : null}
+            {recommend ? (
+              <RecommendPrice title={title} category={category} />
+            ) : null}
           </ImageWrapper>
           <ChildrenWrapper>{children}</ChildrenWrapper>
         </Wrapper>
