@@ -7,7 +7,7 @@ import { db, storage } from "../config/firebase";
 
 const useOwner = (uid) => {
   const [owner, setOwner] = useState(null);
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState("/img/user.png");
 
   const getOwner = async () => {
     const docRef = doc(db, "users", uid);
@@ -25,14 +25,12 @@ const useOwner = (uid) => {
     }
   };
   const getImage = async () => {
-    let url = "";
     try {
       const imageRef = ref(storage, `profile_image/${uid}`);
-      url = await getDownloadURL(imageRef);
+      const url = await getDownloadURL(imageRef);
       setProfileImage(url);
     } catch (err) {
       console.log("useOwner profileImage err: ", err);
-      console.log("url: ", url);
     }
   };
 
