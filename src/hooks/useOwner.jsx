@@ -25,13 +25,14 @@ const useOwner = (uid) => {
     }
   };
   const getImage = async () => {
+    let url = "";
     try {
       const imageRef = ref(storage, `profile_image/${uid}`);
-      await getDownloadURL(imageRef).then((url) => {
-        setProfileImage(url);
-      });
+      url = await getDownloadURL(imageRef);
+      setProfileImage(url);
     } catch (err) {
       console.log("useOwner profileImage err: ", err);
+      console.log("url: ", url);
     }
   };
 
