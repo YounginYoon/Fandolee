@@ -82,12 +82,13 @@ def on_snapshot(doc_snapshot, changes, read_time):
 
             print(f'새로운 문서 추가. category: {category} title: {title}\n')
             recommendPrices = search_similar(title, category)
-            maxPrice = max(recommendPrices)
-            minPrice = min(recommendPrices)
-            print("max min: ", maxPrice, minPrice)
+            if len(recommendPrices) > 0:
+              maxPrice = max(recommendPrices)
+              minPrice = min(recommendPrices)
+              print("max min: ", maxPrice, minPrice)
 
-            #파이어스토어에 추천 가격 수정
-            new_doc_ref.update({"recommendMaxPrice": int(maxPrice), "recommendMinPrice":int(minPrice)})
+              #파이어스토어에 추천 가격 수정
+              new_doc_ref.update({"recommendMaxPrice": int(maxPrice), "recommendMinPrice":int(minPrice)})
 
 
 
