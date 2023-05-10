@@ -12,10 +12,12 @@ import { faSackDollar } from "@fortawesome/free-solid-svg-icons";
 
 import RcvMessage from "./RcvMessage";
 import SndMessage from "./SndMessage";
+import { remainDate } from "../../common/date";
 
 const ChattingRoom = ({ product }) => {
   const user = useUser();
   const isMyAuction = user.uid === product.uid;
+
   // 투찰가 입력 인풋
   const [input, setInput] = useState("");
   const [biddingChat, setBiddingChat] = useState("");
@@ -171,6 +173,11 @@ const ChattingRoom = ({ product }) => {
       </ChattingWrap>
 
       <InputBox>
+        {product.isComplete ? (
+          <CannotInput>낙찰이 완료된 상품입니다.</CannotInput>
+        ) : remainDate(product.endDate) < 0 ? (
+          <CannotInput>경매 기간이 아닙니다.</CannotInput>
+        ) : null}
         <Input
           value={input}
           disabled={isMyAuction || biddingChat}
@@ -230,13 +237,17 @@ const CurrentAuctionDiv = styled.div`
   position: absolute;
   top: 1%;
   left: 1%;
+
   z-index: 100;
   box-sizing: border-box;
   width: 98%;
-  background-color: ${colors.COLOR_LIGHTGREEN_BACKGROUND};
+  // background-color: ${colors.COLOR_LIGHTGREEN_BACKGROUND};
+  background-color: rgba(236, 245, 233, 0.7);
   display: flex;
   justify-content: space-evenly;
+  align-items: center;
   padding: 20px;
+  // height: 40px;
   border-radius: 7px;
   box-shadow: 5px 10px 10px 0 rgba(176, 176, 176, 0.4);
   cursor: pointer;
@@ -293,6 +304,22 @@ const InputBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  position: relative;
+`;
+
+const CannotInput = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  background-color: rgba(255, 255, 255, 0.5);
 `;
 
 const Input = styled.input`

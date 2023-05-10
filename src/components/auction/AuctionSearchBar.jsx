@@ -10,7 +10,10 @@ import { useNavigate } from "react-router-dom";
 import { db } from "../../config/firebase";
 
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import useUser from "../../hooks/useUser";
+
 const AuctionSearchBar = ({ setProducts }) => {
+  const user = useUser();
   const [idol, setIdol] = useState("내가 찾는 아이돌");
   const [category, setCategory] = useState("굿즈 종류");
 
@@ -67,10 +70,12 @@ const AuctionSearchBar = ({ setProducts }) => {
           </Btn>
         </Wrapper>
 
-        <Btn onClick={goAuctionUpPage}>
-          글 올리기{" "}
-          <FontAwesomeIcon icon={faPen} style={{ paddingLeft: "7px" }} />
-        </Btn>
+        {user && (
+          <Btn onClick={goAuctionUpPage}>
+            글 올리기{" "}
+            <FontAwesomeIcon icon={faPen} style={{ paddingLeft: "7px" }} />
+          </Btn>
+        )}
       </Inner>
     </Container>
   );

@@ -15,6 +15,8 @@ const AuctionContainer = ({ data }) => {
     navigate(`/auction/auctiondetail/${data.id}`);
   };
 
+  // console.log("AuctionContainer: ", data);
+
   return (
     <ProductContainer>
       <ProductImg product={data} onClick={goAuctionDetailPage} />
