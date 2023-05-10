@@ -18,7 +18,6 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 import moment from 'moment';
 import useUser from '../hooks/useUser';
-import { dateFormat } from '../common/date';
 import { addDays } from 'date-fns';
 
 const AuctionPostPage = () => {
@@ -32,7 +31,7 @@ const AuctionPostPage = () => {
     info: '',
     title: '',
     likes: 0,
-    endDate: dateFormat(addDays(new Date(), 1)),
+    endDate: addDays(new Date(), 1),
   });
   const { title, info, likes, endDate, minPrice, maxPrice } = inputs;
   const [idol, setIdol] = useState('');

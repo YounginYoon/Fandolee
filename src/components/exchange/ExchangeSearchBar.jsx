@@ -34,6 +34,8 @@ const ExchangeSearchBar = ({setProducts}) => {
         productDB,
         where("category", "==", category),
         where("idol", "==", idol),
+        where("method","==",method),
+        where("region","==",region),
         orderBy("date")
       );
       const ret = await getDocs(q);

@@ -28,7 +28,7 @@ const AuctionSearchBar = ({ setProducts }) => {
         productDB,
         where("category", "==", category),
         where("idol", "==", idol),
-        orderBy("end_date")
+        orderBy("endDate")
       );
       const ret = await getDocs(q);
       const products = ret.docs.map((doc) => ({
