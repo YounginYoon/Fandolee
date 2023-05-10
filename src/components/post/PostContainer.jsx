@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
-import { colors } from '../../common/color';
-import PostImage from './PostImage';
-import RecommendPrice from './RecommendPrice';
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import { colors } from "../../common/color";
+import PostImage from "./PostImage";
+import RecommendPrice from "./RecommendPrice";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const PostContainer = ({
   children,
@@ -15,12 +16,14 @@ const PostContainer = ({
   setImages,
   title,
 }) => {
+  const navigate = useNavigate();
+
   return (
     <>
       <Header>
         <HeaderText>
-          {recommend ? '경매' : '교환'} 게시글 업로드
-          <FontAwesomeIcon icon={faPen} style={{ marginLeft: '10px' }} />
+          {recommend ? "경매" : "교환"} 게시글 업로드
+          <FontAwesomeIcon icon={faPen} style={{ marginLeft: "10px" }} />
         </HeaderText>
       </Header>
       <Container>
@@ -33,7 +36,12 @@ const PostContainer = ({
         </Wrapper>
 
         <BtnWrapper>
-          <Btn bgColor={colors.COLOR_GRAY_BACKGROUND}>취소</Btn>
+          <Btn
+            onClick={() => navigate("../")}
+            bgColor={colors.COLOR_GRAY_BACKGROUND}
+          >
+            취소
+          </Btn>
           <Btn onClick={onPost} bgColor={colors.COLOR_MAIN}>
             게시
           </Btn>

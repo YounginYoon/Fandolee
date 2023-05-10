@@ -15,14 +15,14 @@ import { useNavigate } from "react-router-dom";
 import { db } from "../../config/firebase";
 
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import useUser from "../../hooks/useUser";
 
-const ExchangeSearchBar = ({setProducts}) => {
- 
+const ExchangeSearchBar = ({ setProducts }) => {
+  const user = useUser();
   const [idol, setIdol] = useState("내가 찾는 아이돌");
   const [category, setCategory] = useState("굿즈 종류");
   const [method, setMethod] = useState("교환방법");
   const [region, setRegion] = useState("지역");
-
 
   const navigate = useNavigate();
 
@@ -34,8 +34,8 @@ const ExchangeSearchBar = ({setProducts}) => {
         productDB,
         where("category", "==", category),
         where("idol", "==", idol),
-        where("method","==",method),
-        where("region","==",region),
+        where("method", "==", method),
+        where("region", "==", region),
         orderBy("date")
       );
       const ret = await getDocs(q);
@@ -89,10 +89,12 @@ const ExchangeSearchBar = ({setProducts}) => {
           </Btn>
         </Wrapper>
 
-        <Btn onClick={() => navigate("/exchange/post")}>
-          글 올리기{" "}
-          <FontAwesomeIcon icon={faPen} style={{ paddingLeft: "7px" }} />
-        </Btn>
+        {user && (
+          <Btn onClick={() => navigate("/exchange/post")}>
+            글 올리기{" "}
+            <FontAwesomeIcon icon={faPen} style={{ paddingLeft: "7px" }} />
+          </Btn>
+        )}
       </Inner>
     </Container>
   );
