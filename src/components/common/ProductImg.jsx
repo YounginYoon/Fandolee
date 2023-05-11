@@ -7,15 +7,20 @@ import { faHeart as faHeartOutlined } from "@fortawesome/free-regular-svg-icons"
 import { useNavigate } from "react-router-dom";
 import { colors } from "../../common/color";
 import { remainDate } from "../../common/date";
+import {isLike} from "../../hooks/useHeart";
+import useUser from "../../hooks/useUser";
+
 
 const ProductImg = ({
   product,
   onClick = null,
   size = "M",
-  onHeartClick = () => {},
+  onHeartClick = () => {
+    
+  },
 }) => {
   const [heart, setHeart] = useState(false);
-
+  const user = useUser();
   const { endDate, isComplete } = product;
 
   const handleHeart = () => {
