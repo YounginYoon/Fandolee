@@ -1,25 +1,57 @@
-import React from "react";
-import { useParams, useSearchParams } from "react-router-dom";
-import styled from "styled-components";
-import ChattingHeader from "../components/chat/ChattingHeader";
-import ChattingInfo from "../components/chat/ChattingInfo";
-import Loading from "../components/common/Loading";
-import Tag from "../components/common/Tag";
-import useProduct from "../hooks/useProduct";
-import { moneyFormat } from "../common/money";
-import { timestampToDateFormat } from "../common/date";
-import { colors } from "../common/color";
-import ChattingRoom from "../components/chat/ChattingRoom";
-import { useState } from "react";
+import React, { useEffect } from 'react';
+import { useParams, useSearchParams } from 'react-router-dom';
+import styled from 'styled-components';
+import ChattingHeader from '../components/chat/ChattingHeader';
+import ChattingInfo from '../components/chat/ChattingInfo';
+import Loading from '../components/common/Loading';
+import Tag from '../components/common/Tag';
+import useProduct from '../hooks/useProduct';
+import { moneyFormat } from '../common/money';
+import { remainDate, timestampToDateFormat } from '../common/date';
+import { colors } from '../common/color';
+import ChattingRoom from '../components/chat/ChattingRoom';
+import { useState } from 'react';
+import { realTimeDatabase, db } from '../config/firebase';
 
 const AuctionChattingPage = () => {
   const params = useParams();
   const productId = params.id;
 
-  const product = useProduct(productId);
+  const [product, setProduct] = useState(null);
+  const productRef = db.collection('product').doc(productId);
+
+  const loadProduct = async () => {
+    try {
+      const snapshot = await productRef.get();
+      const data = snapshot.data();
+      setProduct({ ...data, id: snapshot.id });
+    } catch (err) {
+      console.log('loadProduct err: ', err);
+    }
+  };
+
+  useEffect(() => {
+    loadProduct();
+  }, []);
+
+  useEffect(() => {
+    if (product && product.isComplete) {
+      loadProduct();
+    }
+  }, [product]);
 
   // 낙찰 완료하기 버튼 클릭 이벤트 콜백
-  const onBtnClick = () => {};
+  const onBtnClick = async () => {
+    if (!window.confirm('낙찰을 완료하시겠습니까?')) {
+      return;
+    }
+    try {
+      await productRef.update({ isComplete: 1 });
+      loadProduct();
+    } catch (err) {
+      console.log('onBtnClick error: ', err);
+    }
+  };
 
   if (!product) {
     return <Loading />;
