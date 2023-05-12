@@ -126,6 +126,7 @@ const AuctionPostPage = () => {
       images={images}
       setImages={setImages}
       title={title}
+      category={category}
     >
       <PostInputText
         label={"상품명"}
