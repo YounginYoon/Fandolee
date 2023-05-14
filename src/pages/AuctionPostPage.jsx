@@ -18,8 +18,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 import moment from "moment";
 import useUser from "../hooks/useUser";
-import { dateFormat } from "../common/date";
-import { addDays } from "date-fns"
+import { addDays } from "date-fns";
 
 const AuctionPostPage = () => {
   const user = useUser();
@@ -32,7 +31,7 @@ const AuctionPostPage = () => {
     info: "",
     title: "",
     likes: 0,
-    endDate: dateFormat(addDays(new Date(),1)),
+    endDate: addDays(new Date(), 1),
   });
   const { title, info, likes, endDate, minPrice, maxPrice } = inputs;
   const [idol, setIdol] = useState("");
@@ -71,34 +70,33 @@ const AuctionPostPage = () => {
       }
 
       const timeStamp = moment().format("YYYY-MM-DD hh:mm:ss");
-      const imageUrls =[];
+      const imageUrls = [];
 
-      for(let i=0; i<images.length;i++){
+      for (let i = 0; i < images.length; i++) {
         const imageRef = ref(
           storage,
           `product_image/${images[i].name}${timeStamp}`
         );
-  
+
         const snapshot = await uploadBytes(imageRef, images[i]);
-  
+
         const url = await getDownloadURL(snapshot.ref);
 
         imageUrls.push(url);
       }
-      
 
       const body = {
         minPrice: parseInt(minPrice),
         maxPrice: parseInt(maxPrice),
         info,
         idol,
-        image: imageUrls,
+        images: imageUrls,
         category,
         title,
         likes,
         date: new Date(),
         endDate: endDate,
-        isComplete: 1,
+        isComplete: 0,
         biddingPrice: 0,
         biddingDate: new Date(),
       };
@@ -115,7 +113,7 @@ const AuctionPostPage = () => {
           console.log("auction posting fail: ", err);
         });
 
-      window.location.replace("/auction/auctionList");
+      window.location.replace("/auction/list");
     } catch (err) {
       console.log("post auction error: ", err);
     }
@@ -127,6 +125,8 @@ const AuctionPostPage = () => {
       onPost={onPost}
       images={images}
       setImages={setImages}
+      title={title}
+      category={category}
     >
       <PostInputText
         label={"상품명"}

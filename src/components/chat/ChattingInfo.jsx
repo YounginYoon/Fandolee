@@ -1,14 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 import { colors } from "../../common/color";
+import useUser from "../../hooks/useUser";
 
 const ChattingInfo = ({ product, btnText, onBtnClick, children }) => {
-  const { image, info } = product;
+  const user = useUser();
+  const { images, info, uid } = product;
+
   return (
     <Container>
-      <ProductImage src={image} />
+      <ProductImage src={images[0]} />
 
-      <Btn>{btnText}</Btn>
+      {user && user.uid === uid && <Btn>{btnText}</Btn>}
 
       <Tags>{children}</Tags>
 

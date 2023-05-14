@@ -1,7 +1,9 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { useOutlet, useParams } from "react-router-dom";
+import { useNavigate, useOutlet, useParams } from "react-router-dom";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
 
 import styled from "styled-components";
 import AuctionList from "../components/auction/AuctionList";
@@ -15,6 +17,7 @@ import { db } from "../config/firebase";
 import { taps } from "../constants/tap";
 import useOwner from "../hooks/useOwner";
 import useUser from "../hooks/useUser";
+import { colors } from "../common/color";
 
 const UserPage = () => {
   const user = useUser();
@@ -26,6 +29,8 @@ const UserPage = () => {
   const [currentTab, setCurrentTab] = useState(taps.auction);
   const [auctions, setAuctions] = useState(null);
   const [exchanges, setExchanges] = useState(null);
+
+  const navigate = useNavigate();
 
   const getAuctionList = async () => {
     const productRef = collection(db, "product");
@@ -62,6 +67,14 @@ const UserPage = () => {
     }
   };
 
+  const goPostPage = () => {
+    if (currentTab === taps.auction) {
+      navigate("/auction/post");
+    } else {
+      navigate("/exchange/post");
+    }
+  };
+
   useEffect(() => {
     getAuctionList();
     getExchangeList();
@@ -83,11 +96,20 @@ const UserPage = () => {
 
       <UserNav currentTab={currentTab} setCurrentTab={setCurrentTab} />
 
-      {currentTab === taps.auction ? (
-        <AuctionList products={auctions} />
-      ) : currentTab === taps.exchange ? (
-        <ExchangeList products={exchanges} />
-      ) : null}
+      <ListWrapper>
+        {isAdmin && (
+          <PostBtn onClick={goPostPage}>
+            글 올리기{" "}
+            <FontAwesomeIcon style={{ marginLeft: "5px" }} icon={faPen} />
+          </PostBtn>
+        )}
+
+        {currentTab === taps.auction ? (
+          <AuctionList products={auctions} />
+        ) : currentTab === taps.exchange ? (
+          <ExchangeList products={exchanges} />
+        ) : null}
+      </ListWrapper>
     </Container>
   );
 };
@@ -95,3 +117,28 @@ const UserPage = () => {
 export default UserPage;
 
 const Container = styled.div``;
+
+const ListWrapper = styled.div`
+  width: max-content;
+  margin: 0 auto;
+  position: relative;
+  // background-color: orange;
+`;
+
+const PostBtn = styled.div`
+  position: absolute;
+  right: 0;
+  top: -35px;
+  padding: 0 15px;
+  width: max-content;
+  font-size: 14px;
+  height: 30px;
+  // box-shadow: 3px 7px 7px 0 rgba(176, 176, 176, 0.5);
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: ${colors.COLOR_MAIN};
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

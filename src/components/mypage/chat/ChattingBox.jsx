@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { colors } from "../../../common/color";
 import ProductOwner from "../../common/ProductOwner";
 
-const ChattingBox = ({ children }) => {
+const ChattingBox = ({ children, uid, title, onClick }) => {
   const ref = useRef();
   const [height, setHeight] = useState(0);
 
@@ -13,14 +13,14 @@ const ChattingBox = ({ children }) => {
   }, []);
 
   return (
-    <Container ref={ref} height={height}>
+    <Container ref={ref} height={height} onClick={onClick}>
       <Box>
         <Dot />
 
         <Wrapper style={{ flex: 1 }}>
-          <ProductOwner />
+          <ProductOwner uid={uid} />
 
-          <Title>MonstaX 최고</Title>
+          <Title>{title}</Title>
         </Wrapper>
 
         <Wrapper style={{ flex: 2 }}>{children}</Wrapper>

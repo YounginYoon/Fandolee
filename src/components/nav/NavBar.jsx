@@ -10,7 +10,7 @@ const NavBar = () => {
   const [currentTab, setCurrentTab] = useState("");
 
   const goAuctionListPage = () => {
-    navigate(`/auction/auctionlist`);
+    navigate(`/auction/list`);
   };
   const goExchangeListPage = () => {
     navigate("/exchange/list");

@@ -24,7 +24,7 @@ const AuctionDetailInfo = ({ product }) => {
   const [isLike, setIsLike] = useState(false);
 
   const {
-    image,
+    images,
     title,
     maxPrice,
     minPrice,
@@ -85,7 +85,7 @@ const AuctionDetailInfo = ({ product }) => {
         <EndDateBox>낙찰 예정일 {timestampToDateFormat(endDate)}</EndDateBox>
       </EndDateDiv>
 
-      <Image src={image[0]} />
+      <Image src={images[0]} />
 
       <SubContainer>
         {user && uid === user.uid && (

@@ -6,14 +6,22 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartOutlined } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { colors } from "../../common/color";
+import { remainDate } from "../../common/date";
+import {isLike} from "../../hooks/useHeart";
+import useUser from "../../hooks/useUser";
+
 
 const ProductImg = ({
   product,
   onClick = null,
   size = "M",
-  onHeartClick = () => {},
+  onHeartClick = () => {
+    
+  },
 }) => {
   const [heart, setHeart] = useState(false);
+  const user = useUser();
+  const { endDate, isComplete } = product;
 
   const handleHeart = () => {
     setHeart(!heart);
@@ -22,11 +30,17 @@ const ProductImg = ({
 
   return (
     <Container>
-      <Image src={product.image} onClick={onClick} size={size} />
+      <Image src={product.images[0]} onClick={onClick} size={size} />
 
       <HeartBox onClick={handleHeart}>
         <FontAwesomeIcon icon={heart ? faHeart : faHeartOutlined} />
       </HeartBox>
+
+      {isComplete ? (
+        <Status>{endDate ? "낙찰" : "교환"} 완료</Status>
+      ) : endDate && remainDate(endDate) < 0 ? (
+        <Status>경매 종료</Status>
+      ) : null}
     </Container>
   );
 };
@@ -50,6 +64,7 @@ const Container = styled.div`
   cursor: pointer;
   width: max-content;
   height: max-content;
+  // background-color: orange;
 `;
 
 const Image = styled.img`
@@ -75,4 +90,16 @@ const HeartBox = styled.div`
   z-index: 10;
   cursor: pointer;
   color: ${colors.COLOR_HEART};
+`;
+
+const Status = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 100;
+  background-color: ${colors.COLOR_GRAY_BACKGROUND};
+  border-radius: 2px;
+  font-weight: bold;
+  padding: 5px 10px;
+  font-size: 10px;
 `;

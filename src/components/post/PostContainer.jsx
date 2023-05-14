@@ -1,33 +1,81 @@
-import React from "react";
-import styled from "styled-components";
-import { colors } from "../../common/color";
-import PostImage from "./PostImage";
-import RecommendPrice from "./RecommendPrice";
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import { colors } from '../../common/color';
+import PostImage from './PostImage';
+import RecommendPrice from './RecommendPrice';
 
-const PostContainer = ({ children, recommend, onPost, images, setImages }) => {
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
+
+import { db } from '../../config/firebase';
+
+const PostContainer = ({
+  children,
+  recommend,
+  onPost,
+  images,
+  setImages,
+  title,
+  category,
+}) => {
+  const navigate = useNavigate();
+
+  const onCanceled = () => {
+    if (recommend) {
+      navigate('/auction/list');
+    } else {
+      navigate('/exchange/list');
+    }
+  };
+
   return (
-    <Container>
-      <Wrapper>
-        <ImageWrapper>
-          <PostImage images={images} setImages={setImages} />
+    <>
+      <Header>
+        <HeaderText>
+          {recommend ? '경매' : '교환'} 게시글 업로드
+          <FontAwesomeIcon icon={faPen} style={{ marginLeft: '10px' }} />
+        </HeaderText>
+      </Header>
+      <Container>
+        <Wrapper>
+          <ImageWrapper>
+            <PostImage images={images} setImages={setImages} />
+            {recommend ? (
+              <RecommendPrice title={title} category={category} />
+            ) : null}
+          </ImageWrapper>
+          <ChildrenWrapper>{children}</ChildrenWrapper>
+        </Wrapper>
 
-          {recommend ? <RecommendPrice /> : null}
-        </ImageWrapper>
-
-        <ChildrenWrapper>{children}</ChildrenWrapper>
-      </Wrapper>
-
-      <BtnWrapper>
-        <Btn bgColor={colors.COLOR_GRAY_BACKGROUND}>취소</Btn>
-        <Btn onClick={onPost} bgColor={colors.COLOR_MAIN}>
-          게시
-        </Btn>
-      </BtnWrapper>
-    </Container>
+        <BtnWrapper>
+          <Btn onClick={onCanceled} bgColor={colors.COLOR_GRAY_BACKGROUND}>
+            취소
+          </Btn>
+          <Btn onClick={onPost} bgColor={colors.COLOR_MAIN}>
+            게시
+          </Btn>
+        </BtnWrapper>
+      </Container>
+    </>
   );
 };
 
 export default PostContainer;
+
+const Header = styled.div`
+  width: 900px;
+  margin: 20px auto 0;
+  border-bottom: 1px solid ${colors.COLOR_GRAY_BORDER};
+`;
+
+const HeaderText = styled.p`
+  width: max-content;
+  font-size: 24px;
+  font-weight: bold;
+  color: ${colors.COLOR_MAIN};
+  padding: 15px;
+`;
 
 const Container = styled.div`
   width: max-content;
