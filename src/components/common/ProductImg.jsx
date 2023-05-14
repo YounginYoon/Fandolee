@@ -40,10 +40,10 @@ const ProductImg = ({
   
   const HandleHeart = async()=> {
     setHeart(!heart);
-    console.log("heart:",heart);
+    //console.log("heart:",heart);
     
 
-    /* 각 물건의 heart가 다른데 같은 heart로 인식하는 에러 발생..
+    //각 물건의 heart가 다른데 같은 heart로 인식하는 에러 발생..
     if (!heart) {
       if (!arrayData.includes(product.id)) {
         const newArrayData =[...arrayData, product.id ];
@@ -59,7 +59,7 @@ const ProductImg = ({
         await productDB.doc(user.uid).update({ products: removeArrayData });
       }
     }
-    */
+    
     
     
   };
