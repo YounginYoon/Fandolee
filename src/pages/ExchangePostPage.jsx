@@ -14,6 +14,7 @@ import useUser from "../hooks/useUser";
 import { db, storage } from "../config/firebase";
 import moment from "moment";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import Loading from "../components/common/Loading";
 
 const ExchangePostPage = () => {
   const user = useUser();
@@ -32,6 +33,7 @@ const ExchangePostPage = () => {
   const [category, setCategory] = useState("");
   const [region, setRegion] = useState("");
   const [transactionType, setTransactionType] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -42,6 +44,7 @@ const ExchangePostPage = () => {
   };
   const onPost = async () => {
     try {
+      setLoading(true);
       //console.log({ inputs, idol, category });
       const productDB = db.collection("exchange");
 
@@ -110,6 +113,10 @@ const ExchangePostPage = () => {
       console.log("post exchange error: ", err);
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <PostContainer

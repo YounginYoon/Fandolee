@@ -153,7 +153,7 @@ const Container = styled.div`
 const Image = styled.img`
   width: 250px;
   height: 250px;
-  obejct-fit: cover;
+  object-fit: cover;
   border-radius: 7px;
   display: inline-block;
 `;
