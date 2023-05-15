@@ -76,7 +76,7 @@ const ChattingRoom = ({ product }) => {
       timestamp: Date.now(),
     };
 
-    if (!checkValidation(minPrice, maxPrice)) return;
+    if (!checkValidation(minPrice, maxPrice)) return; //
 
     chatSetRef.set(chat);
     setInput('');
