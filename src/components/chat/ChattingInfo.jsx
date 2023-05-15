@@ -1,17 +1,27 @@
-import React from "react";
-import styled from "styled-components";
-import { colors } from "../../common/color";
-import useUser from "../../hooks/useUser";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { colors } from '../../common/color';
+import useUser from '../../hooks/useUser';
 
 const ChattingInfo = ({ product, btnText, onBtnClick, children }) => {
   const user = useUser();
   const { images, info, uid } = product;
+  const [disabled, setDisabled] = useState(false);
+
+  const handleBtn = () => {
+    onBtnClick();
+    setDisabled(true); // 버튼 비활성화
+  };
 
   return (
     <Container>
       <ProductImage src={images[0]} />
 
-      {user && user.uid === uid && <Btn>{btnText}</Btn>}
+      {user && user.uid === uid && (
+        <Btn onClick={handleBtn} disabled={disabled}>
+          {btnText}
+        </Btn>
+      )}
 
       <Tags>{children}</Tags>
 
@@ -57,6 +67,7 @@ const Btn = styled.div`
     color: ${colors.COLOR_BLUE_BUTTON};
     background-color: white;
   }
+  ${(props) => props.disabled && `opacity: 0.5; pointer-events: none;`}
 `;
 
 const Tags = styled.div`
