@@ -21,7 +21,8 @@ const AuctionDetailInfo = ({ product }) => {
   const navigate = useNavigate();
   const user = useUser();
 
-  const [isLike, setIsLike] = useState(false);
+  const [heart, setHeart] = useState(false);
+
 
   const {
     images,
@@ -67,6 +68,12 @@ const AuctionDetailInfo = ({ product }) => {
     navigate("./modify", { product });
   };
 
+  const HandleHeart = async()=> {
+    setHeart(!heart)
+
+  };
+  
+
   return (
     <Container>
       <EndDateDiv>
@@ -88,7 +95,7 @@ const AuctionDetailInfo = ({ product }) => {
       <Image src={images[0]} />
 
       <SubContainer>
-        {user && uid === user.uid && (
+        {user && uid === user.uid && !isComplete &&(
           <IconDiv>
             <Icon onClick={onUpdate}>
               <FontAwesomeIcon icon={faGear} />
@@ -122,8 +129,8 @@ const AuctionDetailInfo = ({ product }) => {
           <Btn onClick={goAuctionChatting}>경매 참여</Btn>
           <HeartDiv>
             <FontAwesomeIcon
-              onClick={() => setIsLike(!isLike)}
-              icon={isLike ? faHeart : faHeartOutline}
+              onClick={HandleHeart}
+              icon={heart ? faHeart : faHeartOutline}
               style={heartStyle}
             />
             <Likes>{likes ? likes : 0}</Likes>
