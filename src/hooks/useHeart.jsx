@@ -38,10 +38,10 @@ export const AddLikeDoc = async (userId) => {
 
 
 
-// like 데이터 들고오기
+//user의 like products 데이터 읽기 
 export const useLike = (user) => {
-    const [arrayData, setArrayData] = useState([]);
     
+    const [arrayData, setArrayData] = useState([]);
     
     const getLike = async() =>{
         try {
@@ -49,10 +49,12 @@ export const useLike = (user) => {
             const docSnap = await getDoc(docRef);
             if (!docSnap.exists()) {
                 await AddLikeDoc(user.uid);
+                
             }
             else{
                 const data = docSnap.data();
                 setArrayData(data.products);
+                
             }
           } catch (err) {
             console.log("getLike error: ", err);
@@ -62,13 +64,14 @@ export const useLike = (user) => {
     useEffect(() => {
         if(user){
             getLike();
+            
         }
-        
-    }, [user]);
+    },[] );
     
     if(!user){
         return [];
     }
+    
     return arrayData;
 };
 
@@ -101,6 +104,7 @@ export const useIsLike = (productId,arrayData) =>{
     else{
         return null;
     }
+    
 
 };
 
