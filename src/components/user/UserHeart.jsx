@@ -4,25 +4,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartOutlined } from "@fortawesome/free-regular-svg-icons";
-import { useNavigate } from "react-router-dom";
-import { colors } from "../../common/color";
-import { remainDate } from "../../common/date";
+
 import {useIsLike, plusProductLike ,miusProductLike, useLike} from "../../hooks/useHeart";
 import useUser from "../../hooks/useUser";
-import Loading from "../common/Loading";
+
 import { db } from "../../config/firebase";
 
-const ProductImg = ({
+
+const UserHeart = ({
   product,
   onClick = null,
-  size = "M",
-  onHeartClick = () => {
-    
-    
-  },
+  
 }) => {
   const user = useUser();
-  const { endDate, isComplete } = product;
 
   const [heart, setHeart] = useState(false);
   const [arrayData, setArrayData] = useState([]);
@@ -61,27 +55,12 @@ const ProductImg = ({
   };
 
   
-  
-
   return (
-    <Container>
-      <Image src={product.images[0]} onClick={onClick} size={size} />
-
-      <HeartBox >
-        <FontAwesomeIcon  icon={heart ? faHeart : faHeartOutlined} />
-        
-      </HeartBox>
-
-      {isComplete ? (
-        <Status>{endDate ? "낙찰" : "교환"} 완료</Status>
-      ) : endDate && remainDate(endDate) < 0 ? (
-        <Status>경매 종료</Status>
-      ) : null}
-    </Container>
+    <FontAwesomeIcon onClick={HandleHeart} icon={heart ? faHeart : faHeartOutlined} />
   );
 };
 
-export default ProductImg;
+export default UserHeart;
 
 export const ImageSizeTable = {
   S: "100px",
@@ -95,47 +74,4 @@ const BorderRadisSizeTable = {
   L: "15px",
 };
 
-const Container = styled.div`
-  position: relative;
-  cursor: pointer;
-  width: max-content;
-  height: max-content;
-  // background-color: orange;
-`;
 
-const Image = styled.img`
-  width: ${({ size }) => ImageSizeTable[size]};
-  height: ${({ size }) => ImageSizeTable[size]};
-  border-radius: ${({ size }) => BorderRadisSizeTable[size]};
-  object-fit: cover;
-  display: inline-block;
-`;
-
-const HeartBox = styled.div`
-  background-color: rgba(166, 166, 166, 0.5);
-  font-size: 22px;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  right: 12px;
-  bottom: 15px;
-  z-index: 10;
-  cursor: pointer;
-  color: ${colors.COLOR_HEART};
-`;
-
-const Status = styled.div`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 100;
-  background-color: ${colors.COLOR_GRAY_BACKGROUND};
-  border-radius: 2px;
-  font-weight: bold;
-  padding: 5px 10px;
-  font-size: 10px;
-`;
