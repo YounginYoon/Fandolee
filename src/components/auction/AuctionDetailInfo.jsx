@@ -16,12 +16,12 @@ import Tag from "../common/Tag";
 import { remainDate, timestampToDateFormat } from "../../common/date";
 import { db } from "../../config/firebase";
 import useUser from "../../hooks/useUser";
+import UserHeart from "../user/UserHeart";
 
 const AuctionDetailInfo = ({ product }) => {
   const navigate = useNavigate();
   const user = useUser();
-
-  const [heart, setHeart] = useState(false);
+  
 
 
   const {
@@ -68,10 +68,7 @@ const AuctionDetailInfo = ({ product }) => {
     navigate("./modify", { product });
   };
 
-  const HandleHeart = async()=> {
-    setHeart(!heart)
 
-  };
   
 
   return (
@@ -128,11 +125,7 @@ const AuctionDetailInfo = ({ product }) => {
           {/* <Btn onClick={() => navigate(`/auction/auctionbidding/${dataID}`)}> */}
           <Btn onClick={goAuctionChatting}>경매 참여</Btn>
           <HeartDiv>
-            <FontAwesomeIcon
-              onClick={HandleHeart}
-              icon={heart ? faHeart : faHeartOutline}
-              style={heartStyle}
-            />
+            <UserHeart product={product}/>
             <Likes>{likes ? likes : 0}</Likes>
           </HeartDiv>
         </BtnDiv>
