@@ -19,7 +19,7 @@ const AuctionContainer = ({ data }) => {
 
   return (
     <ProductContainer>
-      <ProductImg product={data} onClick={goAuctionDetailPage} />
+      <ProductImg product={data} onClick={goAuctionDetailPage} auction={true}/>
 
       <ProductOwner uid={data.uid} />
 

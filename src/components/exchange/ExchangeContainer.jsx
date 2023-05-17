@@ -17,7 +17,7 @@ const ExchangeContainer = ({ data }) => {
   };
   return (
     <ProductContainer>
-      <ProductImg product={data}  onClick={goAuctionDetailPage}/>
+      <ProductImg product={data}  onClick={goAuctionDetailPage} auction={false}/>
 
       <ProductOwner uid={data.uid} />
 

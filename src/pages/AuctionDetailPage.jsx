@@ -15,7 +15,7 @@ const AuctionDetailPage = () => {
   const id = params.id;
 
   const product = useProduct(id);
-
+  
   if (!product) {
     return <Loading />;
   }

@@ -1,16 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import styled from "styled-components";
 import { colors } from "../../common/color";
-import PostImage from "./PostImage";
-import RecommendPrice from "./RecommendPrice";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
 
-import { db } from "../../config/firebase";
+import RecommendPrice from "./RecommendPrice";
+import ModifyImage from "./ModifyImage";
 
-const PostContainer = ({
+const ModifyContainer = ({
   children,
   recommend,
   onPost,
@@ -18,9 +18,10 @@ const PostContainer = ({
   setImages,
   title,
   category,
+  imageUrls,
+  setImageUrls,
 }) => {
   const navigate = useNavigate();
-
   const onCanceled = () => {
     if (recommend) {
       navigate("/auction/list");
@@ -28,19 +29,23 @@ const PostContainer = ({
       navigate("/exchange/list");
     }
   };
-
   return (
     <>
       <Header>
         <HeaderText>
-          {recommend ? "경매" : "교환"} 게시글 업로드
+          {recommend ? "경매" : "교환"} 게시글 수정
           <FontAwesomeIcon icon={faPen} style={{ marginLeft: "10px" }} />
         </HeaderText>
       </Header>
       <Container>
         <Wrapper>
           <ImageWrapper>
-            <PostImage images={images} setImages={setImages} />
+            <ModifyImage
+              imageUrls={imageUrls}
+              setImageUrls={setImageUrls}
+              images={images}
+              setImages={setImages}
+            />
             {recommend ? (
               <RecommendPrice title={title} category={category} />
             ) : null}
@@ -61,7 +66,7 @@ const PostContainer = ({
   );
 };
 
-export default PostContainer;
+export default ModifyContainer;
 
 const Header = styled.div`
   width: 900px;

@@ -26,3 +26,6 @@ export const authService = getAuth(app);
 export const db = firebase.firestore();
 export const storage = firebase.storage();
 export const realTimeDatabase = firebase.database();
+export const increment = firebase.firestore.FieldValue.increment(1);
+export const fieldvalue = firebase.firestore.FieldValue;
+

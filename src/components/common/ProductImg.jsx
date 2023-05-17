@@ -7,72 +7,32 @@ import { faHeart as faHeartOutlined } from "@fortawesome/free-regular-svg-icons"
 import { useNavigate } from "react-router-dom";
 import { colors } from "../../common/color";
 import { remainDate } from "../../common/date";
-import {useIsLike, useAddLike ,useRemoveLike, useLike} from "../../hooks/useHeart";
+import {useIsLike, plusProductLike ,miusProductLike, useLike, Like2} from "../../hooks/useHeart";
 import useUser from "../../hooks/useUser";
 import Loading from "../common/Loading";
 import { db } from "../../config/firebase";
-
+import UserHeart from "../user/UserHeart";
+import UserHeartExchange from "../user/UserHeartExchange";
 
 const ProductImg = ({
   product,
   onClick = null,
   size = "M",
-  onHeartClick = () => {
-    
-    
-  },
+  auction,
+  
 }) => {
   const user = useUser();
+  
   const { endDate, isComplete } = product;
-  const [heart, setHeart] = useState(false);
-  const [arrayData, setArrayData] = useState([]);
-  
-  const arrayDataHook = useLike(user);
-  const isLike = useIsLike(product.id, arrayData);
-  const productDB = db.collection("likes");
- 
-
-  useEffect(()=>{
-    setHeart(isLike);
-    setArrayData(arrayDataHook);
-  },[isLike,arrayDataHook]);
-
-  
-  const HandleHeart = async()=> {
-    setHeart(!heart);
-    //console.log("heart:",heart);
-    
-
-    //각 물건의 heart가 다른데 같은 heart로 인식하는 에러 발생..
-    if (!heart) {
-      if (!arrayData.includes(product.id)) {
-        const newArrayData =[...arrayData, product.id ];
-        setArrayData(newArrayData);
-        await productDB.doc(user.uid).update({ products: newArrayData });
-      }
-    }
-    else{
-      if(arrayData.includes(product.id)){
-        const index = arrayData.indexOf(product.id);
-        const removeArrayData = [...arrayData.slice(0, index), 
-          ...arrayData.slice(index + 1)];
-        await productDB.doc(user.uid).update({ products: removeArrayData });
-      }
-    }
-    
-    
-    
-  };
-
-  
   
 
   return (
     <Container>
       <Image src={product.images[0]} onClick={onClick} size={size} />
 
-      <HeartBox onClick={HandleHeart}>
-        <FontAwesomeIcon icon={heart ? faHeart : faHeartOutlined} />
+      <HeartBox >
+        {auction ? (<UserHeart product={product}/>) : (<UserHeartExchange product={product}/>)}
+        {/* <UserHeart product={product}/> */}
       </HeartBox>
 
       {isComplete ? (

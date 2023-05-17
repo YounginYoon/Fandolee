@@ -19,7 +19,7 @@ import Tag from "../common/Tag";
 import { useNavigate } from "react-router-dom";
 import useUser from "../../hooks/useUser";
 import { db } from "../../config/firebase";
-
+import UserHeartExchange from "../user/UserHeartExchange";
 const ExchangeDetailInfo = ({ product }) => {
   const navigate = useNavigate();
   const user = useUser();
@@ -126,11 +126,7 @@ const ExchangeDetailInfo = ({ product }) => {
         <BtnDiv>
           <Btn onClick={() => {}}>교환 채팅</Btn>
           <HeartDiv>
-            <FontAwesomeIcon
-              onClick={() => setIsLike(!isLike)}
-              icon={isLike ? faHeart : faHeartOutline}
-              style={heartStyle}
-            />
+            <UserHeartExchange product={product}/>
             <Likes>{likes ? likes : 0}</Likes>
           </HeartDiv>
         </BtnDiv>
@@ -153,7 +149,7 @@ const Container = styled.div`
 const Image = styled.img`
   width: 250px;
   height: 250px;
-  obejct-fit: cover;
+  object-fit: cover;
   border-radius: 7px;
   display: inline-block;
 `;

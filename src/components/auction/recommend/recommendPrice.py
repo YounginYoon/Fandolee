@@ -3,7 +3,9 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import time
 
-cred = credentials.Certificate("C:/Users/3ylsj/Desktop/캡디2/cap/src/components/auction/recommend/capstone2023-57a1c-firebase-adminsdk-eval1-b382eff727.json")
+#cred = credentials.Certificate("C:/Users/3ylsj/Desktop/캡디2/cap/src/components/auction/recommend/capstone2023-57a1c-firebase-adminsdk-eval1-b382eff727.json")
+cred = credentials.Certificate("C:\서강대\2023\Capstone2_react\DDJT\src\components\auction\recommend\capstone2023-57a1c-firebase-adminsdk-eval1-b382eff727.json")
+
 firebase_admin.initialize_app(cred)
 
 print('파이썬 서버 실행 중')
@@ -18,7 +20,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
 
 # 데이터셋 로드
-df = pd.read_csv('C:/Users/3ylsj/Desktop/캡디2/cap/src/components/auction/recommend/temp_db_csv.csv')
+df = pd.read_csv('C:\서강대\2023\Capstone2_react\DDJT\src\components\auction\recommend\temp_db_csv.csv')
 df = df.sample(frac=1).reset_index(drop=True)  # 셔플
 
 lower_df = df[['subtitle','price', 'category']]

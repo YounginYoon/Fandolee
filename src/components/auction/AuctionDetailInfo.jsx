@@ -16,12 +16,13 @@ import Tag from "../common/Tag";
 import { remainDate, timestampToDateFormat } from "../../common/date";
 import { db } from "../../config/firebase";
 import useUser from "../../hooks/useUser";
+import UserHeart from "../user/UserHeart";
 
 const AuctionDetailInfo = ({ product }) => {
   const navigate = useNavigate();
   const user = useUser();
+  
 
-  const [isLike, setIsLike] = useState(false);
 
   const {
     images,
@@ -67,6 +68,9 @@ const AuctionDetailInfo = ({ product }) => {
     navigate("./modify", { product });
   };
 
+
+  
+
   return (
     <Container>
       <EndDateDiv>
@@ -88,7 +92,7 @@ const AuctionDetailInfo = ({ product }) => {
       <Image src={images[0]} />
 
       <SubContainer>
-        {user && uid === user.uid && (
+        {user && uid === user.uid && !isComplete &&(
           <IconDiv>
             <Icon onClick={onUpdate}>
               <FontAwesomeIcon icon={faGear} />
@@ -121,11 +125,7 @@ const AuctionDetailInfo = ({ product }) => {
           {/* <Btn onClick={() => navigate(`/auction/auctionbidding/${dataID}`)}> */}
           <Btn onClick={goAuctionChatting}>경매 참여</Btn>
           <HeartDiv>
-            <FontAwesomeIcon
-              onClick={() => setIsLike(!isLike)}
-              icon={isLike ? faHeart : faHeartOutline}
-              style={heartStyle}
-            />
+            <UserHeart product={product}/>
             <Likes>{likes ? likes : 0}</Likes>
           </HeartDiv>
         </BtnDiv>
@@ -189,7 +189,7 @@ const EndDateBox = styled.div`
 const Image = styled.img`
   width: 250px;
   height: 250px;
-  obejct-fit: cover;
+  object-fit: cover;
   border-radius: 7px;
   display: inline-block;
 `;
