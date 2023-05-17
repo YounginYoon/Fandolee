@@ -19,6 +19,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import moment from "moment";
 import useUser from "../hooks/useUser";
 import { addDays } from "date-fns";
+import Loading from "../components/common/Loading";
 
 const AuctionPostPage = () => {
   const user = useUser();
@@ -36,6 +37,7 @@ const AuctionPostPage = () => {
   const { title, info, likes, endDate, minPrice, maxPrice } = inputs;
   const [idol, setIdol] = useState("");
   const [category, setCategory] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -48,6 +50,7 @@ const AuctionPostPage = () => {
 
   const onPost = async () => {
     try {
+      setLoading(true);
       console.log({ inputs, idol, category });
       const productDB = db.collection("product");
 
@@ -119,6 +122,10 @@ const AuctionPostPage = () => {
     }
   };
 
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <PostContainer
       recommend={true}
@@ -170,5 +177,3 @@ const AuctionPostPage = () => {
 };
 
 export default AuctionPostPage;
-
-const Container = styled.div``;

@@ -25,7 +25,6 @@ const ProductImg = ({
   
   const { endDate, isComplete } = product;
   
-  
 
   return (
     <Container>
