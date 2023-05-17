@@ -10,6 +10,11 @@ export const timestampToDateFormat = (timestamp) => {
   return dateFormat(date);
 };
 
+export const timestampToDate = (timestamp) => {
+  const date = timestamp.toDate();
+  return date;
+};
+
 export const remainDate = (timestamp) => {
   const endDate = timestamp.toDate();
   const today = new Date();

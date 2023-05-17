@@ -18,7 +18,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import useUser from "../hooks/useUser";
-import { dateFormat } from "../common/date";
+import { dateFormat, timestampToDate } from "../common/date";
 import useProduct from "../hooks/useProduct";
 import Loading from "../components/common/Loading";
 import { useEffect } from "react";
@@ -45,7 +45,7 @@ const AuctionModifyPage = () => {
     info: "",
     title: "",
     likes: 0,
-    endDate: dateFormat(addDays(new Date(), 1)),
+    endDate: addDays(new Date(), 1),
   });
 
   const { title, info, likes, endDate, minPrice, maxPrice } = inputs;
@@ -58,7 +58,7 @@ const AuctionModifyPage = () => {
         info: product.info,
         title: product.title,
         likes: product.likes,
-        endDate: dateFormat(addDays(new Date(), 1)),
+        endDate: timestampToDate(product.endDate),
       });
       setCategory(product.category);
       setImageUrls(product.images);
@@ -124,7 +124,7 @@ const AuctionModifyPage = () => {
         category,
         title,
         likes,
-        endDate: endDate,
+        endDate,
         isComplete: 0,
         biddingPrice: 0,
         biddingDate: new Date(),
