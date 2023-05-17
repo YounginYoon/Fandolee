@@ -1,6 +1,6 @@
 import React ,{ useState, useEffect } from 'react';
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../config/firebase";
+import { db, increment, fieldvalue } from "../config/firebase";
 import Loading from "../components/common/Loading";
 
 // 데이터베이스에 like 저장
@@ -101,6 +101,34 @@ export const useIsLike = (productId,arrayData) =>{
     else{
         return null;
     }
-    
 
 };
+
+export const useProductLike = async(productId) =>{
+
+    const [likes, setLikes] = useState(0);
+
+    const docRef = doc(db, "product", productId);
+    const docSnap = await getDoc(docRef);
+    if(docSnap.exists()){
+        setLikes(docSnap.data().likes);
+    }
+    return likes;
+};
+
+export const plusProductLike = async(productId) =>{
+    
+    const docRef = db.collection("product").doc(productId);
+    
+    if (docRef) await docRef.update({ likes: fieldvalue.increment(1) });
+    
+    
+}
+
+export const miusProductLike = async(productId) =>{
+ 
+    const docRef = db.collection("product").doc(productId);
+
+    if (docRef) await docRef.update({ likes: fieldvalue.increment(-1) });
+    
+}

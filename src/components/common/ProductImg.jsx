@@ -9,8 +9,8 @@ import { colors } from "../../common/color";
 import { remainDate } from "../../common/date";
 import {
   useIsLike,
-  useAddLike,
-  useRemoveLike,
+  plusProductLike,
+  miusProductLike,
   useLike,
 } from "../../hooks/useHeart";
 import useUser from "../../hooks/useUser";
@@ -25,9 +25,9 @@ const ProductImg = ({
 }) => {
   const user = useUser();
   const { endDate, isComplete } = product;
+
   const [heart, setHeart] = useState(false);
   const [arrayData, setArrayData] = useState([]);
-
   const arrayDataHook = useLike(user);
   const isLike = useIsLike(product.id, arrayData);
   const productDB = db.collection("likes");
@@ -39,14 +39,13 @@ const ProductImg = ({
 
   const HandleHeart = async () => {
     setHeart(!heart);
-    //console.log("heart:",heart);
 
-    //각 물건의 heart가 다른데 같은 heart로 인식하는 에러 발생..
     if (!heart) {
       if (!arrayData.includes(product.id)) {
         const newArrayData = [...arrayData, product.id];
         setArrayData(newArrayData);
         await productDB.doc(user.uid).update({ products: newArrayData });
+        plusProductLike(product.id);
       }
     } else {
       if (arrayData.includes(product.id)) {
@@ -56,6 +55,7 @@ const ProductImg = ({
           ...arrayData.slice(index + 1),
         ];
         await productDB.doc(user.uid).update({ products: removeArrayData });
+        miusProductLike(product.id);
       }
     }
   };
@@ -64,7 +64,7 @@ const ProductImg = ({
     <Container>
       <Image src={product.images[0]} onClick={onClick} size={size} />
 
-      <HeartBox onClick={HandleHeart}>
+      <HeartBox>
         <FontAwesomeIcon icon={heart ? faHeart : faHeartOutlined} />
       </HeartBox>
 
