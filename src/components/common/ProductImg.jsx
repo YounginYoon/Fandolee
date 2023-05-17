@@ -7,64 +7,23 @@ import { faHeart as faHeartOutlined } from "@fortawesome/free-regular-svg-icons"
 import { useNavigate } from "react-router-dom";
 import { colors } from "../../common/color";
 import { remainDate } from "../../common/date";
-import {useIsLike, plusProductLike ,miusProductLike, useLike} from "../../hooks/useHeart";
+import {useIsLike, plusProductLike ,miusProductLike, useLike, Like2} from "../../hooks/useHeart";
 import useUser from "../../hooks/useUser";
 import Loading from "../common/Loading";
 import { db } from "../../config/firebase";
+import UserHeart from "../user/UserHeart";
+import UserHeartExchange from "../user/UserHeartExchange";
 
 const ProductImg = ({
   product,
   onClick = null,
   size = "M",
-  onHeartClick = () => {
-    
-    
-  },
+  auction,
+  
 }) => {
   const user = useUser();
   
   const { endDate, isComplete } = product;
-  const [arrayData, setArrayData] = useState([]);
-  
-  let arrayDataHook = useLike(user);
-  const isLike = useIsLike(product.id, arrayDataHook);
-  //console.log(product.id, arrayDataHook , isLike );
-  const [heart, setHeart] = useState(false);
-
-  useEffect(()=>{
-    setHeart(isLike);
-    setArrayData(arrayDataHook);
- },[isLike,arrayDataHook]);
-
-  
-  const HandleHeart = async()=> {
-
-    const productDB = db.collection("likes");
-
-    setHeart(!heart);
-        
-    if (!heart) {
-      if (!arrayDataHook.includes(product.id)) {
-        
-        const newArrayData =[...arrayDataHook, product.id ];
-        setArrayData(newArrayData);
-        await productDB.doc(user.uid).update({ products: newArrayData });
-        plusProductLike(product.id);
-      }
-    }
-    else{
-      if(arrayDataHook.includes(product.id)){
-        
-        const index = arrayData.indexOf(product.id);
-        const removeArrayData = [...arrayDataHook.slice(0, index), 
-          ...arrayData.slice(index + 1)];
-        await productDB.doc(user.uid).update({ products: removeArrayData });
-        miusProductLike(product.id);
-      }
-    }
-    
-  };
-
   
   
 
@@ -73,8 +32,8 @@ const ProductImg = ({
       <Image src={product.images[0]} onClick={onClick} size={size} />
 
       <HeartBox >
-        <FontAwesomeIcon onClick={HandleHeart} icon={heart ? faHeart : faHeartOutlined} />
-        
+        {auction ? (<UserHeart product={product}/>) : (<UserHeartExchange product={product}/>)}
+        {/* <UserHeart product={product}/> */}
       </HeartBox>
 
       {isComplete ? (
