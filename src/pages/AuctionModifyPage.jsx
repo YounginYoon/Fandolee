@@ -5,8 +5,8 @@ import styled from "styled-components";
 import { IdolList } from "../constants/idol";
 import { Category } from "../constants/category";
 
-import PostContainer from "../components/post/PostContainer";
-import PostInputBox from "../components/post/PostInputBox";
+// import PostContainer from "../components/post/PostContainer";
+import ModifyContainer from "../components/post/ModifyContainer";
 import PostInputText from "../components/post/PostInputText";
 import PostDropDown from "../components/post/PostDropDown";
 import PostTextArea from "../components/post/PostTextArea";
@@ -32,7 +32,10 @@ const AuctionModifyPage = () => {
   //console.log(product.title);
   const user = useUser();
   // 이미지 파일 state
+  // 새로 수정된 이미지
   const [images, setImages] = useState([]);
+  // 기존 이미지
+  const [imageUrls, setImageUrls] = useState(null);
   const [idol, setIdol] = useState("");
   const [category, setCategory] = useState("");
 
@@ -58,14 +61,10 @@ const AuctionModifyPage = () => {
         endDate: dateFormat(addDays(new Date(), 1)),
       });
       setCategory(product.category);
-      setImages(product.image);
+      setImageUrls(product.images);
       setIdol(product.idol);
     }
   }, [product]);
-
-  if (!product) {
-    return <Loading />;
-  }
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -81,8 +80,9 @@ const AuctionModifyPage = () => {
 
     try {
       console.log({ inputs, idol, category });
+      console.log({ imageUrls, images });
 
-      if (images.length === 0) {
+      if (images.length === 0 && imageUrls.length === 0) {
         alert("이미지를 선택해주세요.");
         return;
       }
@@ -101,27 +101,31 @@ const AuctionModifyPage = () => {
       }
 
       const timeStamp = moment().format("YYYY-MM-DD hh:mm:ss");
+      const newImageUrls = [...imageUrls];
 
-      const imageRef = ref(
-        storage,
-        `product_image/${images[0].name}${timeStamp}`
-      );
+      for (let i = 0; i < images.length; i++) {
+        const imageRef = ref(
+          storage,
+          `product_image/${images[i].name}${timeStamp}`
+        );
 
-      const snapshot = await uploadBytes(imageRef, images[0]);
+        const snapshot = await uploadBytes(imageRef, images[i]);
+        const url = await getDownloadURL(snapshot.ref);
 
-      const url = await getDownloadURL(snapshot.ref);
+        newImageUrls.push(url);
+      }
 
       const body = {
         minPrice: parseInt(minPrice),
         maxPrice: parseInt(maxPrice),
         info,
         idol,
-        image: url,
+        images: newImageUrls,
         category,
         title,
         likes,
         endDate: endDate,
-        isComplete: 1,
+        isComplete: 0,
         biddingPrice: 0,
         biddingDate: new Date(),
       };
@@ -145,12 +149,18 @@ const AuctionModifyPage = () => {
     }
   };
 
+  if (!product || !imageUrls) {
+    return <Loading />;
+  }
+
   return (
-    <PostContainer
+    <ModifyContainer
       recommend={true}
       onPost={onPost}
       images={images}
       setImages={setImages}
+      imageUrls={imageUrls}
+      setImageUrls={setImageUrls}
     >
       <PostInputText
         label={"상품명"}
@@ -184,7 +194,7 @@ const AuctionModifyPage = () => {
         onChange={onChange}
         placeholder="설명을 입력해주세요."
       />
-    </PostContainer>
+    </ModifyContainer>
   );
 };
 
