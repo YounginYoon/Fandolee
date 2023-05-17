@@ -14,7 +14,7 @@ export const useAddLike = async(userId, productId) => {
 
     if(docSnap.exists()){
         const data = docSnap.data();
-        setArrayData(data.products);
+        setArrayData(data.exchanges);
         if(arrayData){
             const index = arrayData.indexOf(productId);
             if(index <0){
@@ -49,11 +49,11 @@ export const useLike = (user) => {
             const docSnap = await getDoc(docRef);
             if (!docSnap.exists()) {
                 await AddLikeDoc(user.uid);
-                
+                return [];
             }
             else{
                 const data = docSnap.data();
-                setArrayData(data.products);
+                setArrayData(data.exchanges);
                 
             }
           } catch (err) {
@@ -88,7 +88,7 @@ export const Like2 = async(user) => {
         }
         else{
             const data = docSnap.data();
-            arrayData = (data.products);
+            arrayData = (data.exchanges);
         }
     }
     
@@ -107,7 +107,7 @@ export const useRemoveLike = async(userId, productId) => {
     if (index >= 0) {
         const newArrayData = [...arrayData.slice(0, index), 
             ...arrayData.slice(index + 1)];
-        await productDB.doc(userId).update({ products: newArrayData });
+        await productDB.doc(userId).update({ exchanges: newArrayData });
     }
     
     
@@ -128,11 +128,11 @@ export const useIsLike = (productId,arrayData) =>{
 
 };
 
-export const useProductLike = async(productId) =>{
+export const useExchangeLike = async(productId) =>{
 
     const [likes, setLikes] = useState(0);
 
-    const docRef = doc(db, "product", productId);
+    const docRef = doc(db, "exchange", productId);
     const docSnap = await getDoc(docRef);
     if(docSnap.exists()){
         setLikes(docSnap.data().likes);
@@ -142,17 +142,14 @@ export const useProductLike = async(productId) =>{
 
 export const plusProductLike = async(productId) =>{
     
-    const docRef = db.collection("product").doc(productId);
-    
+    const docRef = db.collection("exchange").doc(productId);
     if (docRef) await docRef.update({ likes: fieldvalue.increment(1) });
-    
     
 }
 
 export const miusProductLike = async(productId) =>{
  
-    const docRef = db.collection("product").doc(productId);
-
+    const docRef = db.collection("exchange").doc(productId);
     if (docRef) await docRef.update({ likes: fieldvalue.increment(-1) });
     
 }

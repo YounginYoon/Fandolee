@@ -7,59 +7,23 @@ import { faHeart as faHeartOutlined } from "@fortawesome/free-regular-svg-icons"
 import { useNavigate } from "react-router-dom";
 import { colors } from "../../common/color";
 import { remainDate } from "../../common/date";
-import {useIsLike, plusProductLike ,miusProductLike, useLike} from "../../hooks/useHeart";
+import {useIsLike, plusProductLike ,miusProductLike, useLike, Like2} from "../../hooks/useHeart";
 import useUser from "../../hooks/useUser";
 import Loading from "../common/Loading";
 import { db } from "../../config/firebase";
+import UserHeart from "../user/UserHeart";
+import UserHeartExchange from "../user/UserHeartExchange";
 
 const ProductImg = ({
   product,
   onClick = null,
   size = "M",
-  onHeartClick = () => {
-    
-    
-  },
+  auction,
+  
 }) => {
   const user = useUser();
-  const { endDate, isComplete } = product;
-
-  const [heart, setHeart] = useState(false);
-  const [arrayData, setArrayData] = useState([]);
-  const arrayDataHook = useLike(user);
-  const isLike = useIsLike(product.id, arrayData);
-  const productDB = db.collection("likes");
- 
-
-  useEffect(()=>{
-    setHeart(isLike);
-    setArrayData(arrayDataHook);
-  },[isLike,arrayDataHook]);
-
   
-  const HandleHeart = async()=> {
-    setHeart(!heart);
-        
-    if (!heart) {
-      if (!arrayData.includes(product.id)) {
-        const newArrayData =[...arrayData, product.id ];
-        setArrayData(newArrayData);
-        await productDB.doc(user.uid).update({ products: newArrayData });
-        plusProductLike(product.id);
-      }
-    }
-    else{
-      if(arrayData.includes(product.id)){
-        const index = arrayData.indexOf(product.id);
-        const removeArrayData = [...arrayData.slice(0, index), 
-          ...arrayData.slice(index + 1)];
-        await productDB.doc(user.uid).update({ products: removeArrayData });
-        miusProductLike(product.id);
-      }
-    }
-    
-  };
-
+  const { endDate, isComplete } = product;
   
   
 
@@ -68,8 +32,8 @@ const ProductImg = ({
       <Image src={product.images[0]} onClick={onClick} size={size} />
 
       <HeartBox >
-        <FontAwesomeIcon  icon={heart ? faHeart : faHeartOutlined} />
-        
+        {auction ? (<UserHeart product={product}/>) : (<UserHeartExchange product={product}/>)}
+        {/* <UserHeart product={product}/> */}
       </HeartBox>
 
       {isComplete ? (
