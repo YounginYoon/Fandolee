@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import React, { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
-import { db, authService, storage } from "../config/firebase";
-import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
-import useUser from "../hooks/useUser";
+import { db, authService, storage } from '../config/firebase';
+import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import useUser from '../hooks/useUser';
 
-import AuctionList from "../components/auction/AuctionList";
-import AuctionSearchBar from "../components/auction/AuctionSearchBar";
-import Loading from "../components/common/Loading";
+import AuctionList from '../components/auction/AuctionList';
+import AuctionSearchBar from '../components/auction/AuctionSearchBar';
+import Loading from '../components/common/Loading';
+import { remainDate } from '../common/date';
 
 const AuctionListPage = () => {
   const user = useUser();
@@ -17,10 +18,10 @@ const AuctionListPage = () => {
 
   //전체 거래 정보를 가져온다.
   const getAuctionList = async () => {
-    const productAllDB = collection(db, "product");
+    const productAllDB = collection(db, 'product');
 
     try {
-      const queryAll = query(productAllDB, orderBy("date", "desc"));
+      const queryAll = query(productAllDB, orderBy('date', 'desc'));
       const data = await getDocs(queryAll);
 
       const newData = data.docs.map((doc) => ({

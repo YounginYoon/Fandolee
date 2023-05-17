@@ -12,11 +12,12 @@ import { colors } from '../common/color';
 import ChattingRoom from '../components/chat/ChattingRoom';
 import { useState } from 'react';
 import { realTimeDatabase, db } from '../config/firebase';
+import useUser from '../hooks/useUser';
 
 const AuctionChattingPage = () => {
   const params = useParams();
   const productId = params.id;
-
+  const user = useUser();
   const [product, setProduct] = useState(null);
   const productRef = db.collection('product').doc(productId);
 
