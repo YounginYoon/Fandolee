@@ -208,4 +208,3 @@ $ npm start
 
 5. useOwner, useProduct 훅 생성 및 상세 페이지 수정
 
-6. 찜 기능 구현
