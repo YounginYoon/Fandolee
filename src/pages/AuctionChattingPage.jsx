@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import ChattingHeader from '../components/chat/ChattingHeader';
 import ChattingInfo from '../components/chat/ChattingInfo';
@@ -13,6 +13,7 @@ import ChattingRoom from '../components/chat/ChattingRoom';
 import { useState } from 'react';
 import { realTimeDatabase, db } from '../config/firebase';
 import useUser from '../hooks/useUser';
+import AuctionModal from '../components/auction/AuctionModal';
 
 const AuctionChattingPage = () => {
   const params = useParams();
@@ -20,6 +21,10 @@ const AuctionChattingPage = () => {
   const user = useUser();
   const [product, setProduct] = useState(null);
   const productRef = db.collection('product').doc(productId);
+  //모달 띄우기
+  const [showAuctionModal, setShowAuctionModal] = useState(false);
+
+  const navigate = useNavigate();
 
   const loadProduct = async () => {
     try {
@@ -30,16 +35,6 @@ const AuctionChattingPage = () => {
       console.log('loadProduct err: ', err);
     }
   };
-
-  useEffect(() => {
-    loadProduct();
-  }, []);
-
-  useEffect(() => {
-    if (product && product.isComplete) {
-      loadProduct();
-    }
-  }, [product]);
 
   // 낙찰 완료하기 버튼 클릭 이벤트 콜백
   const onBtnClick = async () => {
@@ -54,6 +49,21 @@ const AuctionChattingPage = () => {
     }
   };
 
+  useEffect(() => {
+    loadProduct();
+  }, []);
+
+  useEffect(() => {
+    if (product && product.isComplete) {
+      loadProduct();
+      if (user.uid === product.bidder || user.uid === product.uid) {
+        setShowAuctionModal(true);
+      } else {
+        setShowAuctionModal(false);
+      }
+    }
+  }, [product]);
+
   if (!product) {
     return <Loading />;
   }
@@ -61,7 +71,6 @@ const AuctionChattingPage = () => {
   return (
     <>
       <ChattingHeader product={product} />
-
       <Wrapper>
         <ChattingInfo
           product={product}
@@ -81,7 +90,7 @@ const AuctionChattingPage = () => {
             textColor={colors.COLOR_MAIN}
           />
         </ChattingInfo>
-
+        {showAuctionModal && <AuctionModal product={product} />}
         <ChattingRoom product={product} />
       </Wrapper>
     </>

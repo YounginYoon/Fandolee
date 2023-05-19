@@ -1,25 +1,25 @@
-import React from "react";
+import React from 'react';
 
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHeart,
   faGear,
   faTrash,
   faArrowRight,
-} from "@fortawesome/free-solid-svg-icons";
-import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
+} from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faHeartOutline } from '@fortawesome/free-regular-svg-icons';
 
-import { colors } from "../../common/color";
-import { moneyFormat } from "../../common/money";
+import { colors } from '../../common/color';
+import { moneyFormat } from '../../common/money';
 
-import GreenLine from "../common/GreenLine";
-import { useState } from "react";
-import Tag from "../common/Tag";
-import { useNavigate } from "react-router-dom";
-import useUser from "../../hooks/useUser";
-import { db } from "../../config/firebase";
-import UserHeartExchange from "../user/UserHeartExchange";
+import GreenLine from '../common/GreenLine';
+import { useState } from 'react';
+import Tag from '../common/Tag';
+import { useNavigate } from 'react-router-dom';
+import useUser from '../../hooks/useUser';
+import { db } from '../../config/firebase';
+import UserHeartExchange from '../user/UserHeartExchange';
 const ExchangeDetailInfo = ({ product }) => {
   const navigate = useNavigate();
   const user = useUser();
@@ -42,22 +42,30 @@ const ExchangeDetailInfo = ({ product }) => {
   } = product;
 
   const onDelete = async () => {
-    if (!window.confirm("해당 게시글을 삭제하시겠습니까?")) {
+    if (!window.confirm('해당 게시글을 삭제하시겠습니까?')) {
       return;
     }
 
     try {
-      const productDB = db.collection("exchange");
+      const productDB = db.collection('exchange');
 
       await productDB.doc(id).delete();
 
       navigate(-1);
     } catch (err) {
-      console.log("delete product error: ", err);
+      console.log('delete product error: ', err);
     }
   };
   const onUpdate = async () => {
-    navigate("./modify", { product });
+    navigate('./modify', { product });
+  };
+
+  const goTransactionPage = () => {
+    if (uid !== user.uid)
+      navigate(`/transaction/exchange/${product.id}/${user.uid}`);
+    else {
+      navigate(`/transaction/exchange/${product.id}/list`);
+    }
   };
 
   return (
@@ -88,7 +96,7 @@ const ExchangeDetailInfo = ({ product }) => {
               {wantMember ? (
                 <>
                   <FontAwesomeIcon
-                    style={{ fontSize: "20px", margin: "0 10px" }}
+                    style={{ fontSize: '20px', margin: '0 10px' }}
                     icon={faArrowRight}
                   />
                   <ExchangeMember>
@@ -124,9 +132,9 @@ const ExchangeDetailInfo = ({ product }) => {
         </InfoDiv>
 
         <BtnDiv>
-          <Btn onClick={() => {}}>교환 채팅</Btn>
+          <Btn onClick={goTransactionPage}>교환 채팅</Btn>
           <HeartDiv>
-            <UserHeartExchange product={product}/>
+            <UserHeartExchange product={product} />
             <Likes>{likes ? likes : 0}</Likes>
           </HeartDiv>
         </BtnDiv>
@@ -252,6 +260,6 @@ const Likes = styled.p`
 
 const heartStyle = {
   color: colors.COLOR_HEART,
-  fontSize: "28px",
-  cursor: "pointer",
+  fontSize: '28px',
+  cursor: 'pointer',
 };
