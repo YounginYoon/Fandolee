@@ -1,41 +1,44 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import "./App.css";
-import { Reset } from "styled-reset";
-import styled from "styled-components";
-import { colors } from "./common/color";
+import './App.css';
+import { Reset } from 'styled-reset';
+import styled from 'styled-components';
+import { colors } from './common/color';
 
 // firestore 데이터 베이스
-import { db } from "./config/firebase";
-import { Route, Routes } from "react-router-dom";
+import { db } from './config/firebase';
+import { Route, Routes } from 'react-router-dom';
 
 // components
-import AuctionBiddingPage from "./pages/AuctionBiddingPage";
-import Header from "./components/header/Header";
-import Footer, { footerHeight } from "./components/footer/Footer";
-import MainPage from "./pages/MainPage";
-import LoginPage from "./pages/LoginPage";
-import SignUpPage from "./pages/SignUpPage";
-import MainLayout from "./layouts/MainLayout";
-import SubLayout from "./layouts/SubLayout";
-import ProfilePage from "./pages/ProfilePage";
-import AuctionListPage from "./pages/AuctionListPage";
-import AuctionUpPage from "./pages/AuctionUpPage";
-import UserPage from "./pages/UserPage";
-import MyPage from "./pages/MyPage";
-import { MyTab } from "./constants/mypage";
-import ProfileContainer from "./components/mypage/profile/ProfileContainer";
-import ExchangeListPage from "./pages/ExchangeListPage";
-import LikeContainer from "./components/mypage/like/LikeContainer";
-import ChattingList from "./components/mypage/chat/ChattingList";
-import TransactionList from "./components/mypage/transaction/TransactionList";
-import AuctionPostPage from "./pages/AuctionPostPage";
-import AuctionDetailPage from "./pages/AuctionDetailPage";
-import ExchangePostPage from "./pages/ExchangePostPage";
-import AuctionChattingPage from "./pages/AuctionChattingPage";
-import AuctionModifyPage from "./pages/AuctionModifyPage";
-import ExchangeDetailPage from "./pages/ExchangeDetailpage";
-import ExchangeModifyPage from "./pages/ExchangeModifyPage";
+import AuctionBiddingPage from './pages/AuctionBiddingPage';
+import Header from './components/header/Header';
+import Footer, { footerHeight } from './components/footer/Footer';
+import MainPage from './pages/MainPage';
+import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignUpPage';
+import MainLayout from './layouts/MainLayout';
+import SubLayout from './layouts/SubLayout';
+import ProfilePage from './pages/ProfilePage';
+import AuctionListPage from './pages/AuctionListPage';
+import AuctionUpPage from './pages/AuctionUpPage';
+import UserPage from './pages/UserPage';
+import MyPage from './pages/MyPage';
+import { MyTab } from './constants/mypage';
+import ProfileContainer from './components/mypage/profile/ProfileContainer';
+import ExchangeListPage from './pages/ExchangeListPage';
+import LikeContainer from './components/mypage/like/LikeContainer';
+import ChattingList from './components/mypage/chat/ChattingList';
+import TransactionList from './components/mypage/transaction/TransactionList';
+import AuctionPostPage from './pages/AuctionPostPage';
+import AuctionDetailPage from './pages/AuctionDetailPage';
+import ExchangePostPage from './pages/ExchangePostPage';
+import AuctionChattingPage from './pages/AuctionChattingPage';
+import AuctionModifyPage from './pages/AuctionModifyPage';
+import ExchangeDetailPage from './pages/ExchangeDetailpage';
+import ExchangeModifyPage from './pages/ExchangeModifyPage';
+import AuctionTransactionPage from './pages/AuctionTransactionPage';
+import ExchangeTransactionPage from './pages/ExchangeTransactionPage';
+import ExchangeTransactionListPage from './pages/ExchangeTransactionListPage';
 
 const App = () => {
   return (
@@ -95,6 +98,24 @@ const App = () => {
           <Route
             path="exchangedetail/:id/modify"
             element={<ExchangeModifyPage />}
+          />
+        </Route>
+
+        {/* 거래 채팅 */}
+        <Route path="/transaction" element={<MainLayout />}>
+          {/*경매 exchange/productId */}
+          <Route path="auction/:id" element={<AuctionTransactionPage />} />
+          {/* 교환 */}
+          {/* exchange/productId/uid(글 보는 사람) */}
+          <Route
+            path="exchange/:productId/:id"
+            element={<ExchangeTransactionPage />}
+          />
+          {/* 글 올린사람 입장: 교환 채팅 목록*/}
+          {/* exchange/productId/list (글 올린 사람) */}
+          <Route
+            path="exchange/:id/list"
+            element={<ExchangeTransactionListPage />}
           />
         </Route>
       </Routes>

@@ -1,13 +1,14 @@
+import React from 'react';
+import styled from 'styled-components';
 
-import React from "react";
-import styled from "styled-components";
-
-import { useParams } from "react-router-dom";
-import AuctionDetailInfo from "../components/auction/AuctionDetailInfo";
-import GreenLine from "../components/common/GreenLine";
-import Loading from "../components/common/Loading";
-import AuctionDetail from "../components/auction/AuctionDetail";
-import useProduct from "../hooks/useProduct";
+import { useParams } from 'react-router-dom';
+import AuctionDetailInfo from '../components/auction/AuctionDetailInfo';
+import GreenLine from '../components/common/GreenLine';
+import Loading from '../components/common/Loading';
+import AuctionDetail from '../components/auction/AuctionDetail';
+import useProduct from '../hooks/useProduct';
+import { remainDate } from '../common/date';
+import { useEffect } from 'react';
 
 const AuctionDetailPage = () => {
   const params = useParams();
@@ -15,7 +16,7 @@ const AuctionDetailPage = () => {
   const id = params.id;
 
   const product = useProduct(id);
-  
+
   if (!product) {
     return <Loading />;
   }

@@ -1,29 +1,26 @@
-import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faGear, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart, faGear, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faHeartOutline } from '@fortawesome/free-regular-svg-icons';
 
-import { colors } from "../../common/color";
-import { moneyFormat } from "../../common/money";
+import { colors } from '../../common/color';
+import { moneyFormat } from '../../common/money';
 
-import { useEffect } from "react";
-import GreenLine from "../common/GreenLine";
-import { useState } from "react";
-import Tag from "../common/Tag";
-import { remainDate, timestampToDateFormat } from "../../common/date";
-import { db } from "../../config/firebase";
-import useUser from "../../hooks/useUser";
-import UserHeart from "../user/UserHeart";
+import { useEffect } from 'react';
+import GreenLine from '../common/GreenLine';
+import { useState } from 'react';
+import Tag from '../common/Tag';
+import { remainDate, timestampToDateFormat } from '../../common/date';
+import { db } from '../../config/firebase';
+import useUser from '../../hooks/useUser';
+import UserHeart from '../user/UserHeart';
 
 const AuctionDetailInfo = ({ product }) => {
   const navigate = useNavigate();
   const user = useUser();
-  
-
-
   const {
     images,
     title,
@@ -43,45 +40,52 @@ const AuctionDetailInfo = ({ product }) => {
     biddingPrice,
   } = product;
   const _remainDate = remainDate(endDate);
+  const [complete, setComplete] = useState(0);
 
   const goAuctionChatting = () => {
     navigate(`/auction/${id}/chat`);
   };
 
   const onDelete = async () => {
-    if (!window.confirm("해당 게시글을 삭제하시겠습니까?")) {
+    if (!window.confirm('해당 게시글을 삭제하시겠습니까?')) {
       return;
     }
 
     try {
-      const productDB = db.collection("product");
+      const productDB = db.collection('product');
 
       await productDB.doc(id).delete();
 
       navigate(-1);
     } catch (err) {
-      console.log("delete product error: ", err);
+      console.log('delete product error: ', err);
     }
   };
 
   const onUpdate = async () => {
-    navigate("./modify", { product });
+    navigate('./modify', { product });
   };
 
-
-  
-
+  useEffect(() => {
+    if (_remainDate < 0) {
+      const productRef = db.collection('product').doc(id);
+      if (!isComplete) {
+        productRef.update({ isComplete: 1 });
+        setComplete(1);
+      } else setComplete(1);
+    }
+  }, []);
   return (
     <Container>
       <EndDateDiv>
-        {_remainDate < 0 ? (
+        {_remainDate < 0 || complete || isComplete ? (
           <EndDateText>경매가 종료된 상품입니다.</EndDateText>
         ) : (
           <EndDateText>
-            낙찰까지{" "}
+            낙찰까지{' '}
             <span style={{ color: colors.COLOR_RED_TEXT }}>
               {_remainDate}일
-            </span>{" "}
+            </span>{' '}
             남았습니다.
           </EndDateText>
         )}
@@ -92,7 +96,7 @@ const AuctionDetailInfo = ({ product }) => {
       <Image src={images[0]} />
 
       <SubContainer>
-        {user && uid === user.uid && !isComplete &&(
+        {user && uid === user.uid && !isComplete && (
           <IconDiv>
             <Icon onClick={onUpdate}>
               <FontAwesomeIcon icon={faGear} />
@@ -123,9 +127,13 @@ const AuctionDetailInfo = ({ product }) => {
 
         <BtnDiv>
           {/* <Btn onClick={() => navigate(`/auction/auctionbidding/${dataID}`)}> */}
-          <Btn onClick={goAuctionChatting}>경매 참여</Btn>
+          {complete || isComplete ? (
+            <EndBtn onClick={goAuctionChatting}>경매 종료</EndBtn>
+          ) : (
+            <Btn onClick={goAuctionChatting}>경매 참여</Btn>
+          )}
           <HeartDiv>
-            <UserHeart product={product}/>
+            <UserHeart product={product} />
             <Likes>{likes ? likes : 0}</Likes>
           </HeartDiv>
         </BtnDiv>
@@ -263,6 +271,18 @@ const Btn = styled.div`
   border-radius: 7px;
 `;
 
+const EndBtn = styled.div`
+  width: 88%;
+  background-color: ${colors.COLOR_DARKGRAY_BACKGROUND};
+  line-height: 45px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 7px;
+`;
+
 const HeartDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -280,6 +300,6 @@ const Likes = styled.p`
 
 const heartStyle = {
   color: colors.COLOR_HEART,
-  fontSize: "28px",
-  cursor: "pointer",
+  fontSize: '28px',
+  cursor: 'pointer',
 };
