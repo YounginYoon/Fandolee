@@ -20,12 +20,32 @@ import { db } from "../../config/firebase";
 import UserHeart from "../user/UserHeart";
 import UserHeartExchange from "../user/UserHeartExchange";
 
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 const ProductImg = ({ product, onClick = null, size = "M", auction }) => {
   const { endDate, isComplete } = product;
 
+  const sliderParams = {
+    dots: false,
+    infinite: true,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    speed: 500,
+    slidesToShow: 1, // 한번에 볼 수 있는 슬라이드 개수
+    slidesToScroll: 1, // 한번에 넘어가는 슬라이드 개수
+    arrow: false,
+  };
+
   return (
     <Container size={size}>
-      <Image src={product.images[0]} onClick={onClick} />
+      <StyledSlider {...sliderParams}>
+        {product.images.map((image) => (
+          <SliderImage size={size} key={image} src={image} onClick={onClick} />
+        ))}
+      </StyledSlider>
+      {/* <Image src={product.images[0]} onClick={onClick} /> */}
 
       <HeartBox>
         {auction ? (
@@ -70,6 +90,21 @@ const Container = styled.div`
   width: ${({ size }) => ImageSizeTable[size]};
   height: ${({ size }) => ImageSizeTable[size]};
   border-radius: ${({ size }) => BorderRadisSizeTable[size]};
+`;
+
+const StyledSlider = styled(Slider)`
+  // width: 100%;
+  // height: 100%;
+  background-color: ${colors.COLOR_LIGHTGRAY_BACKGROUND};
+`;
+
+const SliderImage = styled.img`
+  // width: 100%;
+  // height: 100%;
+  width: ${({ size }) => ImageSizeTable[size]};
+  height: ${({ size }) => ImageSizeTable[size]};
+  border-radius: ${({ size }) => BorderRadisSizeTable[size]};
+  object-fit: cover;
 `;
 
 const Image = styled.img`
