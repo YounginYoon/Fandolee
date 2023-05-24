@@ -47,7 +47,7 @@ const RecommendPrice = ({ title, category }) => {
           }
         });
         setIsLoading(false); // 로딩 끝
-      }, 5000);
+      }, 15000);
     } catch (err) {
       console.log('sendRecommend err: ', err);
     }
