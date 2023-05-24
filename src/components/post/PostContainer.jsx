@@ -1,14 +1,23 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import { colors } from "../../common/color";
-import PostImage from "./PostImage";
-import RecommendPrice from "./RecommendPrice";
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import { colors } from '../../common/color';
+import PostImage from './PostImage';
+import RecommendPrice from './RecommendPrice';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
-import { db } from "../../config/firebase";
+import { db } from '../../config/firebase';
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  deleteDoc,
+  doc,
+} from 'firebase/firestore';
+import useUser from '../../hooks/useUser';
 
 const PostContainer = ({
   children,
@@ -20,12 +29,30 @@ const PostContainer = ({
   category,
 }) => {
   const navigate = useNavigate();
+  const user = useUser();
 
-  const onCanceled = () => {
-    if (recommend) {
-      navigate("/auction/list");
-    } else {
-      navigate("/exchange/list");
+  const onCanceled = async () => {
+    // recommendPrice collection의 필요없는 데이터 지움
+    try {
+      const recommendRef = collection(db, 'recommendPrice');
+      const q = query(
+        recommendRef,
+        where('uid', '==', user.uid),
+        where('title', '==', title),
+        where('category', '==', category)
+      );
+      const querySnap = await getDocs(q);
+      querySnap.forEach(async (snap) => {
+        const delDoc = doc(recommendRef, snap.id);
+        await deleteDoc(delDoc);
+      });
+      if (recommend) {
+        navigate('/auction/list');
+      } else {
+        navigate('/exchange/list');
+      }
+    } catch (err) {
+      console.log('onCanceled err: ', err);
     }
   };
 
@@ -33,8 +60,8 @@ const PostContainer = ({
     <>
       <Header>
         <HeaderText>
-          {recommend ? "경매" : "교환"} 게시글 업로드
-          <FontAwesomeIcon icon={faPen} style={{ marginLeft: "10px" }} />
+          {recommend ? '경매' : '교환'} 게시글 업로드
+          <FontAwesomeIcon icon={faPen} style={{ marginLeft: '10px' }} />
         </HeaderText>
       </Header>
       <Container>
