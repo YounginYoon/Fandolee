@@ -77,7 +77,7 @@ const ProfileImgModal = ({ setOpenModal }) => {
       <Modal>
         <ModalHeader>프로필 이미지 수정</ModalHeader>
 
-        <ProfileImage src={imageSrc} />
+        <ProfileImage src={imageSrc ? imageSrc : "/img/user.png"} />
 
         <ProfileUploadBtn onClick={() => fileInputRef.current?.click()}>
           이미지 선택
