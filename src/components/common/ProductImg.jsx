@@ -7,31 +7,32 @@ import { faHeart as faHeartOutlined } from "@fortawesome/free-regular-svg-icons"
 import { useNavigate } from "react-router-dom";
 import { colors } from "../../common/color";
 import { remainDate } from "../../common/date";
-import {useIsLike, plusProductLike ,miusProductLike, useLike, Like2} from "../../hooks/useHeart";
+import {
+  useIsLike,
+  plusProductLike,
+  miusProductLike,
+  useLike,
+  Like2,
+} from "../../hooks/useHeart";
 import useUser from "../../hooks/useUser";
 import Loading from "../common/Loading";
 import { db } from "../../config/firebase";
 import UserHeart from "../user/UserHeart";
 import UserHeartExchange from "../user/UserHeartExchange";
 
-const ProductImg = ({
-  product,
-  onClick = null,
-  size = "M",
-  auction,
-  
-}) => {
-  const user = useUser();
-  
+const ProductImg = ({ product, onClick = null, size = "M", auction }) => {
   const { endDate, isComplete } = product;
-  
 
   return (
-    <Container>
-      <Image src={product.images[0]} onClick={onClick} size={size} />
+    <Container size={size}>
+      <Image src={product.images[0]} onClick={onClick} />
 
-      <HeartBox >
-        {auction ? (<UserHeart product={product}/>) : (<UserHeartExchange product={product}/>)}
+      <HeartBox>
+        {auction ? (
+          <UserHeart product={product} />
+        ) : (
+          <UserHeartExchange product={product} />
+        )}
         {/* <UserHeart product={product}/> */}
       </HeartBox>
 
@@ -53,8 +54,8 @@ export const ImageSizeTable = {
 };
 
 const BorderRadisSizeTable = {
-  S: "5px",
-  M: "10px",
+  S: "4px",
+  M: "7px",
   L: "15px",
 };
 
@@ -64,12 +65,16 @@ const Container = styled.div`
   width: max-content;
   height: max-content;
   // background-color: orange;
-`;
-
-const Image = styled.img`
+  overflow: hidden;
+  box-sizing: border-box;
   width: ${({ size }) => ImageSizeTable[size]};
   height: ${({ size }) => ImageSizeTable[size]};
   border-radius: ${({ size }) => BorderRadisSizeTable[size]};
+`;
+
+const Image = styled.img`
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   display: inline-block;
 `;

@@ -53,7 +53,10 @@ const HeaderBtns = () => {
     authService.onAuthStateChanged((user) => {
       if (user) {
         sessionStorage.setItem("user", JSON.stringify(user));
-        setUrl(user.photoURL);
+        // console.log("sesion: ", user.photoURL);
+        if (user.photoURL) {
+          setUrl(user.photoURL);
+        }
       } else {
         window.sessionStorage.removeItem("user");
       }

@@ -18,6 +18,6 @@ const Title = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-top: 10px;
+  margin-top: 5px;
   font-weight: ${({ fontWeight }) => fontWeight};
 `;

@@ -19,7 +19,7 @@ const AuctionContainer = ({ data }) => {
 
   return (
     <ProductContainer>
-      <ProductImg product={data} onClick={goAuctionDetailPage} auction={true}/>
+      <ProductImg product={data} onClick={goAuctionDetailPage} auction={true} />
 
       <ProductOwner uid={data.uid} />
 
@@ -37,7 +37,7 @@ export default AuctionContainer;
 
 const MoneyContainer = styled.div`
   font-weight: bold;
-  margin-top: 10px;
+  margin-top: 5px;
 `;
 
 const Money = styled.span``;
