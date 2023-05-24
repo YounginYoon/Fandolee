@@ -10,10 +10,10 @@ import useUser from "../../../hooks/useUser";
 import { timestampToDateTimeFormat } from "../../../common/date";
 import useProduct from "../../../hooks/useProduct";
 
-const ExchangeChattingBox = ({ productId }) => {
-  const product = useExchange(productId);
-  const navigate = useNavigate();
+const TransactionChattingBox = ({ productId }) => {
+  const product = useProduct(productId);
   const user = useUser();
+  const navigate = useNavigate();
 
   const [lastMessage, setLastMessage] = useState({
     username: "", // user id
@@ -27,9 +27,7 @@ const ExchangeChattingBox = ({ productId }) => {
   };
 
   const getLastMessage = async () => {
-    const ref = realTimeDatabase.ref(
-      `ChatRoom/Exchange/${productId}/${user.uid}`
-    );
+    const ref = realTimeDatabase.ref(`ChatRoom/Auction/${productId}`);
 
     try {
       const snapshot = await ref.limitToLast(1).once("value");
@@ -66,7 +64,7 @@ const ExchangeChattingBox = ({ productId }) => {
   );
 };
 
-export default ExchangeChattingBox;
+export default TransactionChattingBox;
 
 const Wrapper = styled.div`
   width: 100%;

@@ -82,6 +82,7 @@ const TransactionChat = ({ productId, type, onLastMessageChange }) => {
           chatArray.push({ id, ...chats[id] });
         }
       }
+
       setChatList(chatArray);
     });
   }, []);
@@ -89,13 +90,13 @@ const TransactionChat = ({ productId, type, onLastMessageChange }) => {
   return (
     <Container>
       <ChattingWrap>
-        {chatList.map((chat) =>
+        {/* {chatList.map((chat) =>
           chat.uid === chat.username ? (
             <SndMessage key={chat.id} chat={chat} />
           ) : (
             <RcvMessage key={chat.id} chat={chat} />
           )
-        )}
+        )} */}
       </ChattingWrap>
 
       <InputBox>
