@@ -4,14 +4,12 @@ import { colors } from "../../common/color";
 import { timestampToDateTimeFormat } from "../../common/date";
 import { moneyFormat } from "../../common/money";
 
-const SndMessage = ({ chat }) => {
-  const { id, biddingPrice, username, nickname, timestamp } = chat;
-
+const SndMessage = ({ message, timestamp }) => {
   return (
     <Container>
       <Date>{timestampToDateTimeFormat(timestamp)}</Date>
 
-      <Message>{moneyFormat(biddingPrice)} 원</Message>
+      <Message>{message}</Message>
     </Container>
   );
 };

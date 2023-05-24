@@ -191,19 +191,23 @@ const ChattingRoom = ({ product }) => {
 
       <ChattingWrap>
         <Chatting>
-          {chatList.map((chat) =>
-            chat.key === user.uid ? (
-              <SndMessage
-                key={`send${chat.id}_${chat.biddingPrice}`}
-                chat={chat}
-              />
-            ) : (
-              <RcvMessage
-                key={`rcv${chat.id}_${chat.biddingPrice}`}
-                chat={chat}
-              />
-            )
-          )}
+          {chatList.length > 0 &&
+            chatList.map((chat) =>
+              chat.key === user.uid ? (
+                <SndMessage
+                  key={`send${chat.id}_${chat.biddingPrice}`}
+                  message={moneyFormat(chat.biddingPrice)}
+                  timestamp={chat.timestamp}
+                />
+              ) : (
+                <RcvMessage
+                  key={`rcv${chat.id}_${chat.biddingPrice}`}
+                  message={moneyFormat(chat.biddingPrice)}
+                  timestamp={chat.timestamp}
+                  nickname={chat.nickname}
+                />
+              )
+            )}
         </Chatting>
       </ChattingWrap>
 

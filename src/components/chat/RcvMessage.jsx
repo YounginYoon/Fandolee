@@ -4,13 +4,12 @@ import { colors } from "../../common/color";
 import { timestampToDateTimeFormat } from "../../common/date";
 import { moneyFormat } from "../../common/money";
 
-const RcvMessage = ({ chat }) => {
-  const { id, biddingPrice, username, nickname, timestamp } = chat;
+const RcvMessage = ({ message, timestamp, nickname }) => {
   return (
     <Container>
       <Nickname>{nickname}</Nickname>
       <ChatDiv>
-        <Message>{moneyFormat(biddingPrice)} 원</Message>
+        <Message>{message}</Message>
 
         <Date>{timestampToDateTimeFormat(timestamp)}</Date>
       </ChatDiv>

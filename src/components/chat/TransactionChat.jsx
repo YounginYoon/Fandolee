@@ -55,6 +55,9 @@ const TransactionChat = ({ productId, type, onLastMessageChange }) => {
     }
   };
   const handleChatSend = async () => {
+    if (!input) {
+      return;
+    }
     const chat = {
       username: user.uid,
       nickname: user.displayName,
@@ -66,7 +69,7 @@ const TransactionChat = ({ productId, type, onLastMessageChange }) => {
     setInput("");
   };
 
-  useEffect(() => {
+  const getChatList = async () => {
     chatRef.on("value", async (snapshot) => {
       const chats = [];
       snapshot.forEach((child) => {
@@ -74,28 +77,48 @@ const TransactionChat = ({ productId, type, onLastMessageChange }) => {
         chats.push({ key: child.key, ...message });
       });
       chats.sort((a, b) => a.timestamp - b.timestamp);
+      // setChatList(chats);
       const chatArray = [];
-      let messages = [];
+      // let messages = [];
       if (chats) {
-        messages = Object.values(chats).map((chat) => chat.message);
+        // messages = Object.values(chats).map((chat) => chat.message);
+
         for (let id in chats) {
           chatArray.push({ id, ...chats[id] });
         }
       }
+
+      console.log("chatArray: ", chatArray);
       setChatList(chatArray);
     });
+  };
+
+  useEffect(() => {
+    getChatList();
   }, []);
 
   return (
     <Container>
       <ChattingWrap>
-        {chatList.map((chat) =>
-          chat.uid === chat.username ? (
-            <SndMessage key={chat.id} chat={chat} />
-          ) : (
-            <RcvMessage key={chat.id} chat={chat} />
-          )
-        )}
+        <Chatting>
+          {chatList.length > 0 &&
+            chatList.map((chat) =>
+              user.uid === chat.username ? (
+                <SndMessage
+                  key={chat.id}
+                  message={chat.message}
+                  timestamp={chat.timestamp}
+                />
+              ) : (
+                <RcvMessage
+                  key={chat.id}
+                  message={chat.message}
+                  timestamp={chat.timestamp}
+                  nickname={chat.nickname}
+                />
+              )
+            )}
+        </Chatting>
       </ChattingWrap>
 
       <InputBox>
