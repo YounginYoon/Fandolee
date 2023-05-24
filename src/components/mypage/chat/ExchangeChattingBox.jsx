@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { colors } from "../../../common/color";
-import useExchange from "../../../hooks/useExchange";
-import { db, realTimeDatabase } from "../../../config/firebase";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { colors } from '../../../common/color';
+import useExchange from '../../../hooks/useExchange';
+import { db, realTimeDatabase } from '../../../config/firebase';
 
-import ChattingBox from "./ChattingBox";
-import useUser from "../../../hooks/useUser";
-import { timestampToDateTimeFormat } from "../../../common/date";
-import useProduct from "../../../hooks/useProduct";
+import ChattingBox from './ChattingBox';
+import useUser from '../../../hooks/useUser';
+import { timestampToDateTimeFormat } from '../../../common/date';
+import useProduct from '../../../hooks/useProduct';
 
 const ExchangeChattingBox = ({ productId }) => {
   const product = useExchange(productId);
@@ -16,14 +16,14 @@ const ExchangeChattingBox = ({ productId }) => {
   const user = useUser();
 
   const [lastMessage, setLastMessage] = useState({
-    username: "", // user id
-    nickname: "", // 닉네임
+    username: '', // user id
+    nickname: '', // 닉네임
     timestamp: 0,
-    message: "",
+    message: '',
   });
 
   const goChatPage = () => {
-    navigate(`/transaction/exchange/${productId}/${product.uid}`);
+    navigate(`/transaction/exchange/${productId}/${user.uid}`);
   };
 
   const getLastMessage = async () => {
@@ -32,7 +32,7 @@ const ExchangeChattingBox = ({ productId }) => {
     );
 
     try {
-      const snapshot = await ref.limitToLast(1).once("value");
+      const snapshot = await ref.limitToLast(1).once('value');
       let message = {};
       snapshot.forEach((childSnapshot) => {
         const childData = childSnapshot.val();
@@ -43,7 +43,7 @@ const ExchangeChattingBox = ({ productId }) => {
       // console.log(message);
       setLastMessage(message);
     } catch (err) {
-      console.log("getLastMessage err: ", err);
+      console.log('getLastMessage err: ', err);
     }
   };
 
