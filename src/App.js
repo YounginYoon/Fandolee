@@ -1,44 +1,45 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
-import './App.css';
-import { Reset } from 'styled-reset';
-import styled from 'styled-components';
-import { colors } from './common/color';
+import "./App.css";
+import { Reset } from "styled-reset";
+import styled from "styled-components";
+import { colors } from "./common/color";
 
 // firestore 데이터 베이스
-import { db } from './config/firebase';
-import { Route, Routes } from 'react-router-dom';
+import { db } from "./config/firebase";
+import { Route, Routes } from "react-router-dom";
 
 // components
-import AuctionBiddingPage from './pages/AuctionBiddingPage';
-import Header from './components/header/Header';
-import Footer, { footerHeight } from './components/footer/Footer';
-import MainPage from './pages/MainPage';
-import LoginPage from './pages/LoginPage';
-import SignUpPage from './pages/SignUpPage';
-import MainLayout from './layouts/MainLayout';
-import SubLayout from './layouts/SubLayout';
-import ProfilePage from './pages/ProfilePage';
-import AuctionListPage from './pages/AuctionListPage';
-import AuctionUpPage from './pages/AuctionUpPage';
-import UserPage from './pages/UserPage';
-import MyPage from './pages/MyPage';
-import { MyTab } from './constants/mypage';
-import ProfileContainer from './components/mypage/profile/ProfileContainer';
-import ExchangeListPage from './pages/ExchangeListPage';
-import LikeContainer from './components/mypage/like/LikeContainer';
-import ChattingList from './components/mypage/chat/ChattingList';
-import TransactionList from './components/mypage/transaction/TransactionList';
-import AuctionPostPage from './pages/AuctionPostPage';
-import AuctionDetailPage from './pages/AuctionDetailPage';
-import ExchangePostPage from './pages/ExchangePostPage';
-import AuctionChattingPage from './pages/AuctionChattingPage';
-import AuctionModifyPage from './pages/AuctionModifyPage';
-import ExchangeDetailPage from './pages/ExchangeDetailpage';
-import ExchangeModifyPage from './pages/ExchangeModifyPage';
-import AuctionTransactionPage from './pages/AuctionTransactionPage';
-import ExchangeTransactionPage from './pages/ExchangeTransactionPage';
-import ExchangeTransactionListPage from './pages/ExchangeTransactionListPage';
+import AuctionBiddingPage from "./pages/AuctionBiddingPage";
+import Header from "./components/header/Header";
+import Footer, { footerHeight } from "./components/footer/Footer";
+import MainPage from "./pages/MainPage";
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
+import MainLayout from "./layouts/MainLayout";
+import SubLayout from "./layouts/SubLayout";
+import ProfilePage from "./pages/ProfilePage";
+import AuctionListPage from "./pages/AuctionListPage";
+import AuctionUpPage from "./pages/AuctionUpPage";
+import UserPage from "./pages/UserPage";
+import MyPage from "./pages/MyPage";
+import { MyTab } from "./constants/mypage";
+import ProfileContainer from "./components/mypage/profile/ProfileContainer";
+import ExchangeListPage from "./pages/ExchangeListPage";
+import LikeContainer from "./components/mypage/like/LikeContainer";
+import ChattingList from "./components/mypage/chat/ChattingList";
+import TransactionList from "./components/mypage/transaction/TransactionList";
+import AuctionPostPage from "./pages/AuctionPostPage";
+import AuctionDetailPage from "./pages/AuctionDetailPage";
+import ExchangePostPage from "./pages/ExchangePostPage";
+import AuctionChattingPage from "./pages/AuctionChattingPage";
+import AuctionModifyPage from "./pages/AuctionModifyPage";
+import ExchangeDetailPage from "./pages/ExchangeDetailpage";
+import ExchangeModifyPage from "./pages/ExchangeModifyPage";
+import AuctionTransactionPage from "./pages/AuctionTransactionPage";
+import ExchangeTransactionPage from "./pages/ExchangeTransactionPage";
+import ExchangeTransactionListPage from "./pages/ExchangeTransactionListPage";
+import TransactionDetail from "./components/mypage/transaction/TransactionDetail";
 
 const App = () => {
   return (
@@ -60,6 +61,10 @@ const App = () => {
             <Route path={MyTab[1].tab} element={<ChattingList />} />
             <Route path={MyTab[2].tab} element={<LikeContainer />} />
             <Route path={MyTab[3].tab} element={<TransactionList />} />
+            <Route
+              path={`${MyTab[3].tab}/:id`}
+              element={<TransactionDetail />}
+            />
           </Route>
         </Route>
 

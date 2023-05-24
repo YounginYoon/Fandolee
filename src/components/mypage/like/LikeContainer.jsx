@@ -58,4 +58,5 @@ export default LikeContainer;
 
 const Container = styled.div`
   //   background-color: orange;
+  width: 800px;
 `;
