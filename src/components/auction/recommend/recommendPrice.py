@@ -24,13 +24,18 @@ from sklearn.metrics import accuracy_score
 def search_similar(title, category):
   # 데이터셋 로드
   if category == 'Albums':
-    fileName = 'C:/Users/3ylsj/Desktop/캡디2/cap/src/components/auction/recommend/csv/database_albums.csv'
+    fileName = 'database_albums.csv'
   elif category == 'Photo Cards':
-    fileName = 'C:/Users/3ylsj/Desktop/캡디2/cap/src/components/auction/recommend/csv/database_photocards.csv'
+    fileName = 'database_photocards.csv'
   elif category == 'MD':
-    fileName = 'C:/Users/3ylsj/Desktop/캡디2/cap/src/components/auction/recommend/csv/database_md.csv'
+    fileName = 'database_md.csv'
+
+  #내 컴퓨터 폴더 경로
+  filePath = 'C:/Users/3ylsj/Desktop/캡디2/cap/src/components/auction/recommend/csv/'
+
+  filePath += fileName
   
-  df = pd.read_csv(fileName)
+  df = pd.read_csv(filePath)
   df = df.sample(frac=1).reset_index(drop=True)  # 셔플
 
   lower_df = df[['title','price']]
