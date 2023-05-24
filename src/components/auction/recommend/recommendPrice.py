@@ -27,6 +27,8 @@ def search_similar(title, category):
     fileName = 'C:/Users/3ylsj/Desktop/캡디2/cap/src/components/auction/recommend/csv/database_albums.csv'
   elif category == 'Photo Cards':
     fileName = 'C:/Users/3ylsj/Desktop/캡디2/cap/src/components/auction/recommend/csv/database_photocards.csv'
+  elif category == 'MD':
+    fileName = 'C:/Users/3ylsj/Desktop/캡디2/cap/src/components/auction/recommend/csv/database_md.csv'
   
   df = pd.read_csv(fileName)
   df = df.sample(frac=1).reset_index(drop=True)  # 셔플
@@ -66,6 +68,7 @@ def search_similar(title, category):
 
   # 유사도가 높은 순으로 정렬한 후, 상위 2개 문장을 출력합니다.
   similar_sentences = sorted(similar_sentences, key=lambda x: x[1], reverse=True)[:2]
+  print("similar: ", similar_sentences)
   for sentence_df in similar_sentences:
     sentence = sentence_df[0]
     price_df = lower_df[lower_df['title'] == sentence.lower()]

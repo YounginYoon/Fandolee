@@ -33,7 +33,7 @@ const RecommendPrice = ({ title, category }) => {
       await recommendPrice.add({ ...body });
       console.log('send success');
 
-      // 5초 후에 문서 업데이트
+      // 7초 후에 문서 업데이트
       setTimeout(() => {
         const docRef = db
           .collection('recommendPrice')
@@ -47,7 +47,7 @@ const RecommendPrice = ({ title, category }) => {
           }
         });
         setIsLoading(false); // 로딩 끝
-      }, 15000);
+      }, 7000);
     } catch (err) {
       console.log('sendRecommend err: ', err);
     }
