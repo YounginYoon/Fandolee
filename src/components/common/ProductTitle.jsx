@@ -14,4 +14,6 @@ const Title = styled.p`
   text-overflow: ellipsis;
   margin-top: 10px;
   font-weight: ${({ fontWeight }) => fontWeight};
+  // background-color: orange;
+  // padding: 5px 0;
 `;

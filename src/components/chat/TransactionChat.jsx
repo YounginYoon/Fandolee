@@ -1,10 +1,28 @@
-import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { realTimeDatabase } from '../../config/firebase';
-import useUser from '../../hooks/useUser';
-import useOwner from '../../hooks/useOwner';
-import { useParams } from 'react-router-dom';
+import React from "react";
+import { useEffect } from "react";
+import { useState } from "react";
+import { realTimeDatabase } from "../../config/firebase";
+import useUser from "../../hooks/useUser";
+import useOwner from "../../hooks/useOwner";
+import { useParams } from "react-router-dom";
+
+import {
+  Container,
+  CurrentAuctionDiv,
+  CurrentAuctionIcon,
+  CurrentAuctionText,
+  BiddingPriceDiv,
+  BiddingLabel,
+  BiddingPrice,
+  ChattingWrap,
+  Chatting,
+  InputBox,
+  CannotInput,
+  Input,
+  SendBtn,
+} from "./chatStyledComponents";
+import SndMessage from "./SndMessage";
+import RcvMessage from "./RcvMessage";
 
 /*
  type == 1: auction
@@ -14,7 +32,7 @@ const TransactionChat = ({ productId, type, onLastMessageChange }) => {
   const params = useParams();
   const user = useUser();
   //보낸 채팅
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   //채팅 리스트
   const [chatList, setChatList] = useState([]);
 
@@ -32,7 +50,7 @@ const TransactionChat = ({ productId, type, onLastMessageChange }) => {
   };
 
   const onKeyUp = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleChatSend();
     }
   };
@@ -45,11 +63,11 @@ const TransactionChat = ({ productId, type, onLastMessageChange }) => {
     };
 
     chatRef.push().set(chat);
-    setInput('');
+    setInput("");
   };
 
   useEffect(() => {
-    chatRef.on('value', async (snapshot) => {
+    chatRef.on("value", async (snapshot) => {
       const chats = [];
       snapshot.forEach((child) => {
         const message = child.val();
@@ -69,41 +87,22 @@ const TransactionChat = ({ productId, type, onLastMessageChange }) => {
   }, []);
 
   return (
-    <div
-      style={{
-        width: '500px',
-        height: '450px',
-        border: '1px solid red',
-        padding: '10px',
-      }}
-    >
-      <div
-        className="chatList"
-        style={{ width: '500px', height: '400px', border: '1px solid blue' }}
-      >
-        {chatList.map((chat) => (
-          <li
-            key={chat.id}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems:
-                user.uid === chat.username ? 'flex-end' : 'flex-start',
-              margin: '10px',
-            }}
-          >
-            {user.uid !== chat.username ? (
-              <div>{chat.nickname}</div>
-            ) : (
-              <div></div>
-            )}
-            <div>{chat.message}</div>
-          </li>
-        ))}
-      </div>
-      <input value={input} onKeyUp={onKeyUp} onChange={onChange} />
-      <button onClick={handleChatSend}>전송</button>
-    </div>
+    <Container>
+      <ChattingWrap>
+        {chatList.map((chat) =>
+          chat.uid === chat.username ? (
+            <SndMessage key={chat.id} chat={chat} />
+          ) : (
+            <RcvMessage key={chat.id} chat={chat} />
+          )
+        )}
+      </ChattingWrap>
+
+      <InputBox>
+        <Input value={input} onKeyUp={onKeyUp} onChange={onChange} />
+        <SendBtn onClick={handleChatSend}>전송</SendBtn>
+      </InputBox>
+    </Container>
   );
 };
 
