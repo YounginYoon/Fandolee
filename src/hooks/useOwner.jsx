@@ -28,6 +28,7 @@ const useOwner = (uid) => {
     try {
       const imageRef = ref(storage, `profile_image/${uid}`);
       const url = await getDownloadURL(imageRef);
+
       setProfileImage(url);
     } catch (err) {
       console.log('useOwner getImage err: ', err);

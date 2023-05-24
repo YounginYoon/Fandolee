@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { colors } from '../common/color';
-import TransactionChat from '../components/chat/TransactionChat';
-import { useLocation, useParams } from 'react-router-dom';
-import useProduct from '../hooks/useProduct';
-import { db } from '../config/firebase';
-import ChattingInfo from '../components/chat/ChattingInfo';
-import Tag from '../components/common/Tag';
-import Loading from '../components/common/Loading';
-import useUser from '../hooks/useUser';
-import { timestampToDateFormat } from '../common/date';
-import { moneyFormat } from '../common/money';
-import ChattingHeader from '../components/chat/ChattingHeader';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { colors } from "../common/color";
+import TransactionChat from "../components/chat/TransactionChat";
+import { useLocation, useParams } from "react-router-dom";
+import useProduct from "../hooks/useProduct";
+import { db } from "../config/firebase";
+import ChattingInfo from "../components/chat/ChattingInfo";
+import Tag from "../components/common/Tag";
+import Loading from "../components/common/Loading";
+import useUser from "../hooks/useUser";
+import { timestampToDateFormat } from "../common/date";
+import { moneyFormat } from "../common/money";
+import ChattingHeader from "../components/chat/ChattingHeader";
 
 const ExchangeTransactionPage = () => {
   const params = useParams();
@@ -23,13 +23,14 @@ const ExchangeTransactionPage = () => {
   const fetchProduct = async () => {
     try {
       setType(2);
-      const exchangeDoc = await db.collection('exchange').doc(productId);
+      const exchangeDoc = await db.collection("exchange").doc(productId);
       exchangeDoc.onSnapshot((snapshot) => {
         const data = snapshot.data();
+        // console.log({ ...data, id: snapshot.id });
         setProduct({ ...data, id: snapshot.id });
       });
     } catch (err) {
-      console.log('fetchProduct err: ', err);
+      console.log("fetchProduct err: ", err);
     }
   };
   useEffect(() => {
@@ -48,11 +49,14 @@ const ExchangeTransactionPage = () => {
   }
 
   return (
-    <div>
+    <>
       <ChattingHeader product={product} />
-      <div style={{ display: 'flex', flexDirection: 'row', padding: '20px' }}>
-        <ChattingInfo product={product}>
-          <button>교환 완료하기</button>
+      <Wrapper>
+        <ChattingInfo
+          product={product}
+          btnText="교환 완료하기"
+          onBtnClick={() => {}}
+        >
           <Tag
             label="거래방법"
             text={product.transactionType}
@@ -69,9 +73,16 @@ const ExchangeTransactionPage = () => {
             <TransactionChat productId={productId} type={type} />
           )}
         </div>
-      </div>
-    </div>
+      </Wrapper>
+    </>
   );
 };
 
 export default ExchangeTransactionPage;
+
+const Wrapper = styled.div`
+  //   background-color: whitesmoke;
+  margin: 50px auto 300px;
+  width: max-content;
+  display: flex;
+`;

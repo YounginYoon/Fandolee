@@ -20,7 +20,9 @@ const ProfileContainer = () => {
       <Container>
         <ProfileBox>
           <ProfileImageDiv>
-            <ProfileImage src={user.photoURL} />
+            <ProfileImage
+              src={user.photoURL ? user.photoURL : "/img/user.png"}
+            />
 
             <ProfileEditBtn onClick={() => setOpenModal(true)}>
               <FontAwesomeIcon icon={faPen} />
@@ -86,6 +88,7 @@ const ProfileEditBtn = styled.div`
   cursor: pointer;
   color: white;
   font-size: 14px;
+  border: 1px solid white;
 `;
 
 const BambooDiv = styled.div``;
