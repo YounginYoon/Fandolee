@@ -26,6 +26,7 @@ const ExchangeTransactionPage = () => {
       const exchangeDoc = await db.collection("exchange").doc(productId);
       exchangeDoc.onSnapshot((snapshot) => {
         const data = snapshot.data();
+        // console.log({ ...data, id: snapshot.id });
         setProduct({ ...data, id: snapshot.id });
       });
     } catch (err) {

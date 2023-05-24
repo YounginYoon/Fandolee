@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import useUser from "../../../hooks/useUser";
@@ -13,7 +12,6 @@ const filterList = ["경매", "교환", "낙찰"];
 const ChattingList = () => {
   const [filter, setFilter] = useState(filterList[0]);
   const user = useUser();
-  const navigate = useNavigate();
 
   return (
     <Container>

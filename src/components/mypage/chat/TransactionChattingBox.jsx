@@ -23,7 +23,7 @@ const TransactionChattingBox = ({ productId }) => {
   });
 
   const goChatPage = () => {
-    navigate(`/transaction/exchange/${productId}/${product.uid}`);
+    navigate(`/transaction/auction/${productId}`);
   };
 
   const getLastMessage = async () => {
