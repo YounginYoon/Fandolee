@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { colors } from '../../common/color';
-import useUser from '../../hooks/useUser';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { colors } from "../../common/color";
+import useUser from "../../hooks/useUser";
 
 const ChattingInfo = ({ product, btnText, onBtnClick, children }) => {
   const user = useUser();
-  const { images, info, uid } = product;
-  const [disabled, setDisabled] = useState(false);
+  const { images, info, uid, isComplete } = product;
+  const [disabled, setDisabled] = useState(isComplete);
 
   const handleBtn = () => {
     onBtnClick();
@@ -67,7 +67,12 @@ const Btn = styled.div`
     color: ${colors.COLOR_BLUE_BUTTON};
     background-color: white;
   }
-  ${(props) => props.disabled && `opacity: 0.5; pointer-events: none;`}
+  ${(props) =>
+    props.disabled &&
+    `background-color: ${colors.COLOR_DARKGRAY_BACKGROUND}; 
+    border-color: ${colors.COLOR_DARKGRAY_BACKGROUND};
+    pointer-events: none;
+    `}
 `;
 
 const Tags = styled.div`
