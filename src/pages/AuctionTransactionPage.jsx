@@ -21,10 +21,11 @@ const AuctionTransactionPage = () => {
 
   // 낙찰자
   const [bidder, setBidder] = useState('');
+  const productDoc = db.collection('product').doc(productId);
+
   const fetchProduct = async () => {
     try {
       setType(1);
-      const productDoc = await db.collection('product').doc(productId);
       productDoc.onSnapshot(async (snapshot) => {
         const data = snapshot.data();
         const findBidder = await db.collection('users').doc(data.bidder).get();
@@ -34,6 +35,18 @@ const AuctionTransactionPage = () => {
       });
     } catch (err) {
       console.log('fetchProduct err: ', err);
+    }
+  };
+
+  const completeTransaction = async () => {
+    if (!window.confirm('거래를 확정하시겠습니까?')) {
+      return;
+    }
+    try {
+      await productDoc.update({ completeTransaction: 1 });
+      fetchProduct();
+    } catch (err) {
+      console.log('completeTransaction err: ', err);
     }
   };
 
@@ -57,7 +70,7 @@ const AuctionTransactionPage = () => {
       <ChattingHeader product={product} />
       <div style={{ display: 'flex', flexDirection: 'row', padding: '20px' }}>
         <ChattingInfo product={product}>
-          <button>거래 완료하기</button>
+          <button onClick={completeTransaction}>거래 완료하기</button>
           <Tag label="낙찰자" text={bidder} textColor={colors.COLOR_MAIN} />
           <Tag
             label="낙찰일"

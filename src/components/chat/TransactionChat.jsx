@@ -1,10 +1,10 @@
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { realTimeDatabase } from "../../config/firebase";
-import useUser from "../../hooks/useUser";
-import useOwner from "../../hooks/useOwner";
-import { useParams } from "react-router-dom";
+import React from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { realTimeDatabase } from '../../config/firebase';
+import useUser from '../../hooks/useUser';
+import useOwner from '../../hooks/useOwner';
+import { useParams } from 'react-router-dom';
 
 import {
   Container,
@@ -20,9 +20,9 @@ import {
   CannotInput,
   Input,
   SendBtn,
-} from "./chatStyledComponents";
-import SndMessage from "./SndMessage";
-import RcvMessage from "./RcvMessage";
+} from './chatStyledComponents';
+import SndMessage from './SndMessage';
+import RcvMessage from './RcvMessage';
 
 /*
  type == 1: auction
@@ -32,7 +32,7 @@ const TransactionChat = ({ productId, type, onLastMessageChange }) => {
   const params = useParams();
   const user = useUser();
   //보낸 채팅
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   //채팅 리스트
   const [chatList, setChatList] = useState([]);
 
@@ -50,7 +50,7 @@ const TransactionChat = ({ productId, type, onLastMessageChange }) => {
   };
 
   const onKeyUp = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       handleChatSend();
     }
   };
@@ -66,11 +66,11 @@ const TransactionChat = ({ productId, type, onLastMessageChange }) => {
     };
 
     chatRef.push().set(chat);
-    setInput("");
+    setInput('');
   };
 
   const getChatList = async () => {
-    chatRef.on("value", async (snapshot) => {
+    chatRef.on('value', async (snapshot) => {
       const chats = [];
       snapshot.forEach((child) => {
         const message = child.val();
@@ -88,7 +88,7 @@ const TransactionChat = ({ productId, type, onLastMessageChange }) => {
         }
       }
 
-      console.log("chatArray: ", chatArray);
+      //console.log("chatArray: ", chatArray);
       setChatList(chatArray);
     });
   };
