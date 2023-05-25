@@ -40,8 +40,10 @@ const useOwner = (uid) => {
   };
 
   useEffect(() => {
-    getOwner();
-    getImage();
+    if (uid) {
+      getOwner();
+      getImage();
+    }
   }, [uid]);
 
   return [owner, profileImage];

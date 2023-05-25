@@ -17,7 +17,7 @@ const ChattingInfo = ({ product, btnText, onBtnClick, children }) => {
     <Container>
       <ProductImage src={images[0]} />
 
-      {user && user.uid === uid && (
+      {user && user.uid === uid && btnText && (
         <Btn onClick={handleBtn} disabled={disabled}>
           {btnText}
         </Btn>
