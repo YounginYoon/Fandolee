@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { colors } from "../common/color";
-import TransactionChat from "../components/chat/TransactionChat";
-import { useLocation, useParams } from "react-router-dom";
-import useProduct from "../hooks/useProduct";
-import { db } from "../config/firebase";
-import ChattingInfo from "../components/chat/ChattingInfo";
-import Tag from "../components/common/Tag";
-import Loading from "../components/common/Loading";
-import useUser from "../hooks/useUser";
-import { timestampToDateFormat } from "../common/date";
-import { moneyFormat } from "../common/money";
-import ChattingHeader from "../components/chat/ChattingHeader";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { colors } from '../common/color';
+import TransactionChat from '../components/chat/TransactionChat';
+import { useLocation, useParams } from 'react-router-dom';
+import useProduct from '../hooks/useProduct';
+import { db } from '../config/firebase';
+import ChattingInfo from '../components/chat/ChattingInfo';
+import Tag from '../components/common/Tag';
+import Loading from '../components/common/Loading';
+import useUser from '../hooks/useUser';
+import { timestampToDateFormat } from '../common/date';
+import { moneyFormat } from '../common/money';
+import ChattingHeader from '../components/chat/ChattingHeader';
 
 const ExchangeTransactionPage = () => {
   const params = useParams();
@@ -19,20 +19,33 @@ const ExchangeTransactionPage = () => {
   const productId = params.productId;
   const [product, setProduct] = useState(null);
   const [type, setType] = useState(null);
+  const exchangeDoc = db.collection('exchange').doc(productId);
 
   const fetchProduct = async () => {
     try {
       setType(2);
-      const exchangeDoc = await db.collection("exchange").doc(productId);
       exchangeDoc.onSnapshot((snapshot) => {
         const data = snapshot.data();
         // console.log({ ...data, id: snapshot.id });
         setProduct({ ...data, id: snapshot.id });
       });
     } catch (err) {
-      console.log("fetchProduct err: ", err);
+      console.log('fetchProduct err: ', err);
     }
   };
+
+  const onBtnClick = async () => {
+    if (!window.confirm('교환을 완료하시겠습니까?')) {
+      return;
+    }
+    try {
+      await exchangeDoc.update({ isComplete: 1 });
+      fetchProduct();
+    } catch (err) {
+      console.log('onBtnClick error: ', err);
+    }
+  };
+
   useEffect(() => {
     //console.log(params.productId);
     fetchProduct();
@@ -55,7 +68,7 @@ const ExchangeTransactionPage = () => {
         <ChattingInfo
           product={product}
           btnText="교환 완료하기"
-          onBtnClick={() => {}}
+          onBtnClick={onBtnClick}
         >
           <Tag
             label="거래방법"
