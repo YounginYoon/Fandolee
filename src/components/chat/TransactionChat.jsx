@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { realTimeDatabase } from '../../config/firebase';
+import { realTimeDatabase, db } from '../../config/firebase';
 import useUser from '../../hooks/useUser';
 import useOwner from '../../hooks/useOwner';
 import { useParams } from 'react-router-dom';
@@ -23,12 +23,13 @@ import {
 } from './chatStyledComponents';
 import SndMessage from './SndMessage';
 import RcvMessage from './RcvMessage';
+import Loading from '../common/Loading';
 
 /*
  type == 1: auction
  type == 2: exchange
  */
-const TransactionChat = ({ productId, type, onLastMessageChange }) => {
+const TransactionChat = ({ productId, type, onLastMessageChange, product }) => {
   const params = useParams();
   const user = useUser();
   //보낸 채팅
@@ -54,6 +55,7 @@ const TransactionChat = ({ productId, type, onLastMessageChange }) => {
       handleChatSend();
     }
   };
+
   const handleChatSend = async () => {
     if (!input) {
       return;
@@ -122,6 +124,13 @@ const TransactionChat = ({ productId, type, onLastMessageChange }) => {
       </ChattingWrap>
 
       <InputBox>
+        {product && type === 2 && product.isComplete === 1 && (
+          <CannotInput>거래가 완료되었습니다.</CannotInput>
+        )}
+        {product && type === 1 && product.completeTransaction === 1 && (
+          <CannotInput>거래가 완료되었습니다.</CannotInput>
+        )}
+
         <Input value={input} onKeyUp={onKeyUp} onChange={onChange} />
         <SendBtn onClick={handleChatSend}>전송</SendBtn>
       </InputBox>

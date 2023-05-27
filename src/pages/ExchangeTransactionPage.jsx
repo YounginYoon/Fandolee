@@ -12,6 +12,7 @@ import useUser from '../hooks/useUser';
 import { timestampToDateFormat } from '../common/date';
 import { moneyFormat } from '../common/money';
 import ChattingHeader from '../components/chat/ChattingHeader';
+import BambooModal from '../components/common/BambooModal';
 
 const ExchangeTransactionPage = () => {
   const params = useParams();
@@ -20,6 +21,10 @@ const ExchangeTransactionPage = () => {
   const [product, setProduct] = useState(null);
   const [type, setType] = useState(null);
   const exchangeDoc = db.collection('exchange').doc(productId);
+
+  //모달 띄우기
+  const [showBambooModal, setShowBambooModal] = useState(false);
+  const [complete, setComplete] = useState(0);
 
   const fetchProduct = async () => {
     try {
@@ -40,6 +45,9 @@ const ExchangeTransactionPage = () => {
     }
     try {
       await exchangeDoc.update({ isComplete: 1 });
+      await exchangeDoc.update({ exchanger: exchangerUid });
+      setComplete(1);
+      setType(2);
       fetchProduct();
     } catch (err) {
       console.log('onBtnClick error: ', err);
@@ -54,6 +62,11 @@ const ExchangeTransactionPage = () => {
   useEffect(() => {
     if (product) {
       fetchProduct();
+      if (complete) {
+        setShowBambooModal(true);
+      } else {
+        setShowBambooModal(false);
+      }
     }
   }, [product]);
 
@@ -69,6 +82,7 @@ const ExchangeTransactionPage = () => {
           product={product}
           btnText="교환 완료하기"
           onBtnClick={onBtnClick}
+          type={2}
         >
           <Tag
             label="거래방법"
@@ -81,9 +95,14 @@ const ExchangeTransactionPage = () => {
             textColor={colors.COLOR_MAIN}
           />
         </ChattingInfo>
+        {showBambooModal && exchangerUid && <BambooModal product={product} />}
         <div>
           {type !== null && ( // type이 null이 아닐 때 렌더링
-            <TransactionChat productId={productId} type={type} />
+            <TransactionChat
+              productId={productId}
+              type={type}
+              product={product}
+            />
           )}
         </div>
       </Wrapper>

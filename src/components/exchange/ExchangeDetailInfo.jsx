@@ -18,7 +18,7 @@ import { useState } from 'react';
 import Tag from '../common/Tag';
 import { useNavigate } from 'react-router-dom';
 import useUser from '../../hooks/useUser';
-import { db } from '../../config/firebase';
+import { db, realTimeDatabase } from '../../config/firebase';
 import UserHeartExchange from '../user/UserHeartExchange';
 const ExchangeDetailInfo = ({ product }) => {
   const navigate = useNavigate();
@@ -48,9 +48,9 @@ const ExchangeDetailInfo = ({ product }) => {
 
     try {
       const productDB = db.collection('exchange');
-
+      const chatRef = realTimeDatabase.ref(`ChatRoom/Exchange/${product.id}`);
       await productDB.doc(id).delete();
-
+      await chatRef.remove();
       navigate(-1);
     } catch (err) {
       console.log('delete product error: ', err);
@@ -132,7 +132,11 @@ const ExchangeDetailInfo = ({ product }) => {
         </InfoDiv>
 
         <BtnDiv>
-          <Btn onClick={goTransactionPage}>교환 채팅</Btn>
+          {isComplete ? (
+            <EndBtn onClick={goTransactionPage}>교환 완료</EndBtn>
+          ) : (
+            <Btn onClick={goTransactionPage}>교환 채팅</Btn>
+          )}
           <HeartDiv>
             <UserHeartExchange product={product} />
             <Likes>{likes ? likes : 0}</Likes>
@@ -234,6 +238,18 @@ const BtnDiv = styled.div`
 const Btn = styled.div`
   width: 88%;
   background-color: ${colors.COLOR_MAIN};
+  line-height: 45px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 7px;
+`;
+
+const EndBtn = styled.div`
+  width: 88%;
+  background-color: ${colors.COLOR_DARKGRAY_BACKGROUND};
   line-height: 45px;
   font-size: 18px;
   font-weight: bold;

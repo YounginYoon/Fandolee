@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
-import Bamboo from "../components/profile/Bamboo";
-import TransactionHistory from "../components/profile/TransactionHistory";
-import UserInfo from "../components/profile/UserInfo";
-import { db } from "../config/firebase";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import Bamboo from '../components/profile/Bamboo';
+import TransactionHistory from '../components/profile/TransactionHistory';
+import UserInfo from '../components/profile/UserInfo';
+import { db } from '../config/firebase';
 
 const ProfilePage = () => {
   const params = useParams();
@@ -14,13 +14,13 @@ const ProfilePage = () => {
 
   const getUserData = async () => {
     try {
-      const users = db.collection("users");
+      const users = db.collection('users');
       const ret = await users.doc(uid).get();
 
       console.log(ret.data());
       setProfile(ret.data());
     } catch (err) {
-      console.log("get profile data error! ", err);
+      console.log('get profile data error! ', err);
     }
   };
 
@@ -33,7 +33,7 @@ const ProfilePage = () => {
       <UserInfo profileImage={profile.프로필} />
 
       <InfoDiv>
-        <Bamboo nickname={profile.nickName} bamboo={8.5} />
+        <Bamboo nickname={profile.nickName} bamboo={2} />
 
         <TransactionHistory />
       </InfoDiv>
