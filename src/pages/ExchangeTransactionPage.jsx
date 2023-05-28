@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { colors } from '../common/color';
-import TransactionChat from '../components/chat/TransactionChat';
-import { useLocation, useParams } from 'react-router-dom';
-import useProduct from '../hooks/useProduct';
-import { db } from '../config/firebase';
-import ChattingInfo from '../components/chat/ChattingInfo';
-import Tag from '../components/common/Tag';
-import Loading from '../components/common/Loading';
-import useUser from '../hooks/useUser';
-import { timestampToDateFormat } from '../common/date';
-import { moneyFormat } from '../common/money';
-import ChattingHeader from '../components/chat/ChattingHeader';
-import BambooModal from '../components/common/BambooModal';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { colors } from "../common/color";
+import TransactionChat from "../components/chat/TransactionChat";
+import { useLocation, useParams } from "react-router-dom";
+import useProduct from "../hooks/useProduct";
+import { db } from "../config/firebase";
+import ChattingInfo from "../components/chat/ChattingInfo";
+import Tag from "../components/common/Tag";
+import Loading from "../components/common/Loading";
+import useUser from "../hooks/useUser";
+import { timestampToDateFormat } from "../common/date";
+import { moneyFormat } from "../common/money";
+import ChattingHeader from "../components/chat/ChattingHeader";
+import BambooModal from "../components/common/BambooModal";
 
 const ExchangeTransactionPage = () => {
   const params = useParams();
@@ -20,7 +20,7 @@ const ExchangeTransactionPage = () => {
   const productId = params.productId;
   const [product, setProduct] = useState(null);
   const [type, setType] = useState(null);
-  const exchangeDoc = db.collection('exchange').doc(productId);
+  const exchangeDoc = db.collection("exchange").doc(productId);
 
   //모달 띄우기
   const [showBambooModal, setShowBambooModal] = useState(false);
@@ -35,12 +35,12 @@ const ExchangeTransactionPage = () => {
         setProduct({ ...data, id: snapshot.id });
       });
     } catch (err) {
-      console.log('fetchProduct err: ', err);
+      console.log("fetchProduct err: ", err);
     }
   };
 
   const onBtnClick = async () => {
-    if (!window.confirm('교환을 완료하시겠습니까?')) {
+    if (!window.confirm("교환을 완료하시겠습니까?")) {
       return;
     }
     try {
@@ -50,7 +50,7 @@ const ExchangeTransactionPage = () => {
       setType(2);
       fetchProduct();
     } catch (err) {
-      console.log('onBtnClick error: ', err);
+      console.log("onBtnClick error: ", err);
     }
   };
 
@@ -82,7 +82,7 @@ const ExchangeTransactionPage = () => {
           product={product}
           btnText="교환 완료하기"
           onBtnClick={onBtnClick}
-          type={2}
+          disabled={product.isComplete}
         >
           <Tag
             label="거래방법"

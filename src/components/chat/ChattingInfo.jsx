@@ -1,30 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { colors } from '../../common/color';
-import useUser from '../../hooks/useUser';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { colors } from "../../common/color";
+import useUser from "../../hooks/useUser";
 
-const ChattingInfo = ({ product, btnText, onBtnClick, children, type }) => {
+const ChattingInfo = ({ product, btnText, onBtnClick, children, disabled }) => {
   const user = useUser();
-  const { images, info, uid, isComplete } = product;
-  const [disabled, setDisabled] = useState(isComplete);
-
-  const handleBtn = () => {
-    onBtnClick();
-    setDisabled(true); // 버튼 비활성화
-  };
+  const { images, info, uid } = product;
 
   return (
     <Container>
       <ProductImage src={images[0]} />
 
-      {type === 2 && btnText && (
-        <Btn onClick={handleBtn} disabled={disabled}>
-          {btnText}
-        </Btn>
-      )}
-
-      {type !== 2 && user && user.uid === uid && btnText && (
-        <Btn onClick={handleBtn} disabled={disabled}>
+      {user && user.uid === uid && btnText && (
+        <Btn onClick={onBtnClick} disabled={disabled}>
           {btnText}
         </Btn>
       )}
@@ -99,6 +87,7 @@ const InfoLabel = styled.p`
 
 const InfoText = styled.p`
   width: 100%;
-  white-space: normal;
+  // white-space: normal;
   word-wrap: break-word;
+  white-space: pre-wrap;
 `;
