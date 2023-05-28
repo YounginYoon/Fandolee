@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
-import { colors } from "../../common/color";
-import Bamboo from "../common/Bamboo";
-import useUser from "../../hooks/useUser";
-import { useNavigate, useParams } from "react-router-dom";
-import useOwner from "../../hooks/useOwner";
-import Loading from "../common/Loading";
+import { colors } from '../../common/color';
+import Bamboo from '../common/Bamboo';
+import useUser from '../../hooks/useUser';
+import { useNavigate, useParams } from 'react-router-dom';
+import useOwner from '../../hooks/useOwner';
+import Loading from '../common/Loading';
 
 const UserHeader = ({ owner, profileImage, isAdmin }) => {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const UserHeader = ({ owner, profileImage, isAdmin }) => {
             ) : null}
           </NicknameDiv>
 
-          <Bamboo bamboo={8.5} />
+          <Bamboo user={owner} />
         </InfoDiv>
       </Inner>
     </Container>

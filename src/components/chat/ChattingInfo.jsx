@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { colors } from "../../common/color";
-import useUser from "../../hooks/useUser";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { colors } from '../../common/color';
+import useUser from '../../hooks/useUser';
 
-const ChattingInfo = ({ product, btnText, onBtnClick, children }) => {
+const ChattingInfo = ({ product, btnText, onBtnClick, children, type }) => {
   const user = useUser();
   const { images, info, uid, isComplete } = product;
   const [disabled, setDisabled] = useState(isComplete);
@@ -17,7 +17,13 @@ const ChattingInfo = ({ product, btnText, onBtnClick, children }) => {
     <Container>
       <ProductImage src={images[0]} />
 
-      {user && user.uid === uid && btnText && (
+      {type === 2 && btnText && (
+        <Btn onClick={handleBtn} disabled={disabled}>
+          {btnText}
+        </Btn>
+      )}
+
+      {type !== 2 && user && user.uid === uid && btnText && (
         <Btn onClick={handleBtn} disabled={disabled}>
           {btnText}
         </Btn>

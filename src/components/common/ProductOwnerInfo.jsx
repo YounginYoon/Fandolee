@@ -1,15 +1,15 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React from 'react';
+import { useState, useEffect } from 'react';
 
-import { colors } from "../../common/color";
-import styled from "styled-components";
-import { doc, getDoc } from "firebase/firestore";
-import { db, storage } from "../../config/firebase";
-import { getDownloadURL, ref } from "firebase/storage";
-import Bamboo from "./Bamboo";
-import useOwner from "../../hooks/useOwner";
-import Loading from "./Loading";
-import { useNavigate } from "react-router-dom";
+import { colors } from '../../common/color';
+import styled from 'styled-components';
+import { doc, getDoc } from 'firebase/firestore';
+import { db, storage } from '../../config/firebase';
+import { getDownloadURL, ref } from 'firebase/storage';
+import Bamboo from './Bamboo';
+import useOwner from '../../hooks/useOwner';
+import Loading from './Loading';
+import { useNavigate } from 'react-router-dom';
 
 const ProductOwnerInfo = ({ uid }) => {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const ProductOwnerInfo = ({ uid }) => {
 
       <NickName>{owner.nickName}</NickName>
 
-      <Bamboo bamboo={8.5} />
+      <Bamboo user={owner} />
     </Container>
   );
 };

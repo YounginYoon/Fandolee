@@ -12,9 +12,11 @@ import useUser from '../hooks/useUser';
 import { timestampToDateFormat } from '../common/date';
 import { moneyFormat } from '../common/money';
 import ChattingHeader from '../components/chat/ChattingHeader';
+import BambooModal from '../components/common/BambooModal';
 
 const AuctionTransactionPage = () => {
   const params = useParams();
+  const user = useUser();
   const productId = params.id;
   const [product, setProduct] = useState(null);
   const [type, setType] = useState(null);
@@ -22,6 +24,9 @@ const AuctionTransactionPage = () => {
   // 낙찰자
   const [bidder, setBidder] = useState('');
   const productDoc = db.collection('product').doc(productId);
+  //모달 띄우기
+  const [showBambooModal, setShowBambooModal] = useState(false);
+  const [complete, setComplete] = useState(0);
 
   const fetchProduct = async () => {
     try {
@@ -44,6 +49,7 @@ const AuctionTransactionPage = () => {
     }
     try {
       await productDoc.update({ completeTransaction: 1 });
+      setComplete(1);
       fetchProduct();
     } catch (err) {
       console.log('completeTransaction err: ', err);
@@ -58,6 +64,11 @@ const AuctionTransactionPage = () => {
   useEffect(() => {
     if (product) {
       fetchProduct();
+      if (complete) {
+        setShowBambooModal(true);
+      } else {
+        setShowBambooModal(false);
+      }
     }
   }, [product]);
 
@@ -70,7 +81,11 @@ const AuctionTransactionPage = () => {
       <ChattingHeader product={product} />
       <div style={{ display: 'flex', flexDirection: 'row', padding: '20px' }}>
         <ChattingInfo product={product}>
-          <button onClick={completeTransaction}>거래 완료하기</button>
+          {product.completeTransaction !== 1 ? (
+            <button onClick={completeTransaction}>거래 완료하기</button>
+          ) : (
+            <></>
+          )}
           <Tag label="낙찰자" text={bidder} textColor={colors.COLOR_MAIN} />
           <Tag
             label="낙찰일"
@@ -83,9 +98,16 @@ const AuctionTransactionPage = () => {
             textColor={colors.COLOR_MAIN}
           />
         </ChattingInfo>
+        {showBambooModal && product.bidder === user.uid && (
+          <BambooModal product={product} />
+        )}
         <div>
           {type !== null && ( // type이 null이 아닐 때 렌더링
-            <TransactionChat productId={productId} type={type} />
+            <TransactionChat
+              productId={productId}
+              type={type}
+              product={product}
+            />
           )}
         </div>
       </div>

@@ -10,6 +10,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { ref, getDownloadURL } from 'firebase/storage';
 
 import Bamboo from '../profile/Bamboo';
+import useOwner from '../../hooks/useOwner';
 
 const ChatProductHeader = ({ productData }) => {
   const [product, setProduct] = useState('');

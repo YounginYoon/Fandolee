@@ -50,7 +50,7 @@ const ChattingHeader = ({ product }) => {
 
           <OwnerWrapper>
             <Nickname>{owner.nickName}</Nickname>
-            <Bamboo size="S" bamboo={8.5} />
+            <Bamboo size="S" user={owner} />
           </OwnerWrapper>
         </OwnerBox>
       </Inner>

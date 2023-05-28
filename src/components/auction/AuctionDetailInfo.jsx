@@ -14,7 +14,7 @@ import GreenLine from '../common/GreenLine';
 import { useState } from 'react';
 import Tag from '../common/Tag';
 import { remainDate, timestampToDateFormat } from '../../common/date';
-import { db } from '../../config/firebase';
+import { db, realTimeDatabase } from '../../config/firebase';
 import useUser from '../../hooks/useUser';
 import UserHeart from '../user/UserHeart';
 
@@ -53,8 +53,10 @@ const AuctionDetailInfo = ({ product }) => {
 
     try {
       const productDB = db.collection('product');
+      const chatRef = realTimeDatabase.ref(`biddingChatRoom/${product.id}`);
 
       await productDB.doc(id).delete();
+      await chatRef.remove();
 
       navigate(-1);
     } catch (err) {

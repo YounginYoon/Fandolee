@@ -8,20 +8,18 @@ import useProduct from '../../hooks/useProduct';
 import Loading from '../common/Loading';
 import { colors } from '../../common/color';
 import { moneyFormat } from '../../common/money';
+import { db } from '../../config/firebase';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
-const AuctionModal = ({ product }) => {
+const BambooModal = ({ product }) => {
   const navigate = useNavigate();
   const productId = product.id;
   //모달 상태
   const [isModalOpen, setIsModalOpen] = useState(false);
-  //낙찰자
-  const [owner, profileImage] = useOwner(product.bidder);
-
-  // 채팅하기 버튼 클릭시 거래채팅으로 이동
-  const goTransactionPage = () => {
-    navigate(`/transaction/auction/${productId}`);
-    closeModal();
-  };
+  //판매자
+  const [owner, profileImage] = useOwner(product.uid);
+  //밤부 점수 select
+  const [select, setSelect] = useState(0);
 
   // 모달 open and close
   const openModal = () => {
@@ -33,9 +31,29 @@ const AuctionModal = ({ product }) => {
   };
   ////
 
+  const handleSelect = (e) => {
+    setSelect(e.target.value);
+  };
+
+  const updateBamboo = async () => {
+    const bambooRef = doc(db, 'bamboo', product.uid);
+    const docSnap = await getDoc(bambooRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      const count = data.count + 1;
+      const score = data.score + parseInt(select);
+      await updateDoc(bambooRef, { score: score, count: count });
+    } else {
+      const input = { score: parseInt(select), count: 1 };
+      await setDoc(bambooRef, input);
+    }
+    await alert('거래가 완료되었습니다!');
+    navigate('/');
+    closeModal();
+  };
+
   useEffect(() => {
     setIsModalOpen(true);
-    //console.log(product);
   }, []);
 
   if (!product) {
@@ -61,25 +79,37 @@ const AuctionModal = ({ product }) => {
       }}
     >
       <Container>
-        <Image src={product.images[0]} />
-        <Title>{product.title}</Title>
-        <InfoText>낙찰이 완료되었습니다!</InfoText>
-
+        <Image src={profileImage} />
+        {owner ? (
+          <InfoText>{owner.nickName}님과의 거래는 어떠셨나요?</InfoText>
+        ) : (
+          <></>
+        )}
+        <Text>리뷰 남기기</Text>
         <TextBox>
-          <Label>낙찰 금액</Label>
-          <Text>{moneyFormat(product.biddingPrice)} 원</Text>
+          <Label>점수</Label>
+          <select className="scoring" onChange={handleSelect} value={select}>
+            <option value={0}>0</option>
+            <option value={1}>1</option>
+            <option value={2}>2</option>
+            <option value={3}>3</option>
+            <option value={4}>4</option>
+            <option value={5}>5</option>
+            <option value={6}>6</option>
+            <option value={7}>7</option>
+            <option value={8}>8</option>
+            <option value={9}>9</option>
+            <option value={10}>10</option>
+          </select>
+          <Text> / 10</Text>
         </TextBox>
-        <TextBox>
-          <Label>낙찰자</Label>
-          <Text>{owner ? owner.nickName : '없음'}</Text>
-        </TextBox>
-
+        <Text>{select}</Text>
         <BtnDiv>
           <Btn bgColor={colors.COLOR_GRAY_BACKGROUND} onClick={closeModal}>
             닫기
           </Btn>
-          <Btn bgColor={colors.COLOR_MAIN} onClick={goTransactionPage}>
-            거래 채팅
+          <Btn bgColor={colors.COLOR_MAIN} onClick={updateBamboo}>
+            거래 확정하기
           </Btn>
         </BtnDiv>
       </Container>
@@ -87,7 +117,7 @@ const AuctionModal = ({ product }) => {
   );
 };
 
-export default AuctionModal;
+export default BambooModal;
 
 const Container = styled.div`
   // background-color: orange;
