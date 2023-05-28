@@ -67,6 +67,7 @@ const DetailInfo = styled.p`
   margin-top: 40px;
   line-height: 32px;
   text-align: center;
+  white-space: pre-wrap;
 `;
 
 const ProductImage = styled.img`

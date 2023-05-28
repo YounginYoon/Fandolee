@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { colors } from '../common/color';
-import TransactionChat from '../components/chat/TransactionChat';
-import { useParams } from 'react-router-dom';
-import useProduct from '../hooks/useProduct';
-import { db } from '../config/firebase';
-import ChattingInfo from '../components/chat/ChattingInfo';
-import Tag from '../components/common/Tag';
-import Loading from '../components/common/Loading';
-import useUser from '../hooks/useUser';
-import { timestampToDateFormat } from '../common/date';
-import { moneyFormat } from '../common/money';
-import ChattingHeader from '../components/chat/ChattingHeader';
-import BambooModal from '../components/common/BambooModal';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { colors } from "../common/color";
+import TransactionChat from "../components/chat/TransactionChat";
+import { useParams } from "react-router-dom";
+import useProduct from "../hooks/useProduct";
+import { db } from "../config/firebase";
+import ChattingInfo from "../components/chat/ChattingInfo";
+import Tag from "../components/common/Tag";
+import Loading from "../components/common/Loading";
+import useUser from "../hooks/useUser";
+import { timestampToDateFormat } from "../common/date";
+import { moneyFormat } from "../common/money";
+import ChattingHeader from "../components/chat/ChattingHeader";
+import BambooModal from "../components/common/BambooModal";
 
 const AuctionTransactionPage = () => {
   const params = useParams();
@@ -22,8 +22,8 @@ const AuctionTransactionPage = () => {
   const [type, setType] = useState(null);
 
   // 낙찰자
-  const [bidder, setBidder] = useState('');
-  const productDoc = db.collection('product').doc(productId);
+  const [bidder, setBidder] = useState("");
+  const productDoc = db.collection("product").doc(productId);
   //모달 띄우기
   const [showBambooModal, setShowBambooModal] = useState(false);
   const [complete, setComplete] = useState(0);
@@ -33,18 +33,18 @@ const AuctionTransactionPage = () => {
       setType(1);
       productDoc.onSnapshot(async (snapshot) => {
         const data = snapshot.data();
-        const findBidder = await db.collection('users').doc(data.bidder).get();
+        const findBidder = await db.collection("users").doc(data.bidder).get();
         const getBidder = findBidder.data();
         setProduct({ ...data, id: snapshot.id });
         setBidder(getBidder.nickName);
       });
     } catch (err) {
-      console.log('fetchProduct err: ', err);
+      console.log("fetchProduct err: ", err);
     }
   };
 
   const completeTransaction = async () => {
-    if (!window.confirm('거래를 확정하시겠습니까?')) {
+    if (!window.confirm("거래를 확정하시겠습니까?")) {
       return;
     }
     try {
@@ -52,7 +52,7 @@ const AuctionTransactionPage = () => {
       setComplete(1);
       fetchProduct();
     } catch (err) {
-      console.log('completeTransaction err: ', err);
+      console.log("completeTransaction err: ", err);
     }
   };
 
@@ -77,15 +77,16 @@ const AuctionTransactionPage = () => {
   }
 
   return (
-    <div>
+    <>
       <ChattingHeader product={product} />
-      <div style={{ display: 'flex', flexDirection: 'row', padding: '20px' }}>
-        <ChattingInfo product={product}>
-          {product.completeTransaction !== 1 ? (
-            <button onClick={completeTransaction}>거래 완료하기</button>
-          ) : (
-            <></>
-          )}
+
+      <Wrapper>
+        <ChattingInfo
+          product={product}
+          btnText={"거래 완료하기"}
+          onBtnClick={completeTransaction}
+          disabled={product.completeTransaction}
+        >
           <Tag label="낙찰자" text={bidder} textColor={colors.COLOR_MAIN} />
           <Tag
             label="낙찰일"
@@ -101,6 +102,7 @@ const AuctionTransactionPage = () => {
         {showBambooModal && product.bidder === user.uid && (
           <BambooModal product={product} />
         )}
+
         <div>
           {type !== null && ( // type이 null이 아닐 때 렌더링
             <TransactionChat
@@ -110,9 +112,15 @@ const AuctionTransactionPage = () => {
             />
           )}
         </div>
-      </div>
-    </div>
+      </Wrapper>
+    </>
   );
 };
 
 export default AuctionTransactionPage;
+
+const Wrapper = styled.div`
+  margin: 50px auto 300px;
+  width: max-content;
+  display: flex;
+`;

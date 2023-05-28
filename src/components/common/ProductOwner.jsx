@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { colors } from "../../common/color";
-import { doc, getDoc } from "firebase/firestore";
-import { ref, getDownloadURL } from "firebase/storage";
-import { db, storage } from "../../config/firebase";
 import useOwner from "../../hooks/useOwner";
-import Loading from "./Loading";
 import { useNavigate } from "react-router-dom";
 
 const ProductOwner = ({ uid }) => {
@@ -44,6 +40,7 @@ const ProfileImage = styled.img`
   height: 30px;
   border-radius: 50%;
   cursor: pointer;
+  object-fit: cover;
 `;
 
 const Ninckname = styled.p`
