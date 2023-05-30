@@ -7,7 +7,7 @@ import { faHeart as faHeartOutlined } from "@fortawesome/free-regular-svg-icons"
 
 import {
   useIsLike,
-  useLike,
+  useLikeExchange,
   Like2,
   plusProductLike,
   miusProductLike,
@@ -19,7 +19,7 @@ import { db } from "../../config/firebase";
 
 const UserHeartExchange = ({ product, onClick = null }) => {
   const user = useUser();
-  let arrayDataHook = useLike(user);
+  let arrayDataHook = useLikeExchange(user);
 
   const isLike = useIsLike(product.id, arrayDataHook);
   const [heart, setHeart] = useState(false);
