@@ -128,3 +128,4 @@ export const miusProductLike = async (productId) => {
 
   if (docRef) await docRef.update({ likes: fieldvalue.increment(-1) });
 };
+

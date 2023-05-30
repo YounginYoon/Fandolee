@@ -31,7 +31,7 @@ export const AddLikeDoc = async (userId) => {
 };
 
 //user의 like products 데이터 읽기
-export const useLike = (user) => {
+export const useLikeExchange = (user) => {
   const [arrayData, setArrayData] = useState([]);
 
   const getLike = async () => {
@@ -81,7 +81,7 @@ export const Like2 = async (user) => {
 
 // removeLike 데이터 삭제
 export const useRemoveLike = async (userId, productId) => {
-  const arrayData = useLike(userId);
+  const arrayData = useLikeExchange(userId);
   const index = arrayData.indexOf(productId);
   const productDB = db.collection("likes");
 
