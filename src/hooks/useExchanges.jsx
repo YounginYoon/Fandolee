@@ -12,10 +12,9 @@ const useProducts = (arrayId) => {
     try{
       const fetchedProducts = [];
       for(let i=0; i<arrayId.length; i++){
-            
-            const docRef = doc(db, "product", arrayId[i]);
+           
+            const docRef = doc(db, "exchange", arrayId[i]);
             const docSnap = await getDoc(docRef);
-            
             if (!docSnap.exists()){
               ;
             }
