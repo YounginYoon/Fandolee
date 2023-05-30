@@ -44,9 +44,7 @@ const ExchangePostPage = () => {
   };
   const onPost = async () => {
     try {
-      setLoading(true);
-      //console.log({ inputs, idol, category });
-      const productDB = db.collection("exchange");
+      
 
       if (images.length === 0) {
         alert("이미지를 선택해주세요.");
@@ -64,6 +62,9 @@ const ExchangePostPage = () => {
         alert("모든 정보를 입력해주세요.");
         return;
       }
+      setLoading(true);
+      //console.log({ inputs, idol, category });
+      const productDB = db.collection("exchange");
 
       const timeStamp = moment().format("YYYY-MM-DD hh:mm:ss");
       const imageUrls = [];
