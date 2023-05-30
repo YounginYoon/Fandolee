@@ -1,19 +1,19 @@
-import React, { useEffect } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import styled, { css } from "styled-components";
-import ReactModal from "react-modal";
-import { useState } from "react";
-import useOwner from "../../hooks/useOwner";
-import useProduct from "../../hooks/useProduct";
-import Loading from "../common/Loading";
-import { colors } from "../../common/color";
-import { moneyFormat } from "../../common/money";
-import { db } from "../../config/firebase";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import React, { useEffect } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import styled, { css } from 'styled-components';
+import ReactModal from 'react-modal';
+import { useState } from 'react';
+import useOwner from '../../hooks/useOwner';
+import useProduct from '../../hooks/useProduct';
+import Loading from '../common/Loading';
+import { colors } from '../../common/color';
+import { moneyFormat } from '../../common/money';
+import { db } from '../../config/firebase';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 const scores = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-const BambooModal = ({ product }) => {
+const BambooModal = ({ product, type }) => {
   const navigate = useNavigate();
   const productId = product.id;
   //모달 상태
@@ -34,19 +34,30 @@ const BambooModal = ({ product }) => {
   ////
 
   const updateBamboo = async () => {
-    const bambooRef = doc(db, "bamboo", product.uid);
+    const bambooRef = doc(db, 'bamboo', product.uid);
     const docSnap = await getDoc(bambooRef);
-    if (docSnap.exists()) {
+
+    //product / exchange collection에 업데이트하기 위한 ref
+    const dbRef =
+      type === 'auction'
+        ? doc(db, 'product', product.id)
+        : type === 'exchange'
+        ? doc(db, 'exchange', product.id)
+        : null;
+    const productDoc = await getDoc(dbRef);
+
+    if (docSnap.exists() && productDoc.exists()) {
       const data = docSnap.data();
       const count = data.count + 1;
       const score = data.score + parseInt(select);
       await updateDoc(bambooRef, { score: score, count: count });
+      await updateDoc(dbRef, { bambooScore: parseInt(select) }); // product / exchange collection에 업데이트
     } else {
       const input = { score: parseInt(select), count: 1 };
       await setDoc(bambooRef, input);
     }
-    await alert("거래가 완료되었습니다!");
-    navigate("/");
+    await alert('거래가 완료되었습니다!');
+    navigate('/');
     closeModal();
   };
 
@@ -62,17 +73,17 @@ const BambooModal = ({ product }) => {
     <ReactModal
       isOpen={isModalOpen}
       onRequestClose={closeModal}
-      appElement={document.getElementById("root")}
+      appElement={document.getElementById('root')}
       style={{
         overlay: {
-          backgroundColor: "rgba(0, 0, 0, 0.35)",
+          backgroundColor: 'rgba(0, 0, 0, 0.35)',
           zIndex: 9999,
         },
         content: {
-          margin: "auto",
-          width: "max-content",
-          height: "max-content",
-          padding: "25px",
+          margin: 'auto',
+          width: 'max-content',
+          height: 'max-content',
+          padding: '25px',
         },
       }}
     >
@@ -92,7 +103,7 @@ const BambooModal = ({ product }) => {
 
         <ScoreDiv>
           {scores.map((score) => (
-            <ScoreBox>
+            <ScoreBox key={score}>
               <ScoreNum>{score}</ScoreNum>
 
               <ScoreCircleDiv>
