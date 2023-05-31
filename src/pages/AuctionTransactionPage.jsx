@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { colors } from "../common/color";
-import TransactionChat from "../components/chat/TransactionChat";
-import { useParams } from "react-router-dom";
-import useProduct from "../hooks/useProduct";
-import { db } from "../config/firebase";
-import ChattingInfo from "../components/chat/ChattingInfo";
-import Tag from "../components/common/Tag";
-import Loading from "../components/common/Loading";
-import useUser from "../hooks/useUser";
-import { timestampToDateFormat } from "../common/date";
-import { moneyFormat } from "../common/money";
-import ChattingHeader from "../components/chat/ChattingHeader";
-import BambooModal from "../components/common/BambooModal";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { colors } from '../common/color';
+import TransactionChat from '../components/chat/TransactionChat';
+import { useParams } from 'react-router-dom';
+import useProduct from '../hooks/useProduct';
+import { db } from '../config/firebase';
+import ChattingInfo from '../components/chat/ChattingInfo';
+import Tag from '../components/common/Tag';
+import Loading from '../components/common/Loading';
+import useUser from '../hooks/useUser';
+import { timestampToDateFormat } from '../common/date';
+import { moneyFormat } from '../common/money';
+import ChattingHeader from '../components/chat/ChattingHeader';
+import BambooModal from '../components/common/BambooModal';
 
 const AuctionTransactionPage = () => {
   const params = useParams();
@@ -22,37 +22,43 @@ const AuctionTransactionPage = () => {
   const [type, setType] = useState(null);
 
   // 낙찰자
-  const [bidder, setBidder] = useState("");
-  const productDoc = db.collection("product").doc(productId);
+  const [bidder, setBidder] = useState('');
+  const productDoc = db.collection('product').doc(productId);
   //모달 띄우기
   const [showBambooModal, setShowBambooModal] = useState(false);
-  const [complete, setComplete] = useState(0);
 
   const fetchProduct = async () => {
     try {
       setType(1);
       productDoc.onSnapshot(async (snapshot) => {
         const data = snapshot.data();
-        const findBidder = await db.collection("users").doc(data.bidder).get();
+        const findBidder = await db.collection('users').doc(data.bidder).get();
         const getBidder = findBidder.data();
         setProduct({ ...data, id: snapshot.id });
         setBidder(getBidder.nickName);
+        checkComplete();
       });
     } catch (err) {
-      console.log("fetchProduct err: ", err);
+      console.log('fetchProduct err: ', err);
+    }
+  };
+
+  const checkComplete = () => {
+    if (product && product.completeTransaction === 1 && !product.bambooScore) {
+      if (product.bidder == user.uid) setShowBambooModal(true);
+      else setShowBambooModal(false);
     }
   };
 
   const completeTransaction = async () => {
-    if (!window.confirm("거래를 확정하시겠습니까?")) {
+    if (!window.confirm('거래를 확정하시겠습니까?')) {
       return;
     }
     try {
       await productDoc.update({ completeTransaction: 1 });
-      setComplete(1);
       fetchProduct();
     } catch (err) {
-      console.log("completeTransaction err: ", err);
+      console.log('completeTransaction err: ', err);
     }
   };
 
@@ -64,11 +70,7 @@ const AuctionTransactionPage = () => {
   useEffect(() => {
     if (product) {
       fetchProduct();
-      if (complete) {
-        setShowBambooModal(true);
-      } else {
-        setShowBambooModal(false);
-      }
+      checkComplete();
     }
   }, [product]);
 
@@ -83,7 +85,7 @@ const AuctionTransactionPage = () => {
       <Wrapper>
         <ChattingInfo
           product={product}
-          btnText={"거래 완료하기"}
+          btnText={'거래 완료하기'}
           onBtnClick={completeTransaction}
           disabled={product.completeTransaction}
         >
@@ -100,7 +102,7 @@ const AuctionTransactionPage = () => {
           />
         </ChattingInfo>
         {showBambooModal && product.bidder === user.uid && (
-          <BambooModal product={product} />
+          <BambooModal product={product} type={'auction'} />
         )}
 
         <div>
