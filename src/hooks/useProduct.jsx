@@ -11,7 +11,7 @@ const useProduct = (id) => {
     try {
       const docRef = doc(db, "product", id);
       const docSnap = await getDoc(docRef);
-      console.log(docSnap);
+      // console.log(docSnap);
       if (docSnap.exists()) {
         const data = { ...docSnap.data(), id: docSnap.id };
         setProduct(data);

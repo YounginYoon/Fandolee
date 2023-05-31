@@ -4,7 +4,7 @@ import Loading from "../../common/Loading";
 import styled from "styled-components";
 
 import AuctionChattingBox from "./AuctionChattingBox";
-import EmptyChatList from "./EmptyChatList";
+import EmptyList from "../EmptyList";
 
 const AuctionChattingList = ({ user }) => {
   const [auctionChats, setAuctionChats] = useState(null);
@@ -52,7 +52,7 @@ const AuctionChattingList = ({ user }) => {
   return (
     <>
       {auctionChats.length === 0 ? (
-        <EmptyChatList />
+        <EmptyList text="채팅 내역이 없습니다." />
       ) : (
         auctionChats.map((chat) => (
           <AuctionChattingBox key={chat.id} id={chat.id} />

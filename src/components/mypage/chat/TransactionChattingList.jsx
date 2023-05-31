@@ -3,7 +3,7 @@ import { db, realTimeDatabase } from "../../../config/firebase";
 import Loading from "../../common/Loading";
 import styled from "styled-components";
 import TransactionChattingBox from "./TransactionChattingBox";
-import EmptyChatList from "./EmptyChatList";
+import EmptyList from "../EmptyList";
 
 const TransactionChattingList = ({ user }) => {
   // 낙찰 후 거래 채팅의 상품 id 담음
@@ -41,7 +41,7 @@ const TransactionChattingList = ({ user }) => {
   return (
     <>
       {auctionTransaction.length === 0 ? (
-        <EmptyChatList />
+        <EmptyList text="채팅 내역이 없습니다." />
       ) : (
         auctionTransaction.map((productId) => (
           <TransactionChattingBox key={productId} productId={productId} />
