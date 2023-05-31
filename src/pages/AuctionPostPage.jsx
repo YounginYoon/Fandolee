@@ -32,9 +32,10 @@ const AuctionPostPage = () => {
     info: "",
     title: "",
     likes: 0,
+    completeTransaction:0,
     endDate: addDays(new Date(), 1),
   });
-  const { title, info, likes, endDate, minPrice, maxPrice } = inputs;
+  const { title, info, likes, completeTransaction, endDate, minPrice, maxPrice } = inputs;
   const [idol, setIdol] = useState("");
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(false);
@@ -98,6 +99,7 @@ const AuctionPostPage = () => {
         category,
         title,
         likes,
+        completeTransaction,
         date: new Date(),
         endDate: endDate,
         isComplete: 0,
