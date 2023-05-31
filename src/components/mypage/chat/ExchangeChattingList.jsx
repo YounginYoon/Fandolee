@@ -4,7 +4,7 @@ import Loading from "../../common/Loading";
 import styled from "styled-components";
 import ExchangeChattingBox from "./ExchangeChattingBox";
 import useExchange from "../../../hooks/useExchange";
-import EmptyChatList from "./EmptyChatList";
+import EmptyList from "../EmptyList";
 
 const ExchangeChattingList = ({ user }) => {
   // 사용자가 참여한 교환 상품의 id 담음
@@ -44,7 +44,7 @@ const ExchangeChattingList = ({ user }) => {
   return (
     <>
       {exchangeChats.length === 0 ? (
-        <EmptyChatList />
+        <EmptyList text="채팅 내역이 없습니다." />
       ) : (
         exchangeChats.map((productId) => {
           return <ExchangeChattingBox key={productId} productId={productId} />;
