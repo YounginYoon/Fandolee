@@ -6,29 +6,30 @@ import useUser from "../../../hooks/useUser";
 import ProductOwner from "../../common/ProductOwner";
 import ProductTitle from "../../common/ProductTitle";
 import Tag from "../../common/Tag";
-
-const TransactionBox = () => {
+import { moneyFormat } from "../../../common/money";
+import moment from "moment";
+const TransactionBox = (transactions) => {
   // ProductOwner 를 위한 임시
   const user = useUser();
 
   const navigate = useNavigate();
   const goTransactionDetail = () => {
-    navigate(`./1`);
+    navigate(`./${transactions.transactions.productId}`);
   };
+  const formatted = moment(transactions.transactions.transactionDate.toDate()).format('L');
   return (
     <Container onClick={goTransactionDetail}>
-      <ProductImg src={"/img/mon1.jpeg"} />
+      <ProductImg src={transactions.transactions.img[0]} />
 
       <Wrapper>
         <OwnerWrapper>
           <ProductOwner uid={user.uid} />
-          <Date>2023.06.20</Date>
+          <Date>{formatted}</Date>
         </OwnerWrapper>
 
-        <ProductTitle title={"몬스타엑스"} />
-
-        <Tag label="거래 방법" text="교환" />
-        <Tag label="거래 가격" text="15000원" />
+        <ProductTitle title={transactions.transactions.title} />
+        <Tag label="거래 방법" text="경매" />
+        <Tag label="거래 가격" text={moneyFormat(transactions.transactions.price)} />
       </Wrapper>
     </Container>
   );
@@ -72,3 +73,5 @@ const Date = styled.p`
   color: ${colors.COLOR_GRAY_TEXT};
   width: max-content;
 `;
+
+const Money = styled.span``;
