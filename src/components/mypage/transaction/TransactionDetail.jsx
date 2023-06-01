@@ -2,13 +2,38 @@ import React from "react";
 import styled from "styled-components";
 import { colors } from "../../../common/color";
 import { useNavigate } from "react-router-dom";
-
+import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import TransactionInfoBox from "./TransactionInfoBox";
-
+import useProduct from "../../../hooks/useProduct";
+import moment from "moment";
+import Loading from "../../common/Loading";
+import nickName from "../../../hooks/nickName";
+import useUser from "../../../hooks/useUser";
 const TransactionDetail = () => {
   const navigate = useNavigate();
+
+  const params = useParams();
+  const user = useUser();
+  const id = params.id;
+
+  const product = useProduct(id);
+  let seller = "";
+  
+
+  if (!product) {
+    return <Loading />;
+  }
+  const setData = async () => {
+    seller = await nickName(product.uid);
+    console.log(seller);
+  };
+  if(product){
+    setData();
+  }
+  
+  
 
   return (
     <Container>
@@ -18,15 +43,15 @@ const TransactionDetail = () => {
       </IconDiv>
 
       <InfoDiv>
-        <TransactionInfoBox label="굿즈" image={"/img/mon1.jpeg"} />
+        <TransactionInfoBox label="굿즈" image={product.images[0]} />
 
-        <TransactionInfoBox label="아이돌" text="몬스타엑스" />
-        <TransactionInfoBox label="판매자" text="김서강" />
-        <TransactionInfoBox label="거래 방법" text="경매" />
-        <TransactionInfoBox label="낙찰 금액" text="30,000 원" />
-        <TransactionInfoBox label="낙찰자" text="이서강" />
-        <TransactionInfoBox label="낙찰일" text="2023-06-20" />
-        <TransactionInfoBox label="거래일" text="2023-06-20" />
+        <TransactionInfoBox label="아이돌" text={product.idol} />
+        <TransactionInfoBox label="판매자" text={seller} />
+        {/* <TransactionInfoBox label="거래 방법" text={product} /> */}
+        <TransactionInfoBox label="낙찰 금액" text={product.biddingPrice} />
+        <TransactionInfoBox label="낙찰자" text={user.displayName} />
+        <TransactionInfoBox label="낙찰일" text={moment(product.biddingDate.toDate()).format('L')} />
+        {/* <TransactionInfoBox label="거래일" text="2023-06-20" /> */}
       </InfoDiv>
     </Container>
   );

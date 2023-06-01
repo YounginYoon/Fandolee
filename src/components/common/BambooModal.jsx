@@ -36,7 +36,8 @@ const BambooModal = ({ product, type }) => {
   const updateBamboo = async () => {
     const bambooRef = doc(db, 'bamboo', product.uid);
     const docSnap = await getDoc(bambooRef);
-
+    const productDB = db.collection("transactions");
+    
     //product / exchange collection에 업데이트하기 위한 ref
     const dbRef =
       type === 'auction'
@@ -46,16 +47,34 @@ const BambooModal = ({ product, type }) => {
         : null;
     const productDoc = await getDoc(dbRef);
 
+    const body={
+      productId: product.id,
+      sellerId: product.uid,
+      consumerId: product.bidder,
+      transactionDate: product.biddingDate,
+      title: product.title,
+      price: product.biddingPrice,
+      img : product.images
+    }
+
     if (docSnap.exists() && productDoc.exists()) {
       const data = docSnap.data();
       const count = data.count + 1;
       const score = data.score + parseInt(select);
       await updateDoc(bambooRef, { score: score, count: count });
       await updateDoc(dbRef, { bambooScore: parseInt(select) }); // product / exchange collection에 업데이트
+      
+      await productDB.add({
+        ...body,
+        
+      }).catch((err) => {
+        console.log("transactions upload error",err);
+      });
     } else {
       const input = { score: parseInt(select), count: 1 };
       await setDoc(bambooRef, input);
     }
+    
     await alert('거래가 완료되었습니다!');
     navigate('/');
     closeModal();
