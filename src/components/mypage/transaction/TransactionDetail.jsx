@@ -1,4 +1,4 @@
-import React from "react";
+import React , {useState} from "react";
 import styled from "styled-components";
 import { colors } from "../../../common/color";
 import { useNavigate } from "react-router-dom";
@@ -19,20 +19,27 @@ const TransactionDetail = () => {
   const id = params.id;
 
   const product = useProduct(id);
-  let seller = "";
+  
+  const [seller, setSeller] = useState("");
   
 
   if (!product) {
     return <Loading />;
   }
   const setData = async () => {
-    seller = await nickName(product.uid);
-    console.log(seller);
+    const nickname = await nickName(product.uid);
+    return nickname;
   };
-  if(product){
-    setData();
+
+  const showNickName = () =>{  
+    const seller2 = setData()
+    seller2.then((id) => {
+      setSeller(id);
+    });
   }
+  showNickName();
   
+
   
 
   return (

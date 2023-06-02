@@ -11,7 +11,7 @@ const TransactionList = () => {
   const user = useUser();
   const [filter, setFilter] = useState(filterList[0]);
   const transactionsArray = useTransactions(user.uid);
-  console.log(transactionsArray);
+  
   return (
     <Container>
       <Filter filter={filter} setFilter={setFilter} filterList={filterList} />
