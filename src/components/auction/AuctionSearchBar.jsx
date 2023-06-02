@@ -9,29 +9,40 @@ import { faPen, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../config/firebase";
 
-import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy,startAt,endAt} from "firebase/firestore";
 import useUser from "../../hooks/useUser";
+import SearchArea from "../common/SearchArea";
 
 const AuctionSearchBar = ({ setProducts }) => {
   const user = useUser();
   const [idol, setIdol] = useState("내가 찾는 아이돌");
   const [category, setCategory] = useState("굿즈 종류");
+  const [search, setSearch] = useState("");
 
   const navigate = useNavigate();
 
   const goAuctionUpPage = () => {
     navigate("/auction/post");
   };
+  const onChange = (e) => {
+    const { name, value } = e.target;
+
+    setSearch({
+      
+      [name]: value,
+    });
+  };
 
   const handleSearch = async () => {
     const productDB = collection(db, "product");
-
+    
     try {
       const q = query(
         productDB,
         where("category", "==", category),
         where("idol", "==", idol),
-        orderBy("endDate")
+        orderBy("endDate"),
+  
       );
       const ret = await getDocs(q);
       const products = ret.docs.map((doc) => ({
@@ -63,6 +74,14 @@ const AuctionSearchBar = ({ setProducts }) => {
             selected={category}
             setSelected={setCategory}
           />
+
+          {/* <SearchArea
+            label="검색"
+            value={search}
+            name="info"
+            onChange={onChange}
+            placeholder="검색어를 입력해주세요."
+          /> */}
 
           <Btn onClick={handleSearch}>
             검색하기
