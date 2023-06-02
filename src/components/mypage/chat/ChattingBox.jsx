@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { colors } from "../../../common/color";
 import ProductOwner from "../../common/ProductOwner";
 
-const ChattingBox = ({ children, uid, title, onClick }) => {
+const ChattingBox = ({ children, uid, title, onClick, dot }) => {
   const ref = useRef();
   const [height, setHeight] = useState(0);
 
@@ -15,7 +15,7 @@ const ChattingBox = ({ children, uid, title, onClick }) => {
   return (
     <Container ref={ref} height={height} onClick={onClick}>
       <Box>
-        <Dot />
+        {dot && <Dot />}
 
         <Wrapper style={{ flex: 1 }}>
           <ProductOwner uid={uid} />

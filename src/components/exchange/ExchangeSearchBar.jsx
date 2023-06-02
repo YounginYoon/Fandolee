@@ -16,6 +16,10 @@ import { db } from "../../config/firebase";
 
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import useUser from "../../hooks/useUser";
+import SearchBar from "../common/SearchBar";
+
+const height = "28px";
+const fontSize = "12px";
 
 const ExchangeSearchBar = ({ setProducts }) => {
   const user = useUser();
@@ -23,6 +27,8 @@ const ExchangeSearchBar = ({ setProducts }) => {
   const [category, setCategory] = useState("굿즈 종류");
   const [method, setMethod] = useState("교환방법");
   const [region, setRegion] = useState("지역");
+
+  const [input, setInput] = useState("");
 
   const navigate = useNavigate();
 
@@ -55,46 +61,57 @@ const ExchangeSearchBar = ({ setProducts }) => {
       <Inner>
         <Wrapper>
           <DropDownMenu
-            width="180px"
-            margin="0 10px 0 0"
+            width="150px"
+            height={height}
+            fontSize={fontSize}
+            margin="0 5px 0 0"
             list={IdolList}
             selected={idol}
             setSelected={setIdol}
           />
           <DropDownMenu
-            width="180px"
-            margin="0 10px 0 0"
+            width="150px"
+            height={height}
+            fontSize={fontSize}
+            margin="0 5px 0 0"
             list={Category}
             selected={category}
             setSelected={setCategory}
           />
           <DropDownMenu
-            width="120px"
-            margin="0 10px 0 0"
+            width="100px"
+            height={height}
+            fontSize={fontSize}
+            margin="0 5px 0 0"
             list={TransactionType}
             selected={method}
             setSelected={setMethod}
           />
           <DropDownMenu
-            width="100px"
-            margin="0 10px 0 0"
+            width="80px"
+            height={height}
+            fontSize={fontSize}
+            margin="0 5px 0 0"
             list={Region}
             selected={region}
             setSelected={setRegion}
           />
 
+          <SearchBar input={input} setInput={setInput} onClick={() => {}} />
+        </Wrapper>
+
+        <BtnWrap>
           <Btn onClick={handleSearch}>
             검색하기
             <FontAwesomeIcon icon={faSearch} style={{ paddingLeft: "7px" }} />
           </Btn>
-        </Wrapper>
 
-        {user && (
-          <Btn onClick={() => navigate("/exchange/post")}>
-            글 올리기{" "}
-            <FontAwesomeIcon icon={faPen} style={{ paddingLeft: "7px" }} />
-          </Btn>
-        )}
+          {user && (
+            <Btn onClick={() => navigate("/exchange/post")}>
+              <FontAwesomeIcon icon={faPen} />
+            </Btn>
+          )}
+        </BtnWrap>
       </Inner>
     </Container>
   );
@@ -105,7 +122,7 @@ export default ExchangeSearchBar;
 const Container = styled.div`
   width: 100%;
   background-color: ${colors.COLOR_LIGHTGREEN_BACKGROUND};
-  padding: 15px 0;
+  padding: 10px 0;
 `;
 
 const Inner = styled.div`
@@ -116,18 +133,24 @@ const Inner = styled.div`
   justify-content: space-between;
 `;
 
+const BtnWrap = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const Btn = styled.p`
   box-sizing: border-box;
   background-color: ${colors.COLOR_MAIN};
   color: white;
   font-weight: bold;
-  height: 35px;
+  height: ${height};
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 15px;
+  padding: 0 10px;
+  margin-left: 5px;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: ${fontSize};
   border: 1px solid ${colors.COLOR_MAIN};
   cursor: pointer;
 `;

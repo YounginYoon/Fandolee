@@ -19,46 +19,38 @@ const SearchBar = ({ input, setInput, onClick }) => {
   };
 
   return (
-    <Container>
-      <SearchInputDiv>
-        <SearchInput
-          placeholder="어떤 상품을 찾으시나요?"
-          value={input}
-          onChange={onChange}
-          onKeyUp={onKeyUp}
-        />
+    <SearchInputDiv>
+      <SearchInput
+        placeholder="어떤 상품을 찾으시나요?"
+        value={input}
+        onChange={onChange}
+        onKeyUp={onKeyUp}
+      />
 
-        <SearchIcon>
-          <FontAwesomeIcon icon={faSearch} />
-        </SearchIcon>
-      </SearchInputDiv>
-    </Container>
+      <SearchIcon>
+        <FontAwesomeIcon icon={faSearch} />
+      </SearchIcon>
+    </SearchInputDiv>
   );
 };
 
 export default SearchBar;
 
-const Container = styled.div`
-  width: calc((${ImageSizeTable["M"]} + 20px) * 4);
-  //   background-color: orange;
-  margin: 20px auto 0;
-  display: flex;
-  justify-content: flex-end;
-`;
-
 const SearchInputDiv = styled.div`
   width: max-content;
   position: relative;
   height: 28px;
+  margin-right: 5px;
   //   background-color: aqua;
 `;
 const SearchInput = styled.input`
   box-sizing: border-box;
   background-color: ${colors.COLOR_LIGHTGRAY_BACKGROUND};
-  width: 250px;
+  width: 220px;
   height: 100%;
   border-radius: 30px;
-  border: 2px solid ${colors.COLOR_MAIN};
+  border: 1px solid ${colors.COLOR_MAIN};
+  //   border: 1px solid ${colors.COLOR_GRAY_BORDER};
   display: flex;
   align-items: center;
   padding: 0 32px 0 15px;

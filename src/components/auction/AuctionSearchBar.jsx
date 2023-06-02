@@ -9,40 +9,44 @@ import { faPen, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../config/firebase";
 
-import { collection, query, where, getDocs, orderBy,startAt,endAt} from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  orderBy,
+  startAt,
+  endAt,
+} from "firebase/firestore";
 import useUser from "../../hooks/useUser";
 import SearchArea from "../common/SearchArea";
+import SearchBar from "../common/SearchBar";
+
+const height = "28px";
+const fontSize = "12px";
 
 const AuctionSearchBar = ({ setProducts }) => {
   const user = useUser();
   const [idol, setIdol] = useState("내가 찾는 아이돌");
   const [category, setCategory] = useState("굿즈 종류");
-  const [search, setSearch] = useState("");
+
+  const [input, setInput] = useState("");
 
   const navigate = useNavigate();
 
   const goAuctionUpPage = () => {
     navigate("/auction/post");
   };
-  const onChange = (e) => {
-    const { name, value } = e.target;
-
-    setSearch({
-      
-      [name]: value,
-    });
-  };
 
   const handleSearch = async () => {
     const productDB = collection(db, "product");
-    
+
     try {
       const q = query(
         productDB,
         where("category", "==", category),
         where("idol", "==", idol),
-        orderBy("endDate"),
-  
+        orderBy("endDate")
       );
       const ret = await getDocs(q);
       const products = ret.docs.map((doc) => ({
@@ -61,40 +65,39 @@ const AuctionSearchBar = ({ setProducts }) => {
       <Inner>
         <Wrapper>
           <DropDownMenu
-            width="200px"
-            margin="0 10px 0 0"
+            width="150px"
+            height={height}
+            fontSize={fontSize}
+            margin="0 5px 0 0"
             list={IdolList}
             selected={idol}
             setSelected={setIdol}
           />
           <DropDownMenu
-            width="200px"
-            margin="0 10px 0 0"
+            width="150px"
+            height={height}
+            fontSize={fontSize}
+            margin="0 5px 0 0"
             list={Category}
             selected={category}
             setSelected={setCategory}
           />
 
-          {/* <SearchArea
-            label="검색"
-            value={search}
-            name="info"
-            onChange={onChange}
-            placeholder="검색어를 입력해주세요."
-          /> */}
+          <SearchBar input={input} setInput={setInput} onClick={() => {}} />
+        </Wrapper>
 
+        <BtnWrap>
           <Btn onClick={handleSearch}>
             검색하기
             <FontAwesomeIcon icon={faSearch} style={{ paddingLeft: "7px" }} />
           </Btn>
-        </Wrapper>
 
-        {user && (
-          <Btn onClick={goAuctionUpPage}>
-            글 올리기{" "}
-            <FontAwesomeIcon icon={faPen} style={{ paddingLeft: "7px" }} />
-          </Btn>
-        )}
+          {user && (
+            <Btn onClick={goAuctionUpPage}>
+              <FontAwesomeIcon icon={faPen} />
+            </Btn>
+          )}
+        </BtnWrap>
       </Inner>
     </Container>
   );
@@ -105,7 +108,7 @@ export default AuctionSearchBar;
 const Container = styled.div`
   width: 100%;
   background-color: ${colors.COLOR_LIGHTGREEN_BACKGROUND};
-  padding: 15px 0;
+  padding: 10px 0;
 `;
 
 const Inner = styled.div`
@@ -116,18 +119,24 @@ const Inner = styled.div`
   justify-content: space-between;
 `;
 
+const BtnWrap = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const Btn = styled.p`
   box-sizing: border-box;
   background-color: ${colors.COLOR_MAIN};
   color: white;
   font-weight: bold;
-  height: 35px;
+  height: ${height};
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 15px;
+  padding: 0 10px;
+  margin-left: 5px;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: ${fontSize};
   border: 1px solid ${colors.COLOR_MAIN};
   cursor: pointer;
 `;
@@ -136,4 +145,5 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  // background-color: orange;
 `;

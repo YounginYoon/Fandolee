@@ -8,15 +8,8 @@ import useUser from "../hooks/useUser";
 import AuctionList from "../components/auction/AuctionList";
 import AuctionSearchBar from "../components/auction/AuctionSearchBar";
 import Loading from "../components/common/Loading";
-import { remainDate } from "../common/date";
-import SearchBar from "../components/common/SearchBar";
 
 const AuctionListPage = () => {
-  const user = useUser();
-
-  // 검색어 입력 값
-  const [input, setInput] = useState("");
-
   const [products, setProducts] = useState(null);
   //거래 데이터
 
@@ -52,8 +45,6 @@ const AuctionListPage = () => {
     <Container>
       <AuctionSearchBar setProducts={setProducts} />
 
-      <SearchBar input={input} setInput={setInput} onClick={() => {}} />
-
       <AuctionList products={products} />
     </Container>
   );
@@ -61,4 +52,6 @@ const AuctionListPage = () => {
 
 export default AuctionListPage;
 
-const Container = styled.div``;
+const Container = styled.div`
+  position: relative;
+`;
