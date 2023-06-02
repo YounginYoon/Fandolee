@@ -99,8 +99,7 @@ const UserPage = () => {
       <ListWrapper>
         {isAdmin && (
           <PostBtn onClick={goPostPage}>
-            글 올리기{" "}
-            <FontAwesomeIcon style={{ marginLeft: "5px" }} icon={faPen} />
+            <FontAwesomeIcon icon={faPen} />
           </PostBtn>
         )}
 
@@ -127,14 +126,17 @@ const ListWrapper = styled.div`
 
 const PostBtn = styled.div`
   position: absolute;
-  right: 0;
-  top: -35px;
-  padding: 0 15px;
-  width: max-content;
+  right: -45px;
+  top: 0;
+  // padding: 0 15px;
+  // width: max-content;
+  // height: 30px;
+  width: 35px;
+  height: 35px;
   font-size: 14px;
-  height: 30px;
-  // box-shadow: 3px 7px 7px 0 rgba(176, 176, 176, 0.5);
-  border-radius: 5px;
+  box-shadow: 3px 7px 7px 0 rgba(176, 176, 176, 0.5);
+  // border-radius: 5px;
+  border-radius: 50%;
   cursor: pointer;
   background-color: ${colors.COLOR_MAIN};
   color: white;

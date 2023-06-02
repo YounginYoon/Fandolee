@@ -7,8 +7,12 @@ import { db } from "../config/firebase";
 import { collection, query, getDocs, orderBy } from "firebase/firestore";
 
 import Loading from "../components/common/Loading";
+import SearchBar from "../components/common/SearchBar";
 
 const ExchangeListPage = () => {
+  // 검색어 입력 state
+  const [input, setInput] = useState("");
+
   const [products, setProducts] = useState(null);
   //exchange 데이터
 
@@ -42,6 +46,8 @@ const ExchangeListPage = () => {
   return (
     <Container>
       <ExchangeSearchBar setProducts={setProducts} />
+
+      <SearchBar input={input} setInput={setInput} onClick={() => {}} />
 
       <ExchangeList products={products} />
     </Container>

@@ -19,7 +19,13 @@ const Header = () => {
             팬도리
           </HeaderTitle>
 
-          <HeaderInput />
+          {/* <HeaderInput /> */}
+
+          <Slogun>
+            <BoldText>TAFE</BoldText>: <BoldText>T</BoldText>ransparent,{" "}
+            <BoldText>A</BoldText>nywhere, <BoldText>F</BoldText>ast and{" "}
+            <BoldText>E</BoldText>asy
+          </Slogun>
         </HeaderLeft>
 
         <HeaderBtns />
@@ -49,11 +55,22 @@ const HeaderInner = styled.div`
 
 const HeaderLeft = styled.div`
   display: flex;
-  align-items: center;
+  // align-items: center;
+  align-items: flex-end;
 `;
 const HeaderTitle = styled.p`
   font-size: 2rem;
   font-weight: bold;
   color: ${colors.COLOR_MAIN};
   cursor: pointer;
+`;
+
+const Slogun = styled.p`
+  font-size: 14px;
+  color: ${colors.COLOR_DARKGRAY_TEXT};
+  margin-left: 5px;
+`;
+const BoldText = styled.span`
+  font-weight: bold;
+  color: ${colors.COLOR_MAIN};
 `;
