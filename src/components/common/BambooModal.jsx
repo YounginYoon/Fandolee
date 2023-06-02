@@ -57,8 +57,8 @@ const BambooModal = ({ product, type }) => {
       await setDoc(bambooRef, input);
     }
     await alert('거래가 완료되었습니다!');
-    navigate('/');
     closeModal();
+    navigate('/');
   };
 
   useEffect(() => {

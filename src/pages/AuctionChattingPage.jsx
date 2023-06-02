@@ -31,14 +31,10 @@ const AuctionChattingPage = () => {
       const snapshot = await productRef.get();
       const data = snapshot.data();
       await setProduct({ ...data, id: snapshot.id });
-      checkComplete();
+      //checkComplete();
     } catch (err) {
       console.log('loadProduct err: ', err);
     }
-  };
-
-  const onLoadProduct = async () => {
-    await loadProduct();
   };
 
   const checkComplete = async () => {
@@ -106,9 +102,7 @@ const AuctionChattingPage = () => {
             textColor={colors.COLOR_MAIN}
           />
         </ChattingInfo>
-        {showAuctionModal && (
-          <AuctionModal product={product} onLoadProduct={loadProduct} />
-        )}
+        {showAuctionModal && <AuctionModal product={product} />}
         <ChattingRoom
           product={product}
           setShowAuctionModal={setShowAuctionModal}
