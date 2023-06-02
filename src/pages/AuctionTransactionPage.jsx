@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { colors } from '../common/color';
-import TransactionChat from '../components/chat/TransactionChat';
-import { useParams } from 'react-router-dom';
-import useProduct from '../hooks/useProduct';
-import { db } from '../config/firebase';
-import ChattingInfo from '../components/chat/ChattingInfo';
-import Tag from '../components/common/Tag';
-import Loading from '../components/common/Loading';
-import useUser from '../hooks/useUser';
-import { timestampToDateFormat } from '../common/date';
-import { moneyFormat } from '../common/money';
-import ChattingHeader from '../components/chat/ChattingHeader';
-import BambooModal from '../components/common/BambooModal';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { colors } from "../common/color";
+import TransactionChat from "../components/chat/TransactionChat";
+import { useParams } from "react-router-dom";
+import useProduct from "../hooks/useProduct";
+import { db } from "../config/firebase";
+import ChattingInfo from "../components/chat/ChattingInfo";
+import Tag from "../components/common/Tag";
+import Loading from "../components/common/Loading";
+import useUser from "../hooks/useUser";
+import { timestampToDateFormat } from "../common/date";
+import { moneyFormat } from "../common/money";
+import ChattingHeader from "../components/chat/ChattingHeader";
+import BambooModal from "../components/common/BambooModal";
 
 const AuctionTransactionPage = () => {
   const params = useParams();
@@ -22,24 +22,30 @@ const AuctionTransactionPage = () => {
   const [type, setType] = useState(null);
 
   // 낙찰자
-  const [bidder, setBidder] = useState('');
-  const productDoc = db.collection('product').doc(productId);
+  const [bidder, setBidder] = useState(null);
+
   //모달 띄우기
   const [showBambooModal, setShowBambooModal] = useState(false);
 
   const fetchProduct = async () => {
     try {
+      const productDoc = db.collection("product").doc(productId);
       setType(1);
       productDoc.onSnapshot(async (snapshot) => {
         const data = snapshot.data();
-        const findBidder = await db.collection('users').doc(data.bidder).get();
+        const findBidder = await db.collection("users").doc(data.bidder).get();
         const getBidder = findBidder.data();
         setProduct({ ...data, id: snapshot.id });
-        setBidder(getBidder.nickName);
+
+        // console.log(getBidder, findBidder.id);
+        setBidder({
+          ...getBidder,
+          uid: findBidder.id,
+        });
         checkComplete();
       });
     } catch (err) {
-      console.log('fetchProduct err: ', err);
+      console.log("fetchProduct err: ", err);
     }
   };
 
@@ -51,45 +57,52 @@ const AuctionTransactionPage = () => {
   };
 
   const completeTransaction = async () => {
-    if (!window.confirm('거래를 확정하시겠습니까?')) {
+    if (!window.confirm("거래를 확정하시겠습니까?")) {
       return;
     }
     try {
+      // completeTransaction: 1 로 업데이트
+      const productDoc = db.collection("product").doc(productId);
       await productDoc.update({ completeTransaction: 1 });
       fetchProduct();
     } catch (err) {
-      console.log('completeTransaction err: ', err);
+      console.log("completeTransaction err: ", err);
     }
   };
 
   useEffect(() => {
-    //console.log(params);
     fetchProduct();
   }, []);
 
   useEffect(() => {
     if (product) {
-      fetchProduct();
       checkComplete();
     }
   }, [product]);
 
-  if (!product) {
+  if (!product || !bidder) {
     return <Loading />;
   }
 
   return (
     <>
-      <ChattingHeader product={product} />
+      <ChattingHeader
+        product={product}
+        uid={product.uid === user.uid ? bidder.uid : product.uid}
+      />
 
       <Wrapper>
         <ChattingInfo
           product={product}
-          btnText={'거래 완료하기'}
+          btnText={"거래 완료하기"}
           onBtnClick={completeTransaction}
           disabled={product.completeTransaction}
         >
-          <Tag label="낙찰자" text={bidder} textColor={colors.COLOR_MAIN} />
+          <Tag
+            label="낙찰자"
+            text={bidder.nickName}
+            textColor={colors.COLOR_MAIN}
+          />
           <Tag
             label="낙찰일"
             text={timestampToDateFormat(product.biddingDate)}
@@ -102,7 +115,7 @@ const AuctionTransactionPage = () => {
           />
         </ChattingInfo>
         {showBambooModal && product.bidder === user.uid && (
-          <BambooModal product={product} type={'auction'} />
+          <BambooModal product={product} type={"auction"} />
         )}
 
         <div>
