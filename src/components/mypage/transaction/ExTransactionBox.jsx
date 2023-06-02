@@ -6,17 +6,16 @@ import useUser from "../../../hooks/useUser";
 import ProductOwner from "../../common/ProductOwner";
 import ProductTitle from "../../common/ProductTitle";
 import Tag from "../../common/Tag";
-import { moneyFormat } from "../../../common/money";
-import moment from "moment";
-const TransactionBox = (transactions) => {
+
+const ExTransactionBox = (transactions) => {
   // ProductOwner 를 위한 임시
   const user = useUser();
 
   const navigate = useNavigate();
   const goTransactionDetail = () => {
-    navigate(`./${transactions.transactions.productId}`);
+    navigate(`./exchange/${transactions.transactions.productId}`);
   };
-  const formatted = moment(transactions.transactions.transactionDate.toDate()).format('L');
+  
   return (
     <Container onClick={goTransactionDetail}>
       <ProductImg src={transactions.transactions.img[0]} />
@@ -24,18 +23,17 @@ const TransactionBox = (transactions) => {
       <Wrapper>
         <OwnerWrapper>
           <ProductOwner uid={user.uid} />
-          <Date>{formatted}</Date>
         </OwnerWrapper>
 
         <ProductTitle title={transactions.transactions.title} />
-        <Tag label="거래 방법" text="경매" />
-        <Tag label="거래 가격" text={moneyFormat(transactions.transactions.price)} />
+        <Tag label="거래 방법" text="교환" />
+        
       </Wrapper>
     </Container>
   );
 };
 
-export default TransactionBox;
+export default ExTransactionBox;
 
 const Container = styled.div`
   display: flex;

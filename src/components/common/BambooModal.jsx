@@ -36,7 +36,8 @@ const BambooModal = ({ product, type }) => {
   const updateBamboo = async () => {
     const bambooRef = doc(db, 'bamboo', product.uid);
     const docSnap = await getDoc(bambooRef);
-
+    const auctionDB = db.collection("transactions");
+    const exchangeDB = db.collection("exTransactions");
     //product / exchange collection에 업데이트하기 위한 ref
     const dbRef =
       type === 'auction'
@@ -46,16 +47,63 @@ const BambooModal = ({ product, type }) => {
         : null;
     const productDoc = await getDoc(dbRef);
 
+    const body =
+      type === "auction" ?
+      {
+        productId: product.id,
+        sellerId: product.uid,
+        consumerId: product.bidder,
+        transactionDate: product.biddingDate,
+        title: product.title,
+        price: product.biddingPrice,
+        img : product.images,
+        category : product.category
+      } :
+      type === "exchange" ? 
+      {
+        productId: product.id,
+        sellerId: product.uid,
+        consumerId: product.exchanger,
+        title: product.title,
+        img : product.images,
+        category : product.category,
+        haveMember :product.haveMember,
+        wantMember: product.wantMember
+      } : null;
+    
+
     if (docSnap.exists() && productDoc.exists()) {
       const data = docSnap.data();
       const count = data.count + 1;
       const score = data.score + parseInt(select);
       await updateDoc(bambooRef, { score: score, count: count });
       await updateDoc(dbRef, { bambooScore: parseInt(select) }); // product / exchange collection에 업데이트
+      
+      if(type == "auction"){
+        await auctionDB.add({
+          ...body,
+          
+        }).catch((err) => {
+          console.log("transactions upload error",err);
+        });
+      }
+      else{
+        await exchangeDB.add({
+          ...body,
+          
+        }).catch((err) => {
+          console.log("transactions upload error",err);
+        })
+      }
+    
+
+    
+
     } else {
       const input = { score: parseInt(select), count: 1 };
       await setDoc(bambooRef, input);
     }
+    
     await alert('거래가 완료되었습니다!');
     closeModal();
     navigate('/');

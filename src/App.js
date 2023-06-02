@@ -40,7 +40,7 @@ import AuctionTransactionPage from './pages/AuctionTransactionPage';
 import ExchangeTransactionPage from './pages/ExchangeTransactionPage';
 import ExchangeTransactionListPage from './pages/ExchangeTransactionListPage';
 import TransactionDetail from './components/mypage/transaction/TransactionDetail';
-
+import ExTransactionDetail from './components/mypage/transaction/ExTransactionDetail';
 const App = () => {
   return (
     <RootLayout className="root-styles">
@@ -65,6 +65,11 @@ const App = () => {
               path={`${MyTab[3].tab}/:id`}
               element={<TransactionDetail />}
             />
+            <Route
+              path={`${MyTab[3].tab}/exchange/:id`}
+              element={<ExTransactionDetail />}
+            />
+
           </Route>
         </Route>
 
