@@ -105,8 +105,8 @@ const BambooModal = ({ product, type }) => {
     }
     
     await alert('거래가 완료되었습니다!');
-    navigate('/');
     closeModal();
+    navigate('/');
   };
 
   useEffect(() => {

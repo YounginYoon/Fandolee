@@ -3,29 +3,14 @@ import styled from 'styled-components';
 import { colors } from '../../common/color';
 import useUser from '../../hooks/useUser';
 
-const ChattingInfo = ({
-  product,
-  btnText,
-  onBtnClick,
-  children,
-  disabled,
-  type,
-}) => {
+const ChattingInfo = ({ product, btnText, onBtnClick, children, disabled }) => {
   const user = useUser();
   const { images, info, uid } = product;
 
   return (
     <Container>
       <ProductImage src={images[0]} />
-      {/*낙찰채팅에서만 판매자한테 버튼 띄워짐*/}
-      {type !== 'bidding' && user && uid !== user.uid && btnText && (
-        <Btn onClick={onBtnClick} disabled={disabled}>
-          {btnText}
-        </Btn>
-      )}
-
-      {/* 교환, 거래채팅에선 소비자한테 거래/교환 완료 버튼 띄워짐 */}
-      {type == 'bidding' && user && user.uid === uid && btnText && (
+      {user && uid == user.uid && btnText && (
         <Btn onClick={onBtnClick} disabled={disabled}>
           {btnText}
         </Btn>

@@ -9,7 +9,7 @@ import Loading from '../common/Loading';
 import { colors } from '../../common/color';
 import { moneyFormat } from '../../common/money';
 
-const AuctionModal = ({ product, onLoadProduct }) => {
+const AuctionModal = ({ product }) => {
   const navigate = useNavigate();
   const productId = product.id;
   //모달 상태
@@ -36,8 +36,7 @@ const AuctionModal = ({ product, onLoadProduct }) => {
   useEffect(() => {
     setIsModalOpen(true);
     //console.log(product);
-    onLoadProduct();
-  }, [onLoadProduct]);
+  }, []);
 
   if (!product) {
     return <Loading />;
