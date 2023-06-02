@@ -1,8 +1,8 @@
-import React , {useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { colors } from "../../../common/color";
 import { useNavigate } from "react-router-dom";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import TransactionInfoBox from "./TransactionInfoBox";
@@ -11,6 +11,7 @@ import moment from "moment";
 import Loading from "../../common/Loading";
 import nickName from "../../../hooks/nickName";
 import useUser from "../../../hooks/useUser";
+
 const TransactionDetail = () => {
   const navigate = useNavigate();
 
@@ -19,28 +20,28 @@ const TransactionDetail = () => {
   const id = params.id;
 
   const product = useProduct(id);
-  
-  const [seller, setSeller] = useState("");
-  
 
-  if (!product) {
-    return <Loading />;
-  }
+  const [seller, setSeller] = useState("");
+
   const setData = async () => {
     const nickname = await nickName(product.uid);
     return nickname;
   };
 
-  const showNickName = () =>{  
-    const seller2 = setData()
+  const showNickName = () => {
+    const seller2 = setData();
     seller2.then((id) => {
       setSeller(id);
     });
-  }
-  showNickName();
-  
+  };
 
-  
+  useEffect(() => {
+    showNickName();
+  }, []);
+
+  if (!product) {
+    return <Loading />;
+  }
 
   return (
     <Container>
@@ -55,7 +56,10 @@ const TransactionDetail = () => {
         <TransactionInfoBox label="판매자" text={seller} />
         <TransactionInfoBox label="낙찰 금액" text={product.biddingPrice} />
         <TransactionInfoBox label="낙찰자" text={user.displayName} />
-        <TransactionInfoBox label="낙찰일" text={moment(product.biddingDate.toDate()).format('L')} />
+        <TransactionInfoBox
+          label="낙찰일"
+          text={moment(product.biddingDate.toDate()).format("L")}
+        />
       </InfoDiv>
     </Container>
   );

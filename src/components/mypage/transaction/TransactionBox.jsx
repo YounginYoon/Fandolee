@@ -8,18 +8,21 @@ import ProductTitle from "../../common/ProductTitle";
 import Tag from "../../common/Tag";
 import { moneyFormat } from "../../../common/money";
 import moment from "moment";
-const TransactionBox = (transactions) => {
+
+const TransactionBox = ({ transaction }) => {
   // ProductOwner 를 위한 임시
   const user = useUser();
 
   const navigate = useNavigate();
   const goTransactionDetail = () => {
-    navigate(`./${transactions.transactions.productId}`);
+    navigate(`./${transaction.transaction.productId}`);
   };
-  const formatted = moment(transactions.transactions.transactionDate.toDate()).format('L');
+  const formatted = moment(
+    transaction.transaction.transactionDate.toDate()
+  ).format("L");
   return (
     <Container onClick={goTransactionDetail}>
-      <ProductImg src={transactions.transactions.img[0]} />
+      <ProductImg src={transaction.transactions.img[0]} />
 
       <Wrapper>
         <OwnerWrapper>
@@ -27,9 +30,12 @@ const TransactionBox = (transactions) => {
           <Date>{formatted}</Date>
         </OwnerWrapper>
 
-        <ProductTitle title={transactions.transactions.title} />
+        <ProductTitle title={transaction.transactions.title} />
         <Tag label="거래 방법" text="경매" />
-        <Tag label="거래 가격" text={moneyFormat(transactions.transactions.price)} />
+        <Tag
+          label="거래 가격"
+          text={moneyFormat(transaction.transactions.price)}
+        />
       </Wrapper>
     </Container>
   );
