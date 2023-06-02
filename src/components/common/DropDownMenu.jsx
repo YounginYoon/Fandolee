@@ -7,7 +7,15 @@ import { colors } from "../../common/color";
 
 const itemHeight = "35px";
 
-const DropDownMenu = ({ list, selected, setSelected, width, margin = "0" }) => {
+const DropDownMenu = ({
+  list,
+  selected,
+  setSelected,
+  width,
+  height = itemHeight,
+  margin = "0",
+  fontSize = "14px",
+}) => {
   const [open, setOpen] = useState(false);
 
   const onClick = (item) => {
@@ -16,18 +24,24 @@ const DropDownMenu = ({ list, selected, setSelected, width, margin = "0" }) => {
   };
 
   return (
-    <Container margin={margin}>
+    <Container margin={margin} fontSize={fontSize}>
       <SelectedBox onClick={() => setOpen(!open)}>
-        <Selected width={width}>{selected}</Selected>
-        <Icon>
+        <Selected width={width} height={height}>
+          {selected}
+        </Selected>
+        <Icon width={height}>
           <FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} />
         </Icon>
       </SelectedBox>
 
       {open ? (
-        <SelectList width={width}>
+        <SelectList width={width} height={height}>
           {list.map((item, idx) => (
-            <SelectItem key={`${item}_${idx}`} onClick={() => onClick(item)}>
+            <SelectItem
+              key={`${item}_${idx}`}
+              onClick={() => onClick(item)}
+              height={height}
+            >
               {item}
             </SelectItem>
           ))}
@@ -42,6 +56,7 @@ export default DropDownMenu;
 const Container = styled.div`
   position: relative;
   margin: ${({ margin }) => margin};
+  font-size: ${({ fontSize }) => fontSize};
 `;
 
 const SelectedBox = styled.div`
@@ -54,14 +69,12 @@ const Selected = styled.p`
   box-sizing: border-box;
   width: ${({ width }) => width};
   background-color: white;
-  height: 35px;
+  height: ${({ height }) => height};
   display: flex;
-  //   justify-content: center;
   align-items: center;
   padding-left: 10px;
-  padding-right: 45px;
+  padding-right: ${({ height }) => `calc(${height} + 10px)`};
   border-radius: 5px;
-  font-size: 14px;
   border: 1px solid ${colors.COLOR_GRAY_BORDER};
 `;
 
@@ -69,24 +82,24 @@ const Icon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 14px;
-  width: 35px;
-  height: 35px;
+  height: 100%;
+  width: ${({ width }) => width};
   position: absolute;
   top: 0;
   right: 0;
   color: ${colors.COLOR_GRAY_BACKGROUND};
+  // background-color: orange;
 `;
 
 const SelectList = styled.div`
   position: absolute;
-  top: 37px;
+  top: ${({ height }) => `calc(${height} + 2px)`};
   left: 0;
   z-index: 1000;
   background-color: white;
   border-radius: 3px;
   width: ${({ width }) => width};
-  max-height: calc(${itemHeight} * 8);
+  max-height: ${({ height }) => `calc(${height} * 8)`};
   height: max-content;
   overflow-y: auto;
   border: 1px solid ${colors.COLOR_GRAY_BORDER};
@@ -97,9 +110,8 @@ const SelectList = styled.div`
 const SelectItem = styled.p`
   width: 100%;
   box-sizing: border-box;
-  line-height: ${itemHeight};
+  line-height: ${({ height }) => height};
   padding: 0 15px;
-  font-size: 14px;
   cursor: pointer;
 
   &:hover {
