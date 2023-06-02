@@ -1,27 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { colors } from '../common/color';
-import TransactionChat from '../components/chat/TransactionChat';
-import { useLocation, useParams } from 'react-router-dom';
-import useProduct from '../hooks/useProduct';
-import { db } from '../config/firebase';
-import ChattingInfo from '../components/chat/ChattingInfo';
-import Tag from '../components/common/Tag';
-import Loading from '../components/common/Loading';
-import useUser from '../hooks/useUser';
-import { timestampToDateFormat } from '../common/date';
-import { moneyFormat } from '../common/money';
-import ChattingHeader from '../components/chat/ChattingHeader';
-import BambooModal from '../components/common/BambooModal';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { colors } from "../common/color";
+import TransactionChat from "../components/chat/TransactionChat";
+import { useLocation, useParams } from "react-router-dom";
+import useProduct from "../hooks/useProduct";
+import { db } from "../config/firebase";
+import ChattingInfo from "../components/chat/ChattingInfo";
+import Tag from "../components/common/Tag";
+import Loading from "../components/common/Loading";
+import useUser from "../hooks/useUser";
+import { timestampToDateFormat } from "../common/date";
+import { moneyFormat } from "../common/money";
+import ChattingHeader from "../components/chat/ChattingHeader";
+import BambooModal from "../components/common/BambooModal";
 
 const ExchangeTransactionPage = () => {
   const params = useParams();
   const user = useUser();
+  // 교환자
   const exchangerUid = params.id;
   const productId = params.productId;
   const [product, setProduct] = useState(null);
   const [type, setType] = useState(null);
-  const exchangeDoc = db.collection('exchange').doc(productId);
+  const exchangeDoc = db.collection("exchange").doc(productId);
 
   //모달 띄우기
   const [showBambooModal, setShowBambooModal] = useState(false);
@@ -36,7 +37,7 @@ const ExchangeTransactionPage = () => {
         checkComplete();
       });
     } catch (err) {
-      console.log('fetchProduct err: ', err);
+      console.log("fetchProduct err: ", err);
     }
   };
 
@@ -47,7 +48,7 @@ const ExchangeTransactionPage = () => {
     }
   };
   const onBtnClick = async () => {
-    if (!window.confirm('교환을 완료하시겠습니까?')) {
+    if (!window.confirm("교환을 완료하시겠습니까?")) {
       return;
     }
     try {
@@ -56,7 +57,7 @@ const ExchangeTransactionPage = () => {
       setType(2);
       fetchProduct();
     } catch (err) {
-      console.log('onBtnClick error: ', err);
+      console.log("onBtnClick error: ", err);
     }
   };
 
@@ -67,7 +68,6 @@ const ExchangeTransactionPage = () => {
 
   useEffect(() => {
     if (product) {
-      fetchProduct();
       checkComplete();
     }
   }, [product]);
@@ -78,7 +78,10 @@ const ExchangeTransactionPage = () => {
 
   return (
     <>
-      <ChattingHeader product={product} />
+      <ChattingHeader
+        product={product}
+        uid={user.uid === exchangerUid ? product.uid : exchangerUid}
+      />
       <Wrapper>
         <ChattingInfo
           product={product}
@@ -98,7 +101,7 @@ const ExchangeTransactionPage = () => {
           />
         </ChattingInfo>
         {showBambooModal && exchangerUid && (
-          <BambooModal product={product} type={'exchange'} />
+          <BambooModal product={product} type={"exchange"} />
         )}
         <div>
           {type !== null && ( // type이 null이 아닐 때 렌더링

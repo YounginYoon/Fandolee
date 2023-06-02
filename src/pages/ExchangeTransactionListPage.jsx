@@ -99,7 +99,7 @@ const ExchangeTransactionListPage = () => {
 
   return (
     <>
-      <ChattingHeader product={product} />
+      <ChattingHeader product={product} uid={product.uid} />
 
       <Wrapper>
         <ChattingInfo product={product}>

@@ -82,7 +82,7 @@ const SelectList = styled.div`
   position: absolute;
   top: 37px;
   left: 0;
-  z-index: 100;
+  z-index: 1000;
   background-color: white;
   border-radius: 3px;
   width: ${({ width }) => width};
