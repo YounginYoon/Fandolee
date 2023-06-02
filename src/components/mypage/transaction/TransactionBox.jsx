@@ -8,34 +8,42 @@ import ProductTitle from "../../common/ProductTitle";
 import Tag from "../../common/Tag";
 import { moneyFormat } from "../../../common/money";
 import moment from "moment";
+import { timestampToDateFormat } from "../../../common/date";
 
 const TransactionBox = ({ transaction }) => {
-  // ProductOwner 를 위한 임시
-  const user = useUser();
+  console.log(transaction);
+  const {
+    category,
+    consumerId,
+    id,
+    img,
+    price,
+    productId,
+    sellerId,
+    title,
+    transactionDate,
+  } = transaction;
 
   const navigate = useNavigate();
   const goTransactionDetail = () => {
-    navigate(`./${transaction.transaction.productId}`);
+    navigate(`./${productId}`);
   };
-  const formatted = moment(
-    transaction.transaction.transactionDate.toDate()
-  ).format("L");
+  //   const formatted = moment(
+  //     transaction.transaction.transactionDate.toDate()
+  //   ).format("L");
   return (
     <Container onClick={goTransactionDetail}>
-      <ProductImg src={transaction.transactions.img[0]} />
+      <ProductImg src={img[0]} />
 
       <Wrapper>
         <OwnerWrapper>
-          <ProductOwner uid={user.uid} />
-          <Date>{formatted}</Date>
+          <ProductOwner uid={sellerId} />
+          <Date>{timestampToDateFormat(transactionDate)}</Date>
         </OwnerWrapper>
 
-        <ProductTitle title={transaction.transactions.title} />
+        <ProductTitle title={title} />
         <Tag label="거래 방법" text="경매" />
-        <Tag
-          label="거래 가격"
-          text={moneyFormat(transaction.transactions.price)}
-        />
+        <Tag label="거래 가격" text={`${moneyFormat(price)} 원`} />
       </Wrapper>
     </Container>
   );
@@ -73,11 +81,14 @@ const OwnerWrapper = styled.div`
   justify-content: space-between;
   //   background-color: orange;
   width: 100%;
+  position: relative;
 `;
 const Date = styled.p`
   font-size: 10px;
   color: ${colors.COLOR_GRAY_TEXT};
-  width: max-content;
+  position: absolute;
+  top: 0;
+  right: 0;
 `;
 
 const Money = styled.span``;
