@@ -1,14 +1,14 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { colors } from '../../common/color';
-import useOwner from '../../hooks/useOwner';
-import Bamboo from '../common/Bamboo';
-import Tag from '../common/Tag';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { colors } from "../../common/color";
+import useOwner from "../../hooks/useOwner";
+import Bamboo from "../common/Bamboo";
+import Tag from "../common/Tag";
 
-const ChattingHeader = ({ product }) => {
+const ChattingHeader = ({ product, uid }) => {
   const navigate = useNavigate();
-  const { uid, title, idol, haveMember, category, info } = product;
+  const { title, idol, haveMember, category, info } = product;
   const [owner, profileImage] = useOwner(uid);
 
   if (!owner || !profileImage) {

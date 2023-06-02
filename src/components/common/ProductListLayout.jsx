@@ -14,5 +14,5 @@ const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   //   background-color: orange;
-  margin: 50px auto 200px;
+  margin: 20px auto 200px;
 `;

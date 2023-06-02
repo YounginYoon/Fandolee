@@ -7,27 +7,36 @@ import ProductOwner from "../../common/ProductOwner";
 import ProductTitle from "../../common/ProductTitle";
 import Tag from "../../common/Tag";
 
-const ExTransactionBox = (transactions) => {
-  // ProductOwner 를 위한 임시
-  const user = useUser();
+const ExTransactionBox = ({ transaction }) => {
+  // console.log(transaction);
+  const {
+    category,
+    consumerId,
+    haveMember,
+    id,
+    img,
+    productId,
+    sellerId,
+    title,
+    wantMember,
+  } = transaction;
 
   const navigate = useNavigate();
   const goTransactionDetail = () => {
-    navigate(`./exchange/${transactions.transactions.productId}`);
+    navigate(`./exchange/${productId}`);
   };
-  
+
   return (
     <Container onClick={goTransactionDetail}>
-      <ProductImg src={transactions.transactions.img[0]} />
+      <ProductImg src={img[0]} />
 
       <Wrapper>
         <OwnerWrapper>
-          <ProductOwner uid={user.uid} />
+          <ProductOwner uid={sellerId} />
         </OwnerWrapper>
 
-        <ProductTitle title={transactions.transactions.title} />
+        <ProductTitle title={title} />
         <Tag label="거래 방법" text="교환" />
-        
       </Wrapper>
     </Container>
   );

@@ -1,8 +1,8 @@
-import React , {useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { colors } from "../../../common/color";
 import { useNavigate } from "react-router-dom";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import TransactionInfoBox from "./TransactionInfoBox";
@@ -10,7 +10,6 @@ import Loading from "../../common/Loading";
 import nickName from "../../../hooks/nickName";
 import useUser from "../../../hooks/useUser";
 import useExchange from "../../../hooks/useExchange";
-
 
 const ExTransactionDetail = () => {
   const navigate = useNavigate();
@@ -20,30 +19,30 @@ const ExTransactionDetail = () => {
   const id = params.id;
 
   const product = useExchange(id);
-  
-  const [seller, setSeller] = useState("");
-  
 
-  if (!product) {
-    return <Loading />;
-  }
+  const [seller, setSeller] = useState("");
+
   const setData = async () => {
     const nickname = await nickName(product.uid);
     return nickname;
   };
 
-  const showNickName = () =>{  
-    const seller2 = setData()
+  const showNickName = () => {
+    const seller2 = setData();
     seller2.then((id) => {
       setSeller(id);
     });
+  };
+
+  useEffect(() => {
+    showNickName();
+  }, []);
+
+  if (!product) {
+    return <Loading />;
   }
-  showNickName();
-  
- 
 
   return (
-  
     <Container>
       <IconDiv onClick={() => navigate("../transaction")}>
         <FontAwesomeIcon style={{ marginRight: "5px" }} icon={faList} />
@@ -58,7 +57,6 @@ const ExTransactionDetail = () => {
         <TransactionInfoBox label="교환멤버" text={product.wantMember} />
       </InfoDiv>
     </Container>
-    
   );
 };
 
