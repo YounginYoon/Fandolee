@@ -22,22 +22,52 @@ const TransactionDetail = () => {
   const product = useProduct(id);
 
   const [seller, setSeller] = useState("");
+  const [consumer, setConsumer] = useState("");
 
-  const setData = async () => {
-    const nickname = await nickName(product.uid);
-    return nickname;
+  const setData = async (product) => {
+    if(product){
+      const nickname = await nickName(product.uid);
+      return nickname;
+    }
+    else{
+      return null;
+    }
+    
+  };
+  const setData2 = async (product) => {
+    if(product){
+      const nickname = await nickName(product.bidder);
+      return nickname;
+    }
+    else{
+      return null;
+    }
   };
 
   const showNickName = () => {
-    const seller2 = setData();
-    seller2.then((id) => {
-      setSeller(id);
-    });
+    const seller2 = setData(product);
+    const consumer2 = setData2(product);
+    if(seller2){
+      seller2.then((id) => {
+        setSeller(id);
+        //console.log("seller: ",id);
+      });
+    }
+    if(consumer2){
+      consumer2.then((id)=>{
+        //console.log("consumer: ",id);
+        setConsumer(id);
+      })
+    }
+    
   };
+
+
 
   useEffect(() => {
     showNickName();
-  }, []);
+    
+  }, [product]);
 
   if (!product) {
     return <Loading />;
@@ -55,7 +85,7 @@ const TransactionDetail = () => {
         <TransactionInfoBox label="아이돌" text={product.idol} />
         <TransactionInfoBox label="판매자" text={seller} />
         <TransactionInfoBox label="낙찰 금액" text={product.biddingPrice} />
-        <TransactionInfoBox label="낙찰자" text={user.displayName} />
+        <TransactionInfoBox label="낙찰자" text={consumer} />
         <TransactionInfoBox
           label="낙찰일"
           text={moment(product.biddingDate.toDate()).format("L")}
