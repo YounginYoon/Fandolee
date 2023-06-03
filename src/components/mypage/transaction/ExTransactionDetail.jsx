@@ -21,22 +21,30 @@ const ExTransactionDetail = () => {
   const product = useExchange(id);
 
   const [seller, setSeller] = useState("");
-
   const setData = async () => {
-    const nickname = await nickName(product.uid);
-    return nickname;
+    if(product){
+      const nickname = await nickName(product.uid);
+      return nickname;
+    }
+    else{
+      return null;
+    }
+    
   };
 
   const showNickName = () => {
     const seller2 = setData();
-    seller2.then((id) => {
-      setSeller(id);
-    });
+    if(seller2){
+      seller2.then((id) => {
+        setSeller(id);
+      });
+    }
+    
   };
 
   useEffect(() => {
     showNickName();
-  }, []);
+  }, [product]);
 
   if (!product) {
     return <Loading />;

@@ -11,7 +11,7 @@ import moment from "moment";
 import { timestampToDateFormat } from "../../../common/date";
 
 const TransactionBox = ({ transaction }) => {
-  console.log(transaction);
+  //console.log(transaction);
   const {
     category,
     consumerId,

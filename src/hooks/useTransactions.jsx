@@ -1,4 +1,4 @@
-import { doc, getDocs , where, query,collection } from "firebase/firestore";
+import { doc, getDocs , where, query,collection,or } from "firebase/firestore";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -11,8 +11,8 @@ const useTransactions = (id,type) => {
     const transactionDB = collection(db, 'transactions');
     try {
         const q = query(
-            transactionDB,
-            where("consumerId", "==", id)
+          transactionDB, or(where("consumerId", "==", id),
+          where("sellerId","==",id))
           );
         const ret = await getDocs(q);
         const products = ret.docs.map((doc) => ({
@@ -30,8 +30,8 @@ const useTransactions = (id,type) => {
     const transactionDB = collection(db, 'exTransactions');
     try {
         const q = query(
-            transactionDB,
-            where("consumerId", "==", id)
+            transactionDB, or(where("consumerId", "==", id),
+            where("sellerId","==",id))
           );
         const ret = await getDocs(q);
         const products = ret.docs.map((doc) => ({
