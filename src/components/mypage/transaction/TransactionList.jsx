@@ -42,7 +42,7 @@ const TransactionList = () => {
   const transactionsArray = useTransactions(user.uid, "auction");
   const exTrandsactionsArray = useTransactions(user.uid, "exchange");
 
-  console.log({ transactionsArray, exTrandsactionsArray });
+  //console.log({ transactionsArray, exTrandsactionsArray });
   return (
     <Container>
       <Filter filter={filter} setFilter={setFilter} filterList={filterList} />

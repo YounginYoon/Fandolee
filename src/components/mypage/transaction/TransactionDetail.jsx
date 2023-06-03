@@ -24,9 +24,9 @@ const TransactionDetail = () => {
   const [seller, setSeller] = useState("");
   const [consumer, setConsumer] = useState("");
 
-  const setData = async (uid) => {
-    if(uid){
-      const nickname = await nickName(uid);
+  const setData = async (product) => {
+    if(product){
+      const nickname = await nickName(product.uid);
       return nickname;
     }
     else{
@@ -34,30 +34,39 @@ const TransactionDetail = () => {
     }
     
   };
+  const setData2 = async (product) => {
+    if(product){
+      const nickname = await nickName(product.bidder);
+      return nickname;
+    }
+    else{
+      return null;
+    }
+  };
 
-  const showSellerNickName = () => {
-    const seller2 = setData(product.uid);
+  const showNickName = () => {
+    const seller2 = setData(product);
+    const consumer2 = setData2(product);
     if(seller2){
       seller2.then((id) => {
         setSeller(id);
+        //console.log("seller: ",id);
       });
+    }
+    if(consumer2){
+      consumer2.then((id)=>{
+        //console.log("consumer: ",id);
+        setConsumer(id);
+      })
     }
     
   };
 
-  const showConsumerNickName = () => {
-    const seller2 = setData(user.uid);
-    if(seller2){
-      seller2.then((id) => {
-        setConsumer(id);
-      });
-    }
-    
-  };
+
 
   useEffect(() => {
-    showSellerNickName();
-    showConsumerNickName();
+    showNickName();
+    
   }, [product]);
 
   if (!product) {

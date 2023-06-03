@@ -21,7 +21,9 @@ const ExTransactionDetail = () => {
   const product = useExchange(id);
 
   const [seller, setSeller] = useState("");
-  const setData = async () => {
+  const [consumer, setConsumer] = useState("");
+
+  const setData = async (product) => {
     if(product){
       const nickname = await nickName(product.uid);
       return nickname;
@@ -31,13 +33,30 @@ const ExTransactionDetail = () => {
     }
     
   };
+  const setData2 = async (product) => {
+    if(product){
+      const nickname = await nickName(product.exchanger);
+      return nickname;
+    }
+    else{
+      return null;
+    }
+  };
 
   const showNickName = () => {
-    const seller2 = setData();
+    const seller2 = setData(product);
+    const consumer2 = setData2(product);
     if(seller2){
       seller2.then((id) => {
         setSeller(id);
+        //console.log("seller: ",id);
       });
+    }
+    if(consumer2){
+      consumer2.then((id)=>{
+        //console.log("consumer: ",id);
+        setConsumer(id);
+      })
     }
     
   };
@@ -61,7 +80,7 @@ const ExTransactionDetail = () => {
         <TransactionInfoBox label="굿즈" image={product.images[0]} />
         <TransactionInfoBox label="카테고리" text={product.idol} />
         <TransactionInfoBox label="판매자" text={seller} />
-        <TransactionInfoBox label="낙찰자" text={user.displayName} />
+        <TransactionInfoBox label="낙찰자" text={consumer} />
         <TransactionInfoBox label="교환멤버" text={product.wantMember} />
       </InfoDiv>
     </Container>
