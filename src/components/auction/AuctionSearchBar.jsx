@@ -21,6 +21,7 @@ import {
 import useUser from "../../hooks/useUser";
 import SearchArea from "../common/SearchArea";
 import SearchBar from "../common/SearchBar";
+import AuctionList from "./AuctionList";
 
 const height = "28px";
 const fontSize = "12px";
@@ -33,35 +34,40 @@ const AuctionSearchBar = ({ setProducts }) => {
   const [input, setInput] = useState("");
 
   const navigate = useNavigate();
-
+  
   const goAuctionUpPage = () => {
     navigate("/auction/post");
   };
 
   const handleSearch = async () => {
     const productDB = collection(db, "product");
-
+    
     try {
       const q = query(
         productDB,
         where("category", "==", category),
         where("idol", "==", idol),
         where("isComplete", "==", 0),
-        orderBy("title"),
-        where("title",">=",input),
-        where("title","<=","input"+"\uf8ff")
+        orderBy("endDate"),
         
       );
       const ret = await getDocs(q);
-      const products = ret.docs.map((doc) => ({
+      const newData = ret.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-
-      setProducts(products);
+      const products=newData.filter((product) =>{
+        return product.title.includes(input);
+      })
+      
+      
+      setProducts(newData);
     } catch (err) {
       console.log("err:", err);
     }
+
+
+
   };
 
   const onChange = (e) => {
@@ -125,6 +131,8 @@ const AuctionSearchBar = ({ setProducts }) => {
           )}
         </BtnWrap>
       </Inner>
+
+
     </Container>
   );
 };
