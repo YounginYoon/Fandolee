@@ -12,19 +12,44 @@ import { useLikeExchange } from '../../hooks/useHeartExchange';
 import useProducts from '../../hooks/useProducts';
 
 const RecommendedProducts = () => {
-  // const user = useUser();
-  // // 사용자가 찜한 경매, 교환 상품 가져오기
-  // const arrayDataAuction = useLike(user);
-  // const arrayDataExchange = useLikeExchange(user);
-  // const products = useProducts(arrayDataAuction);
-  // const exchanges = useProducts(arrayDataExchange);
+  const user = useUser();
+  // 사용자가 찜한 경매, 교환 상품 가져오기
+  const arrayDataAuction = useLike(user);
+  const arrayDataExchange = useLikeExchange(user);
+  const products = useProducts(arrayDataAuction);
 
-  // // products와 exchange에 값이 담겨있을 때
-  // const getIdol = async () => {
-  //   // 아이돌명 중복없이 가져옴
-  //   const idolName = [];
+  const [idol, setIdol] = useState(null);
 
-  // }
+  // products와 exchange에 값이 담겨있을 때
+  const getIdol = async () => {
+    const idolName = [];
+    if (products && products.length > 0) {
+      await products.map((product, index) => {
+        if (product.idol) idolName.push(product.idol);
+      });
+    }
+    if (idolName.length > 0) {
+      const tmpSet = new Set(idolName);
+      if (tmpSet) await setIdol(tmpSet);
+      //console.log(idol);
+      getProducts();
+    }
+  };
+
+  const getProducts = async () => {
+    //console.log(idol);
+  };
+
+  useEffect(() => {
+    getIdol();
+  }, []);
+
+  useEffect(() => {
+    if (idol) {
+      //console.log(idol);
+    }
+  }, [idol]);
+
   return (
     <Container>
       <Text>팬도리를 위한 추천상품 🎁</Text>
