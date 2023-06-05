@@ -8,7 +8,7 @@ const AuctionList = ({ products }) => {
 
   return (
     <ProductListLayout>
-      {products.map((product, index) => (
+      {products && products.map((product, index) => (
         <AuctionContainer data={product} key={index} />
       ))}
     </ProductListLayout>

@@ -40,19 +40,39 @@ const ExchangeSearchBar = ({ setProducts }) => {
         productDB,
         where("category", "==", category),
         where("idol", "==", idol),
-        where("method", "==", method),
+        where("transactionType", "==", method),
         where("region", "==", region),
-        orderBy("date")
+        where("isComplete","==",0),
+        orderBy("date"),
+        
       );
       const ret = await getDocs(q);
-      const products = ret.docs.map((doc) => ({
+      const newData = ret.docs.map((doc) => ({
+        
+        
         id: doc.id,
         ...doc.data(),
+
       }));
+      const products=newData.filter((product) =>{
+        return product.wantMember.includes(input);
+      })
+      
+      
 
       setProducts(products);
     } catch (err) {
       console.log("err:", err);
+    }
+  };
+
+  const onChange = (e) => {
+    const { value } = e.target;
+    setInput(value);
+  };
+  const onKeyUp = (e) => {
+    if (e.key === "Enter") {
+      //onClick();
     }
   };
 
@@ -97,7 +117,14 @@ const ExchangeSearchBar = ({ setProducts }) => {
             setSelected={setRegion}
           />
 
-          <SearchBar input={input} setInput={setInput} onClick={() => {}} />
+          <SearchInput
+            placeholder="원하는 멤버명을 검색하세요!"
+            value={input}
+            onChange={onChange}
+            onKeyUp={onKeyUp}
+          />
+
+          
         </Wrapper>
 
         <BtnWrap>
@@ -159,4 +186,17 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+const SearchInput = styled.input`
+  box-sizing: border-box;
+  background-color: ${colors.COLOR_LIGHTGRAY_BACKGROUND};
+  width: 220px;
+  height: 100%;
+  border-radius: 30px;
+  border: 1px solid ${colors.COLOR_MAIN};
+  //   border: 1px solid ${colors.COLOR_GRAY_BORDER};
+  display: flex;
+  align-items: center;
+  padding: 0 32px 0 15px;
+  font-size: 12px;
 `;
