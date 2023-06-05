@@ -82,6 +82,7 @@ const TransactionDetail = () => {
 
       <InfoDiv>
         <TransactionInfoBox label="굿즈" image={product.images[0]} />
+        <TransactionInfoBox label="제목" text = {product.title} />
         <TransactionInfoBox label="아이돌" text={product.idol} />
         <TransactionInfoBox label="판매자" text={seller} />
         <TransactionInfoBox label="낙찰 금액" text={product.biddingPrice} />
