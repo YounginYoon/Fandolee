@@ -2,7 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { colors } from '../../common/color';
 import { db } from '../../config/firebase';
-import { collection, query, where, getDocs, getDoc } from 'firebase/firestore';
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  getDoc,
+  limit,
+  orderBy,
+} from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import ExchangeList from '../exchange/ExchangeList';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +18,8 @@ import useUser from '../../hooks/useUser';
 import { useLike } from '../../hooks/useHeart';
 import { useLikeExchange } from '../../hooks/useHeartExchange';
 import useProducts from '../../hooks/useProducts';
+import useExchanges from '../../hooks/useExchanges';
+import Loading from '../common/Loading';
 
 const RecommendedProducts = () => {
   const user = useUser();
@@ -17,68 +27,108 @@ const RecommendedProducts = () => {
   const arrayDataAuction = useLike(user);
   const arrayDataExchange = useLikeExchange(user);
   const products = useProducts(arrayDataAuction);
+  const exchanges = useExchanges(arrayDataExchange);
 
-  const [idol, setIdol] = useState(null);
+  const [idol, setIdol] = useState([]);
+  const [recommendProducts, setRecommendProducts] = useState([]);
 
-  // products와 exchange에 값이 담겨있을 때
   const getIdol = async () => {
-    const idolName = [];
-    if (products && products.length > 0) {
+    const idols = [];
+    if (products) {
       await products.map((product, index) => {
-        if (product.idol) idolName.push(product.idol);
+        idols.push(product.idol);
       });
     }
-    if (idolName.length > 0) {
-      const tmpSet = new Set(idolName);
-      if (tmpSet) await setIdol(tmpSet);
-      //console.log(idol);
-      getProducts();
+    if (exchanges) {
+      await exchanges.map((product, index) => {
+        if (product.idol !== '') idols.push(product.idol);
+      });
+    }
+    // 중복 아이돌 지움
+    const removeEqual = await idols.filter((value, index, self) => {
+      return self.indexOf(value) === index;
+    });
+    setIdol(removeEqual);
+  };
+
+  const loadIdolProducts = async () => {
+    try {
+      const productRef = collection(db, 'product');
+      const exchangeRef = collection(db, 'exchange');
+      const q = query(
+        productRef,
+        where('idol', 'in', idol),
+        where('isComplete', '==', 0),
+        limit(4)
+      );
+      const eq = query(
+        exchangeRef,
+        where('idol', 'in', idol),
+        where('isComplete', '==', 0),
+        limit(4)
+      );
+
+      const productDocs = await getDocs(q);
+      const exchangeDocs = await getDocs(eq);
+      const productData = productDocs.docs.map((doc) => doc.data());
+      const exchangeData = exchangeDocs.docs.map((doc) => doc.data());
+      const combineData = productData.concat(exchangeData);
+      await setRecommendProducts(combineData);
+      recommendProducts.sort((a, b) => b.likes - a.likes);
+    } catch (err) {
+      console.log('loadIdolProducts err: ', err);
     }
   };
 
-  const getProducts = async () => {
-    //console.log(idol);
+  const loadRandomProducts = async (len) => {
+    try {
+      const productRef = collection(db, 'product');
+      const exchangeRef = collection(db, 'exchange');
+      const q = query(productRef, where('isComplete', '==', 0), limit(6 - len));
+      const eq = query(
+        exchangeRef,
+        where('isComplete', '==', 0),
+        limit(6 - len)
+      );
+      const productDocs = await getDocs(q);
+      const exchangeDocs = await getDocs(eq);
+      const productData = productDocs.docs.map((doc) => doc.data());
+      const exchangeData = exchangeDocs.docs.map((doc) => doc.data());
+      const combineData = productData.concat(exchangeData);
+      await setRecommendProducts([...recommendProducts, combineData]);
+      recommendProducts.sort((a, b) => b.likes - a.likes);
+    } catch (err) {
+      console.log('loadRandomProducts err: ', err);
+    }
   };
 
   useEffect(() => {
-    getIdol();
-  }, []);
-
-  useEffect(() => {
-    if (idol) {
-      //console.log(idol);
+    // getIdol();
+    if (idol.length > 0) {
+      loadIdolProducts();
+    }
+    if (recommendProducts.length < 6) {
+      loadRandomProducts(recommendProducts.length);
     }
   }, [idol]);
+
+  useEffect(() => {
+    if (products && exchanges) {
+      getIdol();
+    }
+  }, [products, exchanges]);
+
+  const showRecommend = recommendProducts.slice(0, 6);
+
+  if (!showRecommend) {
+    return <Loading />;
+  }
 
   return (
     <Container>
       <Text>팬도리를 위한 추천상품 🎁</Text>
 
-      <ProductsDiv>
-        {/* <ProductBox>
-          <ProductImg src="/img/goods1.jpeg" />
-        </ProductBox>
-
-        <ProductBox>
-          <ProductImg src="/img/goods2.jpeg" />
-        </ProductBox>
-
-        <ProductBox>
-          <ProductImg src="/img/goods3.jpeg" />
-        </ProductBox>
-
-        <ProductBox>
-          <ProductImg src="/img/goods4.jpeg" />
-        </ProductBox>
-
-        <ProductBox>
-          <ProductImg src="/img/goods5.jpeg" />
-        </ProductBox>
-
-        <ProductBox>
-          <ProductImg src="/img/goods6.jpeg" />
-        </ProductBox> */}
-      </ProductsDiv>
+      <ProductsDiv></ProductsDiv>
     </Container>
   );
 };
