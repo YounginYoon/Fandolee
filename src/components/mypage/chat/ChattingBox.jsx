@@ -67,12 +67,13 @@ const Dot = styled.div`
 
 const Title = styled.p`
   font-weight: bold;
-  margin: 10px 0;
+  padding: 10px 0;
   width: 100%;
   box-sizing: border-box;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  // background-color: orange;
 `;
 
 const Wrapper = styled.div``;
