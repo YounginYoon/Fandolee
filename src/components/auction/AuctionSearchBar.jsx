@@ -5,8 +5,13 @@ import { Category } from "../../constants/category";
 import { IdolList } from "../../constants/idol";
 import DropDownMenu from "../common/DropDownMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import {
+  faPen,
+  faSearch,
+  faRotateRight,
+  faRotate,
+} from "@fortawesome/free-solid-svg-icons";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { db } from "../../config/firebase";
 
 import {
@@ -26,141 +31,78 @@ import AuctionList from "./AuctionList";
 const height = "28px";
 const fontSize = "12px";
 
-const AuctionSearchBar = ({ setProducts, setLoading }) => {
+const initialIdol = "내가 찾는 아이돌";
+const initialCategory = "굿즈 종류";
+
+const AuctionSearchBar = ({ getAuctionList }) => {
   const user = useUser();
-  const [idol, setIdol] = useState("내가 찾는 아이돌");
-  const [category, setCategory] = useState("굿즈 종류");
+  const [idol, setIdol] = useState(initialIdol);
+  const [category, setCategory] = useState(initialCategory);
 
   const [input, setInput] = useState("");
 
   const navigate = useNavigate();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const goAuctionUpPage = () => {
     navigate("/auction/post");
   };
 
+  const setQueryString = (idol, category, title) => {
+    if (idol === initialIdol && category === initialCategory && !title) {
+      searchParams.delete("idol");
+      searchParams.delete("category");
+      searchParams.delete("title");
+    } else {
+      if (idol !== initialIdol) {
+        searchParams.set("idol", idol);
+      }
+      if (category !== initialCategory) {
+        searchParams.set("category", category);
+      }
+      if (title) {
+        searchParams.set("title", title);
+      }
+    }
+
+    setSearchParams(searchParams);
+  };
   const handleSearch = async () => {
-    setLoading(true);
-    const productDB = collection(db, "product");
-   
-    if(idol === "내가 찾는 아이돌" && category === "굿즈 종류"){
-      try {
-        const q = query(
-          productDB,
-          where("isComplete", "==", 0),
-          orderBy("endDate"),
-        );
-        const ret = await getDocs(q);
-        const newData = ret.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        const products = newData.filter((product) => {
-          const inputArray = input.split(' ');
-          const isAllIncluded = inputArray.every((ele) => 
-          product.title.includes(ele));
-          return isAllIncluded;
-        });
+    const _idol = idol === initialIdol ? null : idol;
+    const _category = category === initialCategory ? null : category;
+    setQueryString(idol, category, input);
 
-        setProducts(products);
-      } catch (err) {
-        console.log("err:", err);
-      }
-    }
-    else if(idol === "내가 찾는 아이돌" && category !== "굿즈 종류"){
-
-      try {
-        const q = query(
-          productDB,
-          where("category", "==", category),
-          where("isComplete", "==", 0),
-          orderBy("endDate"),
-        );
-        const ret = await getDocs(q);
-        const newData = ret.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        const products = newData.filter((product) => {
-          const inputArray = input.split(' ');
-          const isAllIncluded = inputArray.every((ele) => 
-          product.title.includes(ele));
-          return isAllIncluded;
-        });
-        setProducts(products);
-      } catch (err) {
-        console.log("err:", err);
-      }
-    }
-    else if(idol !== "내가 찾는 아이돌" && category === "굿즈 종류"){
-
-      try {
-        const q = query(
-          productDB,
-          where("idol", "==", idol),
-          where("isComplete", "==", 0),
-          orderBy("endDate"),
-        );
-        const ret = await getDocs(q);
-        const newData = ret.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        const products = newData.filter((product) => {
-          const inputArray = input.split(' ');
-          const isAllIncluded = inputArray.every((ele) => 
-          product.title.includes(ele));
-          return isAllIncluded;
-        });
-        setProducts(products);
-      } catch (err) {
-        console.log("err:", err);
-      }
-
-    }else{
-
-      try {
-        const q = query(
-          productDB,
-          where("category", "==", category),
-          where("idol", "==", idol),
-          where("isComplete", "==", 0),
-          orderBy("endDate"),
-        );
-        const ret = await getDocs(q);
-        const newData = ret.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        const products = newData.filter((product) => {
-          const inputArray = input.split(' ');
-          const isAllIncluded = inputArray.every((ele) => 
-          product.title.includes(ele));
-          return isAllIncluded;
-        });
-        setProducts(products);
-      } catch (err) {
-        console.log("err:", err);
-      }
-
-    }
-    
-
-    
-
-
-
+    await getAuctionList(_idol, _category, input);
   };
 
-  const onChange = (e) => {
-    const { value } = e.target;
-    setInput(value);
-  };
-  const onKeyUp = (e) => {
-    if (e.key === "Enter") {
-      //onClick();
+  const setInitialStates = () => {
+    const _idol = searchParams.get("idol");
+    const _category = searchParams.get("category");
+    const _title = searchParams.get("title");
+
+    if (_idol) {
+      setIdol(_idol);
+    }
+    if (_category) {
+      setCategory(_category);
+    }
+    if (_title) {
+      setInput(_title);
     }
   };
+
+  const onRefresh = async () => {
+    setIdol(initialIdol);
+    setCategory(initialCategory);
+    setInput("");
+    setQueryString(initialIdol, initialCategory, "");
+    await getAuctionList();
+  };
+
+  useEffect(() => {
+    setInitialStates();
+  }, []);
 
   return (
     <Container>
@@ -186,6 +128,11 @@ const AuctionSearchBar = ({ setProducts, setLoading }) => {
           />
 
           <SearchBar input={input} setInput={setInput} onClick={handleSearch} />
+
+          <RotateIcon onClick={onRefresh}>
+            초기화
+            <FontAwesomeIcon icon={faRotate} style={{ marginLeft: "3px" }} />
+          </RotateIcon>
         </Wrapper>
 
         <BtnWrap>
@@ -248,4 +195,11 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   // background-color: orange;
+`;
+
+const RotateIcon = styled.div`
+  color: ${colors.COLOR_GRAY_TEXT};
+  font-size: 12px;
+  // background-color: orange;
+  cursor: pointer;
 `;

@@ -9,6 +9,7 @@ import { collection, query, getDocs, orderBy } from "firebase/firestore";
 import Loading from "../components/common/Loading";
 
 const ExchangeListPage = () => {
+  const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState(null);
   //exchange 데이터
 
@@ -26,6 +27,7 @@ const ExchangeListPage = () => {
 
       // console.log("newData: ", newData);
       setProducts(newData);
+      setLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -35,13 +37,13 @@ const ExchangeListPage = () => {
     getExchangeList();
   }, []);
 
-  if (!products) {
+  if (loading) {
     return <Loading />;
   }
 
   return (
     <Container>
-      <ExchangeSearchBar setProducts={setProducts} />
+      <ExchangeSearchBar setProducts={setProducts} setLoading={setLoading} />
 
       <ExchangeList products={products} />
     </Container>
