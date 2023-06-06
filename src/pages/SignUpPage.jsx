@@ -36,7 +36,7 @@ const SignUpPage = () => {
     } else {
       const EmailCheck = await db
         .collection('users')
-        .where('Email', '==', input.email)
+        .where('email', '==', input.email)
         .get();
       if (EmailCheck.docs.length > 0) {
         alert('이메일을 확인하세요!');
@@ -64,7 +64,7 @@ const SignUpPage = () => {
     } else {
       const NicknameCheck = await db
         .collection('users')
-        .where('Nickname', '==', input.nickname)
+        .where('nickName', '==', input.nickname)
         .get();
       if ((await NicknameCheck).docs.length > 0) {
         alert('닉네임을 확인하세요!');
@@ -129,7 +129,7 @@ const SignUpPage = () => {
           } else {
             const check = db
               .collection('users')
-              .where('Email', '==', value)
+              .where('email', '==', value)
               .get()
               .then((res) => {
                 if (res.size > 0)
@@ -143,7 +143,7 @@ const SignUpPage = () => {
           } else {
             const check = db
               .collection('users')
-              .where('Nickname', '==', value)
+              .where('nickName', '==', value)
               .get()
               .then((res) => {
                 if (res.size > 0)

@@ -36,23 +36,48 @@ const ExchangeSearchBar = ({ setProducts }) => {
     const productDB = collection(db, "exchange");
 
     try {
-      const q = query(
+      let q = query(
         productDB,
-        where("category", "==", category),
-        where("idol", "==", idol),
-        where("method", "==", method),
-        where("region", "==", region),
-        orderBy("date")
+        where("isComplete","==",0),
+        orderBy("date"),
       );
+      if(idol !=="내가 찾는 아이돌"){
+        q = query(q, where("idol", "==", idol));
+      }
+      if(category !=="굿즈 종류"){
+        q = query(q, where("category","==", category));
+      }
+      
+      if(method !== "교환방법"){
+        q = query(q, where("transactionType","==",method));
+      }
+      if(region !== "지역"){
+        q = query(q, where("region","==", region));
+      }
       const ret = await getDocs(q);
-      const products = ret.docs.map((doc) => ({
+      const newData = ret.docs.map((doc) => ({      
         id: doc.id,
         ...doc.data(),
       }));
+      const products=newData.filter((product) =>{
+        return product.wantMember.includes(input);
+      })
+      
+      
 
       setProducts(products);
     } catch (err) {
       console.log("err:", err);
+    }
+  };
+
+  const onChange = (e) => {
+    const { value } = e.target;
+    setInput(value);
+  };
+  const onKeyUp = (e) => {
+    if (e.key === "Enter") {
+      //onClick();
     }
   };
 
@@ -97,7 +122,14 @@ const ExchangeSearchBar = ({ setProducts }) => {
             setSelected={setRegion}
           />
 
-          <SearchBar input={input} setInput={setInput} onClick={() => {}} />
+          <SearchInput
+            placeholder="원하는 멤버명을 검색하세요!"
+            value={input}
+            onChange={onChange}
+            onKeyUp={onKeyUp}
+          />
+
+          
         </Wrapper>
 
         <BtnWrap>
@@ -159,4 +191,17 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+const SearchInput = styled.input`
+  box-sizing: border-box;
+  background-color: ${colors.COLOR_LIGHTGRAY_BACKGROUND};
+  width: 220px;
+  height: 100%;
+  border-radius: 30px;
+  border: 1px solid ${colors.COLOR_MAIN};
+  //   border: 1px solid ${colors.COLOR_GRAY_BORDER};
+  display: flex;
+  align-items: center;
+  padding: 0 32px 0 15px;
+  font-size: 12px;
 `;

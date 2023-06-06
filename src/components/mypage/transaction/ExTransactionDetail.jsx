@@ -78,6 +78,7 @@ const ExTransactionDetail = () => {
 
       <InfoDiv>
         <TransactionInfoBox label="굿즈" image={product.images[0]} />
+        <TransactionInfoBox label="제목" text = {product.title} />
         <TransactionInfoBox label="카테고리" text={product.idol} />
         <TransactionInfoBox label="판매자" text={seller} />
         <TransactionInfoBox label="낙찰자" text={consumer} />

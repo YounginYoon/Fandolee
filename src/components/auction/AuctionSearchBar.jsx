@@ -21,11 +21,12 @@ import {
 import useUser from "../../hooks/useUser";
 import SearchArea from "../common/SearchArea";
 import SearchBar from "../common/SearchBar";
+import AuctionList from "./AuctionList";
 
 const height = "28px";
 const fontSize = "12px";
 
-const AuctionSearchBar = ({ setProducts }) => {
+const AuctionSearchBar = ({ setProducts, setLoading }) => {
   const user = useUser();
   const [idol, setIdol] = useState("내가 찾는 아이돌");
   const [category, setCategory] = useState("굿즈 종류");
@@ -39,29 +40,116 @@ const AuctionSearchBar = ({ setProducts }) => {
   };
 
   const handleSearch = async () => {
+    setLoading(true);
     const productDB = collection(db, "product");
+   
+    if(idol === "내가 찾는 아이돌" && category === "굿즈 종류"){
+      try {
+        const q = query(
+          productDB,
+          where("isComplete", "==", 0),
+          orderBy("endDate"),
+        );
+        const ret = await getDocs(q);
+        const newData = ret.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        const products = newData.filter((product) => {
+          const inputArray = input.split(' ');
+          const isAllIncluded = inputArray.every((ele) => 
+          product.title.includes(ele));
+          return isAllIncluded;
+        });
 
-    try {
-      const q = query(
-        productDB,
-        where("category", "==", category),
-        where("idol", "==", idol),
-        where("isComplete", "==", 0),
-        orderBy("title"),
-        where("title",">=",input),
-        where("title","<=","input"+"\uf8ff")
-        
-      );
-      const ret = await getDocs(q);
-      const products = ret.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      setProducts(products);
-    } catch (err) {
-      console.log("err:", err);
+        setProducts(products);
+      } catch (err) {
+        console.log("err:", err);
+      }
     }
+    else if(idol === "내가 찾는 아이돌" && category !== "굿즈 종류"){
+
+      try {
+        const q = query(
+          productDB,
+          where("category", "==", category),
+          where("isComplete", "==", 0),
+          orderBy("endDate"),
+        );
+        const ret = await getDocs(q);
+        const newData = ret.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        const products = newData.filter((product) => {
+          const inputArray = input.split(' ');
+          const isAllIncluded = inputArray.every((ele) => 
+          product.title.includes(ele));
+          return isAllIncluded;
+        });
+        setProducts(products);
+      } catch (err) {
+        console.log("err:", err);
+      }
+    }
+    else if(idol !== "내가 찾는 아이돌" && category === "굿즈 종류"){
+
+      try {
+        const q = query(
+          productDB,
+          where("idol", "==", idol),
+          where("isComplete", "==", 0),
+          orderBy("endDate"),
+        );
+        const ret = await getDocs(q);
+        const newData = ret.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        const products = newData.filter((product) => {
+          const inputArray = input.split(' ');
+          const isAllIncluded = inputArray.every((ele) => 
+          product.title.includes(ele));
+          return isAllIncluded;
+        });
+        setProducts(products);
+      } catch (err) {
+        console.log("err:", err);
+      }
+
+    }else{
+
+      try {
+        const q = query(
+          productDB,
+          where("category", "==", category),
+          where("idol", "==", idol),
+          where("isComplete", "==", 0),
+          orderBy("endDate"),
+        );
+        const ret = await getDocs(q);
+        const newData = ret.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        const products = newData.filter((product) => {
+          const inputArray = input.split(' ');
+          const isAllIncluded = inputArray.every((ele) => 
+          product.title.includes(ele));
+          return isAllIncluded;
+        });
+        setProducts(products);
+      } catch (err) {
+        console.log("err:", err);
+      }
+
+    }
+    
+
+    
+
+
+
   };
 
   const onChange = (e) => {
@@ -73,7 +161,6 @@ const AuctionSearchBar = ({ setProducts }) => {
       //onClick();
     }
   };
-
 
   return (
     <Container>
@@ -97,19 +184,8 @@ const AuctionSearchBar = ({ setProducts }) => {
             selected={category}
             setSelected={setCategory}
           />
-          <SearchInputDiv>
 
-          <SearchInput
-            placeholder="어떤 상품을 찾으시나요?"
-            value={input}
-            onChange={onChange}
-            onKeyUp={onKeyUp}
-          />
-
-          
-        </SearchInputDiv>
-
-          {/* <SearchBar input={input} setInput={setInput} onClick={() => {}} /> */}
+          <SearchBar input={input} setInput={setInput} onClick={handleSearch} />
         </Wrapper>
 
         <BtnWrap>
@@ -172,41 +248,4 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   // background-color: orange;
-`;
-
-
-const SearchInputDiv = styled.div`
-  width: max-content;
-  position: relative;
-  height: 28px;
-  margin-right: 5px;
-  //   background-color: aqua;
-`;
-const SearchInput = styled.input`
-  box-sizing: border-box;
-  background-color: ${colors.COLOR_LIGHTGRAY_BACKGROUND};
-  width: 220px;
-  height: 100%;
-  border-radius: 30px;
-  border: 1px solid ${colors.COLOR_MAIN};
-  //   border: 1px solid ${colors.COLOR_GRAY_BORDER};
-  display: flex;
-  align-items: center;
-  padding: 0 32px 0 15px;
-  font-size: 12px;
-`;
-
-const SearchIcon = styled.div`
-  //   background-color: orange;
-  cursor: pointer;
-  height: 100%;
-  width: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 0;
-  right: 5px;
-  font-size: 12px;
-  color: ${colors.COLOR_MAIN};
 `;

@@ -2,90 +2,133 @@ import React from 'react';
 import styled from 'styled-components';
 import { colors } from '../../common/color';
 import { db } from '../../config/firebase';
-import { collection, query, where, getDocs, getDoc } from 'firebase/firestore';
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  getDoc,
+  limit,
+  orderBy,
+} from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import ExchangeList from '../exchange/ExchangeList';
 import { useNavigate } from 'react-router-dom';
+import useUser from '../../hooks/useUser';
+import { useLike } from '../../hooks/useHeart';
+import { useLikeExchange } from '../../hooks/useHeartExchange';
+import useProducts from '../../hooks/useProducts';
+import useExchanges from '../../hooks/useExchanges';
+import Loading from '../common/Loading';
 
 const RecommendedProducts = () => {
-  // const productRef = query(collection(db, 'product'));
-  // const exchangeRef = query(collection(db, 'exchange'));
-  // // 모든 경매 상품 담음
-  // const [products, setProducts] = useState([]);
-  // // 모든 교환 상품 담음
-  // const [exchange, setExchange] = useState([]);
-  // //경매 랜덤 추천 상품 담음
-  // const [recommendProducts, setRecommendProducts] = useState([]);
-  // //교환 랜덤 추천 상품 담음
-  // const [recommendExchange, setRecommendExchange] = useState([]);
-  // const navigate = useNavigate();
-  // // 모든 경매 상품 가져옴
-  // const getAllProducts = async () => {
-  //   const productDocs = await getDocs(productRef);
-  //   const productsList = [];
-  //   await productDocs.forEach((doc) => {
-  //     const data = doc.data();
-  //     if (data.isComplete === 0) productsList.push({ id: doc.id, data });
-  //   });
-  //   setProducts(productsList);
-  // };
-  // //모든 교환 상품 가져옴
-  // const getAllExchange = async () => {
-  //   const exchangeDocs = await getDocs(exchangeRef);
-  //   const productsList = [];
-  //   await exchangeDocs.forEach((doc) => {
-  //     const data = doc.data();
-  //     if (data.isComplete === 0) productsList.push({ id: doc.id, data });
-  //   });
-  //   setExchange(productsList);
-  // };
-  // const randomRecommend = (list, setRecommend) => {
-  //   const shuffled = list.sort(() => 0.5 - Math.random());
-  //   const selected = shuffled.slice(0, 3); // 랜덤으로 3개 뽑기
-  //   setRecommend(selected);
-  // };
-  // const goAuctionProduct = (productId) => {
-  //   navigate(`/auction/auctiondetail/${productId}`);
-  // };
-  // const goExchangeProduct = (productId) => {
-  //   navigate(`/exchange/exchangedetail/${productId}`);
-  // };
-  // useEffect(() => {
-  //   getAllProducts();
-  //   getAllExchange();
-  // }, []);
-  // useEffect(() => {
-  //   if (products.length > 0) {
-  //     randomRecommend(products, setRecommendProducts);
-  //   }
-  //   if (exchange.length > 0) {
-  //     randomRecommend(exchange, setRecommendExchange);
-  //     console.log(recommendExchange);
-  //   }
-  // }, [products, exchange]);
+  const user = useUser();
+  // 사용자가 찜한 경매, 교환 상품 가져오기
+  const arrayDataAuction = useLike(user);
+  const arrayDataExchange = useLikeExchange(user);
+  const products = useProducts(arrayDataAuction);
+  const exchanges = useExchanges(arrayDataExchange);
+
+  const [idol, setIdol] = useState([]);
+  const [recommendProducts, setRecommendProducts] = useState([]);
+
+  const getIdol = async () => {
+    const idols = [];
+    if (products) {
+      await products.map((product, index) => {
+        idols.push(product.idol);
+      });
+    }
+    if (exchanges) {
+      await exchanges.map((product, index) => {
+        if (product.idol !== '') idols.push(product.idol);
+      });
+    }
+    // 중복 아이돌 지움
+    const removeEqual = await idols.filter((value, index, self) => {
+      return self.indexOf(value) === index;
+    });
+    setIdol(removeEqual);
+  };
+
+  const loadIdolProducts = async () => {
+    try {
+      const productRef = collection(db, 'product');
+      const exchangeRef = collection(db, 'exchange');
+      const q = query(
+        productRef,
+        where('idol', 'in', idol),
+        where('isComplete', '==', 0),
+        limit(4)
+      );
+      const eq = query(
+        exchangeRef,
+        where('idol', 'in', idol),
+        where('isComplete', '==', 0),
+        limit(4)
+      );
+
+      const productDocs = await getDocs(q);
+      const exchangeDocs = await getDocs(eq);
+      const productData = productDocs.docs.map((doc) => doc.data());
+      const exchangeData = exchangeDocs.docs.map((doc) => doc.data());
+      const combineData = productData.concat(exchangeData);
+      await setRecommendProducts(combineData);
+      recommendProducts.sort((a, b) => b.likes - a.likes);
+    } catch (err) {
+      console.log('loadIdolProducts err: ', err);
+    }
+  };
+
+  const loadRandomProducts = async (len) => {
+    try {
+      const productRef = collection(db, 'product');
+      const exchangeRef = collection(db, 'exchange');
+      const q = query(productRef, where('isComplete', '==', 0), limit(6 - len));
+      const eq = query(
+        exchangeRef,
+        where('isComplete', '==', 0),
+        limit(6 - len)
+      );
+      const productDocs = await getDocs(q);
+      const exchangeDocs = await getDocs(eq);
+      const productData = productDocs.docs.map((doc) => doc.data());
+      const exchangeData = exchangeDocs.docs.map((doc) => doc.data());
+      const combineData = productData.concat(exchangeData);
+      await setRecommendProducts([...recommendProducts, combineData]);
+      recommendProducts.sort((a, b) => b.likes - a.likes);
+    } catch (err) {
+      console.log('loadRandomProducts err: ', err);
+    }
+  };
+
+  useEffect(() => {
+    // getIdol();
+    if (idol.length > 0) {
+      loadIdolProducts();
+    }
+    if (recommendProducts.length < 6) {
+      loadRandomProducts(recommendProducts.length);
+    }
+  }, [idol]);
+
+  useEffect(() => {
+    if (products && exchanges) {
+      getIdol();
+    }
+  }, [products, exchanges]);
+
+  const showRecommend = recommendProducts.slice(0, 6);
+
+  if (!showRecommend) {
+    return <Loading />;
+  }
+
   return (
     <Container>
       <Text>팬도리를 위한 추천상품 🎁</Text>
-      <ProductsDiv>
-        <ProductBox>
-          <ProductImg src="/img/goods1.jpeg" />
-        </ProductBox>
-        <ProductBox>
-          <ProductImg src="/img/goods2.jpeg" />
-        </ProductBox>
-        <ProductBox>
-          <ProductImg src="/img/goods3.jpeg" />
-        </ProductBox>
-        <ProductBox>
-          <ProductImg src="/img/goods4.jpeg" />
-        </ProductBox>
-        <ProductBox>
-          <ProductImg src="/img/goods5.jpeg" />
-        </ProductBox>
-        <ProductBox>
-          <ProductImg src="/img/goods6.jpeg" />
-        </ProductBox>
-      </ProductsDiv>
+
+      <ProductsDiv></ProductsDiv>
     </Container>
   );
 };
