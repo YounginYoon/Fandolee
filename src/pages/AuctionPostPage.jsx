@@ -71,7 +71,7 @@ const AuctionPostPage = () => {
         return;
       }
       setLoading(true);
-      console.log({ inputs, idol, category });
+      //console.log({ inputs, idol, category });
       const productDB = db.collection("product");
 
       const timeStamp = moment().format("YYYY-MM-DD hh:mm:ss");
@@ -113,7 +113,7 @@ const AuctionPostPage = () => {
           uid: user.uid,
         })
         .then((doc) => {
-          console.log(doc);
+          //console.log(doc);
         })
         .catch((err) => {
           console.log("auction posting fail: ", err);
