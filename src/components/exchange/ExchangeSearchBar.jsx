@@ -36,23 +36,28 @@ const ExchangeSearchBar = ({ setProducts }) => {
     const productDB = collection(db, "exchange");
 
     try {
-      const q = query(
+      let q = query(
         productDB,
-        where("category", "==", category),
-        where("idol", "==", idol),
-        where("transactionType", "==", method),
-        where("region", "==", region),
         where("isComplete","==",0),
         orderBy("date"),
-        
       );
+      if(idol !=="내가 찾는 아이돌"){
+        q = query(q, where("idol", "==", idol));
+      }
+      if(category !=="굿즈 종류"){
+        q = query(q, where("category","==", category));
+      }
+      
+      if(method !== "교환방법"){
+        q = query(q, where("transactionType","==",method));
+      }
+      if(region !== "지역"){
+        q = query(q, where("region","==", region));
+      }
       const ret = await getDocs(q);
-      const newData = ret.docs.map((doc) => ({
-        
-        
+      const newData = ret.docs.map((doc) => ({      
         id: doc.id,
         ...doc.data(),
-
       }));
       const products=newData.filter((product) =>{
         return product.wantMember.includes(input);
