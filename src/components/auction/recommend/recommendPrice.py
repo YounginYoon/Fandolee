@@ -204,6 +204,7 @@ def search_similar(title, category):
     # 가장 유사한 문장을 찾습니다.
     similar_sentences = []
     prices = []
+    titles = []
 
     for sentence in gensim_input:
         sentence_vec = np.mean([ft_model.wv[word] for word in sentence.split()], axis=0)
@@ -223,8 +224,7 @@ def search_similar(title, category):
             continue
         price = price_df['price'].values
         for p in price:
-            prices.append(p)
-
+            prices.append((sentence, p))
     return prices
 
 def on_snapshot(doc_snapshot, changes, read_time):
@@ -242,14 +242,21 @@ def on_snapshot(doc_snapshot, changes, read_time):
                 if category and title:
                     print(f'새로운 문서 추가. category: {category} title: {title}\n')
                     recommendPrices = search_similar(title, category)
+
                     if len(recommendPrices) > 0:
-                        maxPrice = max(recommendPrices)
-                        minPrice = min(recommendPrices)
+                        maxPrice = max(recommendPrices, key=lambda x: x[1])[1]
+                        minPrice = min(recommendPrices, key=lambda x: x[1])[1]
+                        for title, price in recommendPrices:
+                          if price == maxPrice:
+                            maxTitle = title
+                          if price == minPrice:
+                            minTitle = title
                         print("max min: ", maxPrice, minPrice)
+                        print("max min: ", maxTitle, minTitle)
 
                         # 파이어스토어에 추천 가격 수정
-                        new_doc_ref.update({"recommendMaxPrice": int(maxPrice), "recommendMinPrice": int(minPrice)})
-
+                        new_doc_ref.update({"recommendMaxPrice": int(maxPrice), "recommendMaxTitle": maxTitle, "recommendMinPrice": int(minPrice),  "recommendMinTitle": minTitle})
+                        print("upate Firebase!\n")
 doc_watch = db.collection(u'recommendPrice').on_snapshot(on_snapshot)
 
 # 서버가 종료되지 않도록 무한루프를 실행

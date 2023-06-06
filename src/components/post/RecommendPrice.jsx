@@ -9,6 +9,8 @@ const RecommendPrice = ({ title, category }) => {
   const user = useUser();
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
+  const [minTitle, setMaxTitle] = useState('');
+  const [maxTitle, setMinTitle] = useState('');
   const [isComplete, setIsComplete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -39,6 +41,7 @@ const RecommendPrice = ({ title, category }) => {
           .collection('recommendPrice')
           .where('title', '==', title)
           .where('category', '==', category)
+          .where('uid', '==', user.uid)
           .limit(1);
 
         docRef.get().then((query) => {
@@ -61,6 +64,8 @@ const RecommendPrice = ({ title, category }) => {
         const data = docRef.data();
         setMinPrice(data.recommendMinPrice);
         setMaxPrice(data.recommendMaxPrice);
+        setMinTitle(data.recommendMinTitle);
+        setMaxTitle(data.recommendMaxTitle);
         setIsComplete(data.isComplete);
       }
     } catch (err) {
@@ -68,6 +73,10 @@ const RecommendPrice = ({ title, category }) => {
     }
   };
 
+  const goOtherSite = () => {
+    const siteURL = `https://m.bunjang.co.kr/search/products?q=${title}`;
+    window.open(siteURL, '_blank');
+  };
   return (
     <Container>
       <RecommendBox>
@@ -81,14 +90,21 @@ const RecommendPrice = ({ title, category }) => {
           <Price>{moneyFormat(minPrice)}</Price>
         </TextBox>
         <TextBox>
+          <Text>{minTitle}</Text>
+        </TextBox>
+        <TextBox>
           <Text>최대</Text>
           <Price>{moneyFormat(maxPrice)}</Price>
+        </TextBox>
+        <TextBox>
+          <Text>{maxTitle}</Text>
         </TextBox>
       </RecommendBox>
 
       <RecommendBtn onClick={sendRecommend}>
         {isLoading ? 'Loading...' : '가격 추천 받기'}
       </RecommendBtn>
+      <OtherSiteBtn onClick={goOtherSite}>다른 사이트 둘러보기</OtherSiteBtn>
     </Container>
   );
 };
@@ -135,6 +151,7 @@ const TextBox = styled.div`
   align-items: center;
   justify-content: center;
   margin: 15px;
+  width: 250px;
 `;
 
 const Text = styled.span`
@@ -152,6 +169,20 @@ const Price = styled.span`
 const RecommendBtn = styled.div`
   border-radius: 8px;
   background-color: ${colors.COLOR_MAIN};
+  height: 50px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+  cursor: pointer;
+`;
+
+const OtherSiteBtn = styled.div`
+  border-radius: 8px;
+  background-color: ${colors.COLOR_BLUE_BUTTON};
   height: 50px;
   color: white;
   font-weight: bold;
