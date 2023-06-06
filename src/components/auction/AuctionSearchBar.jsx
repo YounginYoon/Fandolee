@@ -26,7 +26,7 @@ import AuctionList from "./AuctionList";
 const height = "28px";
 const fontSize = "12px";
 
-const AuctionSearchBar = ({ setProducts }) => {
+const AuctionSearchBar = ({ setProducts, setLoading }) => {
   const user = useUser();
   const [idol, setIdol] = useState("내가 찾는 아이돌");
   const [category, setCategory] = useState("굿즈 종류");
@@ -34,48 +34,36 @@ const AuctionSearchBar = ({ setProducts }) => {
   const [input, setInput] = useState("");
 
   const navigate = useNavigate();
-  
+
   const goAuctionUpPage = () => {
     navigate("/auction/post");
   };
 
   const handleSearch = async () => {
+    setLoading(true);
     const productDB = collection(db, "product");
-    
+
     try {
       const q = query(
         productDB,
         where("category", "==", category),
         where("idol", "==", idol),
         where("isComplete", "==", 0),
-        orderBy("endDate"),
+        orderBy("endDate")
       );
       const ret = await getDocs(q);
       const newData = ret.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      const products=newData.filter((product) =>{
+      const products = newData.filter((product) => {
         return product.title.includes(input);
-      })
-      
-      
+      });
+
       setProducts(newData);
+      setLoading(false);
     } catch (err) {
       console.log("err:", err);
-    }
-
-
-
-  };
-
-  const onChange = (e) => {
-    const { value } = e.target;
-    setInput(value);
-  };
-  const onKeyUp = (e) => {
-    if (e.key === "Enter") {
-      //onClick();
     }
   };
 
@@ -102,7 +90,7 @@ const AuctionSearchBar = ({ setProducts }) => {
             setSelected={setCategory}
           />
 
-          <SearchBar input={input} setInput={setInput} onClick={() => {}} />
+          <SearchBar input={input} setInput={setInput} onClick={handleSearch} />
         </Wrapper>
 
         <BtnWrap>
@@ -118,8 +106,6 @@ const AuctionSearchBar = ({ setProducts }) => {
           )}
         </BtnWrap>
       </Inner>
-
-
     </Container>
   );
 };

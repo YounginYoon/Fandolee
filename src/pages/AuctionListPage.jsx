@@ -12,6 +12,7 @@ import Loading from "../components/common/Loading";
 const AuctionListPage = () => {
   const [products, setProducts] = useState(null);
   //거래 데이터
+  const [loading, setLoading] = useState(true);
 
   //전체 거래 정보를 가져온다.
   const getAuctionList = async () => {
@@ -28,6 +29,7 @@ const AuctionListPage = () => {
 
       // console.log("newData: ", newData);
       setProducts(newData);
+      setLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -37,13 +39,13 @@ const AuctionListPage = () => {
     getAuctionList();
   }, []);
 
-  if (!products) {
+  if (loading) {
     return <Loading />;
   }
 
   return (
     <Container>
-      <AuctionSearchBar setProducts={setProducts} />
+      <AuctionSearchBar setProducts={setProducts} setLoading={setLoading} />
 
       <AuctionList products={products} />
     </Container>
