@@ -1,4 +1,5 @@
 export const Region = [
+  "택배",
   "서울",
   "경기",
   "인천",
