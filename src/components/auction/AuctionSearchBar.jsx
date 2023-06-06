@@ -26,7 +26,7 @@ import AuctionList from "./AuctionList";
 const height = "28px";
 const fontSize = "12px";
 
-const AuctionSearchBar = ({ setProducts }) => {
+const AuctionSearchBar = ({ setProducts, setLoading }) => {
   const user = useUser();
   const [idol, setIdol] = useState("내가 찾는 아이돌");
   const [category, setCategory] = useState("굿즈 종류");
@@ -34,12 +34,13 @@ const AuctionSearchBar = ({ setProducts }) => {
   const [input, setInput] = useState("");
 
   const navigate = useNavigate();
-  
+
   const goAuctionUpPage = () => {
     navigate("/auction/post");
   };
 
   const handleSearch = async () => {
+    setLoading(true);
     const productDB = collection(db, "product");
    
     if(idol === "내가 찾는 아이돌" && category === "굿즈 종류"){
@@ -184,7 +185,7 @@ const AuctionSearchBar = ({ setProducts }) => {
             setSelected={setCategory}
           />
 
-          <SearchBar input={input} setInput={setInput} onClick={() => {}} />
+          <SearchBar input={input} setInput={setInput} onClick={handleSearch} />
         </Wrapper>
 
         <BtnWrap>
@@ -200,8 +201,6 @@ const AuctionSearchBar = ({ setProducts }) => {
           )}
         </BtnWrap>
       </Inner>
-
-
     </Container>
   );
 };
