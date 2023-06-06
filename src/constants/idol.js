@@ -1,5 +1,4 @@
 export const IdolList = [
-  "Your Idol",
   "BTS",
   "SKZ",
   "SVT",

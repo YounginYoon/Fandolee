@@ -11,7 +11,7 @@ import { Category } from "../../constants/category";
 import DropDownMenu from "../common/DropDownMenu";
 import { TransactionType } from "../../constants/transactionType";
 import { Region } from "../../constants/region";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { db } from "../../config/firebase";
 
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
@@ -21,7 +21,7 @@ import SearchBar from "../common/SearchBar";
 const height = "28px";
 const fontSize = "12px";
 
-const ExchangeSearchBar = ({ setProducts }) => {
+const ExchangeSearchBar = ({ setProducts, setLoading }) => {
   const user = useUser();
   const [idol, setIdol] = useState("내가 찾는 아이돌");
   const [category, setCategory] = useState("굿즈 종류");
@@ -33,52 +33,39 @@ const ExchangeSearchBar = ({ setProducts }) => {
   const navigate = useNavigate();
 
   const handleSearch = async () => {
+    setLoading(true);
     const productDB = collection(db, "exchange");
 
     try {
-      let q = query(
-        productDB,
-        where("isComplete","==",0),
-        orderBy("date"),
-      );
-      if(idol !=="내가 찾는 아이돌"){
+      let q = query(productDB, where("isComplete", "==", 0), orderBy("date"));
+      if (idol !== "내가 찾는 아이돌") {
         q = query(q, where("idol", "==", idol));
       }
-      if(category !=="굿즈 종류"){
-        q = query(q, where("category","==", category));
+      if (category !== "굿즈 종류") {
+        q = query(q, where("category", "==", category));
       }
-      
-      if(method !== "교환방법"){
-        q = query(q, where("transactionType","==",method));
+
+      if (method !== "교환방법") {
+        q = query(q, where("transactionType", "==", method));
       }
-      if(region !== "지역"){
-        q = query(q, where("region","==", region));
+      if (region !== "지역") {
+        q = query(q, where("region", "==", region));
       }
       const ret = await getDocs(q);
-      const newData = ret.docs.map((doc) => ({      
+      const newData = ret.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      const products=newData.filter((product) =>{
+      const products = newData.filter((product) => {
         return product.wantMember.includes(input);
-      })
-      
-      
+      });
 
       setProducts(products);
     } catch (err) {
       console.log("err:", err);
     }
-  };
 
-  const onChange = (e) => {
-    const { value } = e.target;
-    setInput(value);
-  };
-  const onKeyUp = (e) => {
-    if (e.key === "Enter") {
-      //onClick();
-    }
+    setLoading(false);
   };
 
   return (
@@ -122,14 +109,7 @@ const ExchangeSearchBar = ({ setProducts }) => {
             setSelected={setRegion}
           />
 
-          <SearchInput
-            placeholder="원하는 멤버명을 검색하세요!"
-            value={input}
-            onChange={onChange}
-            onKeyUp={onKeyUp}
-          />
-
-          
+          <SearchBar input={input} setInput={setInput} onClick={handleSearch} />
         </Wrapper>
 
         <BtnWrap>
@@ -191,17 +171,4 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`;
-const SearchInput = styled.input`
-  box-sizing: border-box;
-  background-color: ${colors.COLOR_LIGHTGRAY_BACKGROUND};
-  width: 220px;
-  height: 100%;
-  border-radius: 30px;
-  border: 1px solid ${colors.COLOR_MAIN};
-  //   border: 1px solid ${colors.COLOR_GRAY_BORDER};
-  display: flex;
-  align-items: center;
-  padding: 0 32px 0 15px;
-  font-size: 12px;
 `;
