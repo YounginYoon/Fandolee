@@ -2,10 +2,11 @@ import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 import styled from 'styled-components';
 import { colors } from '../common/color';
-import { db, authService } from '../config/firebase';
+import { db, authService, storage } from '../config/firebase';
 import { async } from '@firebase/util';
 import { doc } from 'firebase/firestore';
 
@@ -89,6 +90,19 @@ const SignUpPage = () => {
       if (user) {
         console.log('1');
         await updateProfile(user, { displayName: input.nickname });
+        // 프사 기본으로 지정
+        const file = '/img/user.png';
+        const imageRef = ref(storage, `profile_image/${user.uid}`);
+
+        const response = await fetch(file);
+        const blob = await response.blob();
+        uploadBytes(imageRef, blob).then((snapshot) => {
+          getDownloadURL(snapshot.ref).then((url) => {
+            updateProfile(user, { photoURL: url });
+            window.location.reload();
+          });
+        });
+
         db.collection('users')
           .doc(user.uid)
           .set(user_info)
