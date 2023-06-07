@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-const Loading = () => {
+const Loading = ({ size = "150px" }) => {
   return (
     <Container>
-      <Spinner src="/img/Spinner.gif" />
+      <Spinner size={size} src="/img/Spinner.gif" />
     </Container>
   );
 };
@@ -19,6 +19,6 @@ const Container = styled.div`
 `;
 
 const Spinner = styled.img`
-  width: 150px;
-  height: 150px;
+  width: ${({ size }) => size};
+  height: ${({ size }) => size};
 `;

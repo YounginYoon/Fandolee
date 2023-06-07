@@ -24,21 +24,18 @@ const ExTransactionDetail = () => {
   const [consumer, setConsumer] = useState("");
 
   const setData = async (product) => {
-    if(product){
+    if (product) {
       const nickname = await nickName(product.uid);
       return nickname;
-    }
-    else{
+    } else {
       return null;
     }
-    
   };
   const setData2 = async (product) => {
-    if(product){
+    if (product) {
       const nickname = await nickName(product.exchanger);
       return nickname;
-    }
-    else{
+    } else {
       return null;
     }
   };
@@ -46,26 +43,25 @@ const ExTransactionDetail = () => {
   const showNickName = () => {
     const seller2 = setData(product);
     const consumer2 = setData2(product);
-    if(seller2){
+    if (seller2) {
       seller2.then((id) => {
         setSeller(id);
         //console.log("seller: ",id);
       });
     }
-    if(consumer2){
-      consumer2.then((id)=>{
+    if (consumer2) {
+      consumer2.then((id) => {
         //console.log("consumer: ",id);
         setConsumer(id);
-      })
+      });
     }
-    
   };
 
   useEffect(() => {
     showNickName();
   }, [product]);
 
-  if (!product) {
+  if (!product || !seller || !consumer) {
     return <Loading />;
   }
 
@@ -78,11 +74,16 @@ const ExTransactionDetail = () => {
 
       <InfoDiv>
         <TransactionInfoBox label="굿즈" image={product.images[0]} />
-        <TransactionInfoBox label="제목" text = {product.title} />
-        <TransactionInfoBox label="카테고리" text={product.idol} />
-        <TransactionInfoBox label="판매자" text={seller} />
-        <TransactionInfoBox label="낙찰자" text={consumer} />
+        <TransactionInfoBox label="제목" text={product.title} />
+        <TransactionInfoBox label="아이돌" text={product.idol} />
+        <TransactionInfoBox label="굿즈종류" text={product.category} />
+        <TransactionInfoBox label="거래유형" text={"교환"} />
+        <TransactionInfoBox label="게시자" text={seller} />
+        <TransactionInfoBox label="거래자" text={consumer} />
+        <TransactionInfoBox label="보유멤버" text={product.haveMember} />
         <TransactionInfoBox label="교환멤버" text={product.wantMember} />
+        <TransactionInfoBox label="지역" text={product.region} />
+        <TransactionInfoBox label="교환방법" text={product.transactionType} />
       </InfoDiv>
     </Container>
   );

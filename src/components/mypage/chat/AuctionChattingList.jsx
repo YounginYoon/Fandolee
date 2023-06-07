@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { db, realTimeDatabase } from '../../../config/firebase';
-import Loading from '../../common/Loading';
-import styled from 'styled-components';
+import React, { useEffect, useState } from "react";
+import { db, realTimeDatabase } from "../../../config/firebase";
+import Loading from "../../common/Loading";
+import styled from "styled-components";
 
-import AuctionChattingBox from './AuctionChattingBox';
-import EmptyList from '../EmptyList';
+import AuctionChattingBox from "./AuctionChattingBox";
+import EmptyList from "../EmptyList";
 
 const AuctionChattingList = ({ user }) => {
   const [auctionChats, setAuctionChats] = useState(null);
 
   const getAuctionChats = async () => {
-    const chatRef = realTimeDatabase.ref('biddingChatRoom');
+    const chatRef = realTimeDatabase.ref("biddingChatRoom");
 
     try {
-      const products = await chatRef.once('value').then(async (snapshot) => {
+      const products = await chatRef.once("value").then(async (snapshot) => {
         const promises = [];
         snapshot.forEach((child) => {
           child.forEach((data) => {
@@ -21,7 +21,7 @@ const AuctionChattingList = ({ user }) => {
 
             // 사용자가 참여한 경매 채팅
             if (chat.username === user.uid) {
-              const productRef = db.collection('product').doc(child.key).get();
+              const productRef = db.collection("product").doc(child.key).get();
               promises.push(productRef);
             }
           });
@@ -37,7 +37,7 @@ const AuctionChattingList = ({ user }) => {
 
       setAuctionChats(products);
     } catch (err) {
-      console.log('getAuctioinChats err: ', err);
+      console.log("getAuctioinChats err: ", err);
     }
   };
 
