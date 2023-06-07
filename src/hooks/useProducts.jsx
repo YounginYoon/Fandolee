@@ -7,34 +7,29 @@ import { db } from "../config/firebase";
 const useProducts = (arrayId) => {
   const [products, setProducts] = useState(null);
 
-  const getProduct = async(arrayId) => {
-    
-    try{
+  const getProduct = async (arrayId) => {
+    try {
       const fetchedProducts = [];
-      for(let i=0; i<arrayId.length; i++){
-            
-            const docRef = doc(db, "product", arrayId[i]);
-            const docSnap = await getDoc(docRef);
-            
-            if (!docSnap.exists()){
-              ;
-            }
-            else{
-              fetchedProducts.push({ ...docSnap.data(), id: docSnap.id });
-            }
+      for (let i = 0; i < arrayId.length; i++) {
+        const docRef = doc(db, "product", arrayId[i]);
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+        } else {
+          fetchedProducts.push({ ...docSnap.data(), id: docSnap.id });
+        }
       }
+
       setProducts(fetchedProducts);
-      
-    }
-    catch (err) {
+    } catch (err) {
       console.log("useProduct error: ", err);
     }
   };
 
   useEffect(() => {
-    getProduct(arrayId);
-    
-    
+    if (arrayId && arrayId.length > 0) {
+      getProduct(arrayId);
+    }
   }, [arrayId]);
 
   return products;
