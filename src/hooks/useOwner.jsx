@@ -1,16 +1,16 @@
-import { doc, getDoc } from "firebase/firestore";
-import { getDownloadURL, ref } from "firebase/storage";
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { db, storage } from "../config/firebase";
+import { doc, getDoc } from 'firebase/firestore';
+import { getDownloadURL, ref, getMetadata } from 'firebase/storage';
+import React from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { db, storage } from '../config/firebase';
 
 const useOwner = (uid) => {
   const [owner, setOwner] = useState(null);
-  const [profileImage, setProfileImage] = useState("/img/user.png");
+  const [profileImage, setProfileImage] = useState('/img/user.png');
 
   const getOwner = async () => {
-    const docRef = doc(db, "users", uid);
+    const docRef = doc(db, 'users', uid);
     const docSnap = await getDoc(docRef);
 
     try {
@@ -21,20 +21,19 @@ const useOwner = (uid) => {
         setOwner({ ...data, uid });
       }
     } catch (err) {
-      console.log("useOwner error: ", err);
+      console.log('useOwner error: ', err);
     }
   };
   const getImage = async () => {
     try {
       const imageRef = ref(storage, `profile_image/${uid}`);
-
       const url = await getDownloadURL(imageRef);
       setProfileImage(url);
     } catch (err) {
-      if (err.code === "storage/object-not-found") {
-        setProfileImage("/img/user.png");
+      if (err.code === 'storage/object-not-found') {
+        setProfileImage('/img/user.png');
       } else {
-        console.log("useOwner getImage err: ", err);
+        console.log('useOwner getImage err: ', err);
       }
     }
   };
