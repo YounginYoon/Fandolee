@@ -1,19 +1,19 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react';
 
-import styled from "styled-components";
-import { colors } from "../../../common/color";
+import styled from 'styled-components';
+import { colors } from '../../../common/color';
 
-import useUser from "../../../hooks/useUser";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, authService, storage } from "../../../config/firebase";
-import { updateProfile } from "firebase/auth";
+import useUser from '../../../hooks/useUser';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, authService, storage } from '../../../config/firebase';
+import { updateProfile } from 'firebase/auth';
 
 const ProfileImgModal = ({ setOpenModal }) => {
   const user = useUser();
 
   const fileInputRef = useRef(null);
 
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState('');
   const [imageSrc, setImageSrc] = useState(user.photoURL);
 
   const imageRef = ref(storage, `profile_image/${user.uid}`);
@@ -26,14 +26,24 @@ const ProfileImgModal = ({ setOpenModal }) => {
 
   // 프로필 사진 삭제 함수
   const handleRemoveImage = () => {
-    const ret = window.confirm("프로필 사진을 삭제하시겠습니까?");
+    const ret = window.confirm('프로필 사진을 삭제하시겠습니까?');
+    const file = '/img/user.png';
     if (ret) {
-      // 프로필 사진 삭제
-      authService.onAuthStateChanged((user) => {
+      // 프로필 사진 삭제 (기본 이미지로 대체해서 업로드)
+      authService.onAuthStateChanged(async (user) => {
         if (user) {
-          storage.refFromURL(imageRef).delete();
-          updateProfile(user, { photoURL: "" });
-          window.location.reload();
+          const response = await fetch(file);
+          const blob = await response.blob();
+          uploadBytes(imageRef, blob).then((snapshot) => {
+            getDownloadURL(snapshot.ref).then((url) => {
+              updateProfile(user, { photoURL: url });
+              window.location.reload();
+            });
+          });
+
+          // storage.refFromURL(imageRef).delete();
+          // updateProfile(user, { photoURL: '' });
+          // window.location.reload();
         }
       });
     }
@@ -67,6 +77,7 @@ const ProfileImgModal = ({ setOpenModal }) => {
       reader.onload = () => {
         setImageSrc(reader.result || null); // 파일의 컨텐츠
         setImage(file);
+        //console.log(file);
         resolve();
       };
     });
@@ -77,7 +88,7 @@ const ProfileImgModal = ({ setOpenModal }) => {
       <Modal>
         <ModalHeader>프로필 이미지 수정</ModalHeader>
 
-        <ProfileImage src={imageSrc ? imageSrc : "/img/user.png"} />
+        <ProfileImage src={imageSrc ? imageSrc : '/img/user.png'} />
 
         <ProfileUploadBtn onClick={() => fileInputRef.current?.click()}>
           이미지 선택
@@ -86,7 +97,7 @@ const ProfileImgModal = ({ setOpenModal }) => {
           type="file"
           accept="image/*"
           ref={fileInputRef}
-          style={{ display: "none" }}
+          style={{ display: 'none' }}
           onChange={onUpload}
         />
 
