@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faPen } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faPen, faRotate } from "@fortawesome/free-solid-svg-icons";
 
 import { colors } from "../../common/color";
 import { IdolList } from "../../constants/idol";
@@ -162,7 +162,18 @@ const ExchangeSearchBar = ({ getExchangeList }) => {
             setSelected={setRegion}
           />
 
-          <SearchBar input={input} setInput={setInput} onClick={handleSearch} />
+          <SearchBar
+            input={input}
+            setInput={setInput}
+            onClick={handleSearch}
+            width={"170px"}
+            placeholder="멤버를 검색하세요"
+          />
+
+          <RotateIcon onClick={onRefresh}>
+            초기화
+            <FontAwesomeIcon icon={faRotate} style={{ marginLeft: "3px" }} />
+          </RotateIcon>
         </Wrapper>
 
         <BtnWrap>
@@ -224,4 +235,11 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+
+const RotateIcon = styled.div`
+  color: ${colors.COLOR_GRAY_TEXT};
+  font-size: 12px;
+  // background-color: orange;
+  cursor: pointer;
 `;

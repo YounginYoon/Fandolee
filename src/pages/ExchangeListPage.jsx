@@ -11,6 +11,7 @@ import {
   orderBy,
   where,
   or,
+  and,
 } from "firebase/firestore";
 
 import Loading from "../components/common/Loading";
@@ -37,24 +38,21 @@ const ExchangeListPage = () => {
 
       let q = null;
       if (idol || category || region || transactionType) {
-        // const obj = {
-        //   idol,
-        //   category,
-        //   region,
-        //   transactionType,
-        // };
+        const obj = {
+          idol,
+          category,
+          region,
+          transactionType,
+        };
 
-        // const arr = [];
-        // for (let key in obj) {
-        //   console.log(key);
-        // }
+        const whereConditions = [];
+        for (let key in obj) {
+          if (obj[key]) {
+            whereConditions.push(where(key, "==", obj[key]));
+          }
+        }
 
-        const condition = or(
-          where("idol", "==", idol),
-          where("category", "==", category),
-          where("region", "==", region),
-          where("transactionType", "==", transactionType)
-        );
+        const condition = and(...whereConditions);
 
         q = query(exchangeRef, condition);
       } else {
