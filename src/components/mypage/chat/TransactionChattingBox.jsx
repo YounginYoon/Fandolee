@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { colors } from "../../../common/color";
-import useExchange from "../../../hooks/useExchange";
-import { db, realTimeDatabase } from "../../../config/firebase";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { colors } from '../../../common/color';
+import useExchange from '../../../hooks/useExchange';
+import { db, realTimeDatabase } from '../../../config/firebase';
 
-import ChattingBox from "./ChattingBox";
-import useUser from "../../../hooks/useUser";
-import { timestampToDateTimeFormat } from "../../../common/date";
-import useProduct from "../../../hooks/useProduct";
+import ChattingBox from './ChattingBox';
+import useUser from '../../../hooks/useUser';
+import { timestampToDateTimeFormat } from '../../../common/date';
+import useProduct from '../../../hooks/useProduct';
 
 const TransactionChattingBox = ({ productId }) => {
   const product = useProduct(productId);
@@ -16,10 +16,10 @@ const TransactionChattingBox = ({ productId }) => {
   const navigate = useNavigate();
 
   const [lastMessage, setLastMessage] = useState({
-    username: "", // user id
-    nickname: "", // 닉네임
+    username: '', // user id
+    nickname: '', // 닉네임
     timestamp: 0,
-    message: "",
+    message: '',
   });
 
   const goChatPage = () => {
@@ -30,7 +30,10 @@ const TransactionChattingBox = ({ productId }) => {
     const ref = realTimeDatabase.ref(`ChatRoom/Auction/${productId}`);
 
     try {
-      const snapshot = await ref.limitToLast(1).once("value");
+      const snapshot = await ref
+        .orderByChild('timestamp')
+        .limitToLast(1)
+        .once('value');
       let message = {};
       snapshot.forEach((childSnapshot) => {
         const childData = childSnapshot.val();
@@ -41,7 +44,7 @@ const TransactionChattingBox = ({ productId }) => {
       // console.log(message);
       setLastMessage(message);
     } catch (err) {
-      console.log("getLastMessage err: ", err);
+      console.log('getLastMessage err: ', err);
     }
   };
 
@@ -57,8 +60,11 @@ const TransactionChattingBox = ({ productId }) => {
     <ChattingBox uid={product.uid} title={product.title} onClick={goChatPage}>
       <Wrapper>
         <Message>{lastMessage.message}</Message>
-
-        <Date>{timestampToDateTimeFormat(lastMessage.timestamp)}</Date>
+        {lastMessage.timestamp !== 0 ? (
+          <Date>{timestampToDateTimeFormat(lastMessage.timestamp)}</Date>
+        ) : (
+          <></>
+        )}
       </Wrapper>
     </ChattingBox>
   );

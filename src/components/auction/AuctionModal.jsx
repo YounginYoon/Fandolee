@@ -1,13 +1,14 @@
-import React, { useEffect } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import styled from "styled-components";
-import ReactModal from "react-modal";
-import { useState } from "react";
-import useOwner from "../../hooks/useOwner";
-import useProduct from "../../hooks/useProduct";
-import Loading from "../common/Loading";
-import { colors } from "../../common/color";
-import { moneyFormat } from "../../common/money";
+import React, { useEffect } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import styled from 'styled-components';
+import ReactModal from 'react-modal';
+import { useState } from 'react';
+import useOwner from '../../hooks/useOwner';
+import useProduct from '../../hooks/useProduct';
+import Loading from '../common/Loading';
+import { colors } from '../../common/color';
+import { moneyFormat } from '../../common/money';
+import { realTimeDatabase } from '../../config/firebase';
 
 const AuctionModal = ({ product }) => {
   const navigate = useNavigate();
@@ -16,11 +17,25 @@ const AuctionModal = ({ product }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   //낙찰자
   const [owner, profileImage] = useOwner(product.bidder);
+  //거래채팅 ref
+  const chatRef = realTimeDatabase.ref(`ChatRoom/Auction/${productId}/manager`);
 
   // 채팅하기 버튼 클릭시 거래채팅으로 이동
-  const goTransactionPage = () => {
+  const goTransactionPage = async () => {
+    createChatRoom();
     navigate(`/transaction/auction/${productId}`);
     closeModal();
+  };
+
+  //채팅하기 버튼 클릭시 빈 채팅방 생성
+  const createChatRoom = () => {
+    const createChat = {
+      username: owner.uid,
+      nickname: owner.nickName,
+      message: '채팅방이 생성되었습니다.',
+      timestamp: 0,
+    };
+    chatRef.set(createChat);
   };
 
   // 모달 open and close
@@ -46,17 +61,17 @@ const AuctionModal = ({ product }) => {
     <ReactModal
       isOpen={isModalOpen}
       onRequestClose={closeModal}
-      appElement={document.getElementById("root")}
+      appElement={document.getElementById('root')}
       style={{
         overlay: {
-          backgroundColor: "rgba(0, 0, 0, 0.35)",
+          backgroundColor: 'rgba(0, 0, 0, 0.35)',
           zIndex: 9999,
         },
         content: {
-          margin: "auto",
-          width: "max-content",
-          height: "max-content",
-          padding: "25px",
+          margin: 'auto',
+          width: 'max-content',
+          height: 'max-content',
+          padding: '25px',
         },
       }}
     >
@@ -71,7 +86,7 @@ const AuctionModal = ({ product }) => {
         </TextBox>
         <TextBox>
           <Label>낙찰자</Label>
-          <Text>{owner ? owner.nickName : "없음"}</Text>
+          <Text>{owner ? owner.nickName : '없음'}</Text>
         </TextBox>
 
         <BtnDiv>

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import styled from "styled-components";
-import { colors } from "../../common/color";
+import styled from 'styled-components';
+import { colors } from '../../common/color';
 
-import { db } from "../../config/firebase";
+import { db } from '../../config/firebase';
 import {
   collection,
   query,
@@ -12,16 +12,16 @@ import {
   getDoc,
   limit,
   orderBy,
-} from "firebase/firestore";
+} from 'firebase/firestore';
 
-import useExchanges from "../../hooks/useExchanges";
-import { useLike } from "../../hooks/useHeart";
-import { useLikeExchange } from "../../hooks/useHeartExchange";
-import useProducts from "../../hooks/useProducts";
-import useUser from "../../hooks/useUser";
-import Loading from "../common/Loading";
-import { useNavigate } from "react-router-dom";
-import Product from "./Product";
+import useExchanges from '../../hooks/useExchanges';
+import { useLike } from '../../hooks/useHeart';
+import { useLikeExchange } from '../../hooks/useHeartExchange';
+import useProducts from '../../hooks/useProducts';
+import useUser from '../../hooks/useUser';
+import Loading from '../common/Loading';
+import { useNavigate } from 'react-router-dom';
+import Product from './Product';
 
 const RecommendedProducts = () => {
   const user = useUser();
@@ -35,7 +35,7 @@ const RecommendedProducts = () => {
   const exchanges = useExchanges(exchangeIds);
 
   const [idols, setIdols] = useState(null);
-  const [recommendedProducts, setRecommendProducts] = useState(null);
+  const [recommendedProducts, setRecommendProducts] = useState([]);
 
   // 사용자가 찜한 경매, 교환 상품에서 아이돌 추출
   const getIdols = async () => {
@@ -63,19 +63,19 @@ const RecommendedProducts = () => {
 
   const loadIdolProducts = async () => {
     try {
-      const productRef = collection(db, "product");
-      const exchangeRef = collection(db, "exchange");
+      const productRef = collection(db, 'product');
+      const exchangeRef = collection(db, 'exchange');
 
       const q = query(
         productRef,
-        where("idol", "in", idols),
-        where("isComplete", "==", 0),
+        where('idol', 'in', idols),
+        where('isComplete', '==', 0),
         limit(4)
       );
       const eq = query(
         exchangeRef,
-        where("idol", "in", idols),
-        where("isComplete", "==", 0),
+        where('idol', 'in', idols),
+        where('isComplete', '==', 0),
         limit(4)
       );
 
@@ -85,12 +85,12 @@ const RecommendedProducts = () => {
       const productData = productDocs.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-        type: "auction",
+        type: 'auction',
       }));
       const exchangeData = exchangeDocs.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-        type: "exchange",
+        type: 'exchange',
       }));
 
       let combineData = [...productData, ...exchangeData];
@@ -99,24 +99,24 @@ const RecommendedProducts = () => {
 
       setRecommendProducts(combineData);
     } catch (err) {
-      console.log("loadIdolProducts err: ", err);
+      console.log('loadIdolProducts err: ', err);
     }
   };
 
   const loadRandomProducts = async (len) => {
     try {
-      const productRef = collection(db, "product");
-      const exchangeRef = collection(db, "exchange");
+      const productRef = collection(db, 'product');
+      const exchangeRef = collection(db, 'exchange');
       const limitNum = 6 - len;
 
       const q = query(
         productRef,
-        where("isComplete", "==", 0),
+        where('isComplete', '==', 0),
         limit(limitNum)
       );
       const eq = query(
         exchangeRef,
-        where("isComplete", "==", 0),
+        where('isComplete', '==', 0),
         limit(limitNum)
       );
       const productDocs = await getDocs(q);
@@ -125,12 +125,12 @@ const RecommendedProducts = () => {
       const productData = productDocs.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-        type: "auction",
+        type: 'auction',
       }));
       const exchangeData = exchangeDocs.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-        type: "exchange",
+        type: 'exchange',
       }));
 
       const prevProducts = recommendedProducts ? recommendedProducts : [];
@@ -140,7 +140,7 @@ const RecommendedProducts = () => {
 
       setRecommendProducts(combineData);
     } catch (err) {
-      console.log("loadRandomProducts err: ", err);
+      console.log('loadRandomProducts err: ', err);
     }
   };
 
@@ -164,12 +164,13 @@ const RecommendedProducts = () => {
     // console.log("recommendedProducts: ", recommendedProducts);
     if (recommendedProducts && recommendedProducts.length < 6) {
       //   console.log("random");
+      //console.log(recommendedProducts);
       loadRandomProducts(recommendedProducts.length);
     }
   }, [recommendedProducts]);
 
   return !recommendedProducts ? (
-    <Loading size={"100px"} />
+    <Loading size={'100px'} />
   ) : (
     recommendedProducts.map((product) => (
       <Product key={`recomend_${product.id}`} product={product} />
