@@ -17,6 +17,7 @@ import AuctionList from "../components/auction/AuctionList";
 import AuctionSearchBar from "../components/auction/AuctionSearchBar";
 import Loading from "../components/common/Loading";
 import { useSearchParams } from "react-router-dom";
+import EmptyProductList from "../components/common/EmptyProductList";
 
 const AuctionListPage = () => {
   const [products, setProducts] = useState(null);
@@ -81,7 +82,7 @@ const AuctionListPage = () => {
     getAuctionList(idol, category, title);
   }, []);
 
-  if (loading) {
+  if (loading || !products) {
     return <Loading />;
   }
 
@@ -89,7 +90,11 @@ const AuctionListPage = () => {
     <Container>
       <AuctionSearchBar getAuctionList={getAuctionList} />
 
-      <AuctionList products={products} />
+      {products.length === 0 ? (
+        <EmptyProductList />
+      ) : (
+        <AuctionList products={products} />
+      )}
     </Container>
   );
 };

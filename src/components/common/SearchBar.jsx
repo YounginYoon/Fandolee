@@ -7,7 +7,13 @@ import { colors } from "../../common/color";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-const SearchBar = ({ input, setInput, onClick }) => {
+const SearchBar = ({
+  input,
+  setInput,
+  onClick,
+  width = "220px",
+  placeholder,
+}) => {
   const onChange = (e) => {
     const { value } = e.target;
     setInput(value);
@@ -21,10 +27,11 @@ const SearchBar = ({ input, setInput, onClick }) => {
   return (
     <SearchInputDiv>
       <SearchInput
-        placeholder="멤버를 검색하세요."
+        placeholder={placeholder}
         value={input}
         onChange={onChange}
         onKeyUp={onKeyUp}
+        width={width}
       />
 
       <SearchIcon>
@@ -46,7 +53,7 @@ const SearchInputDiv = styled.div`
 const SearchInput = styled.input`
   box-sizing: border-box;
   background-color: ${colors.COLOR_LIGHTGRAY_BACKGROUND};
-  width: 220px;
+  width: ${({ width }) => width};
   height: 100%;
   border-radius: 30px;
   border: 1px solid ${colors.COLOR_MAIN};

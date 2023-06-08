@@ -127,7 +127,12 @@ const AuctionSearchBar = ({ getAuctionList }) => {
             setSelected={setCategory}
           />
 
-          <SearchBar input={input} setInput={setInput} onClick={handleSearch} />
+          <SearchBar
+            input={input}
+            setInput={setInput}
+            onClick={handleSearch}
+            placeholder="상품을 검색하세요"
+          />
 
           <RotateIcon onClick={onRefresh}>
             초기화
