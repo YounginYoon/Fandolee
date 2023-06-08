@@ -4,37 +4,94 @@ import ExchangeList from "../components/exchange/ExchangeList";
 import ExchangeSearchBar from "../components/exchange/ExchangeSearchBar";
 
 import { db } from "../config/firebase";
-import { collection, query, getDocs, orderBy } from "firebase/firestore";
+import {
+  collection,
+  query,
+  getDocs,
+  orderBy,
+  where,
+  or,
+} from "firebase/firestore";
 
 import Loading from "../components/common/Loading";
+import { useSearchParams } from "react-router-dom";
 
 const ExchangeListPage = () => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState(null);
   //exchange 데이터
 
-  const getExchangeList = async () => {
-    const productAllDB = collection(db, "exchange");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const getExchangeList = async (
+    idol,
+    category,
+    region,
+    transactionType,
+    title
+  ) => {
+    const exchangeRef = collection(db, "exchange");
 
     try {
-      const queryAll = query(productAllDB, orderBy("date", "desc"));
-      const data = await getDocs(queryAll);
+      setLoading(true);
 
-      const newData = data.docs.map((doc) => ({
+      let q = null;
+      if (idol || category || region || transactionType) {
+        // const obj = {
+        //   idol,
+        //   category,
+        //   region,
+        //   transactionType,
+        // };
+
+        // const arr = [];
+        // for (let key in obj) {
+        //   console.log(key);
+        // }
+
+        const condition = or(
+          where("idol", "==", idol),
+          where("category", "==", category),
+          where("region", "==", region),
+          where("transactionType", "==", transactionType)
+        );
+
+        q = query(exchangeRef, condition);
+      } else {
+        q = query(exchangeRef, orderBy("date", "desc"));
+      }
+
+      const ret = await getDocs(q);
+      const newData = ret.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
+      const exchanges = !title
+        ? [...newData]
+        : newData.filter((product) => {
+            const inputArray = title.split(" ");
+            const isAllIncluded = inputArray.every((el) =>
+              product.title.includes(el)
+            );
+            return isAllIncluded;
+          });
 
-      // console.log("newData: ", newData);
-      setProducts(newData);
+      setProducts(exchanges);
+
       setLoading(false);
     } catch (err) {
-      console.log(err);
+      console.log("getExchangeList err: ", err);
     }
   };
 
   useEffect(() => {
-    getExchangeList();
+    const idol = searchParams.get("idol");
+    const category = searchParams.get("cateogry");
+    const region = searchParams.get("region");
+    const transactionType = searchParams.get("transactionType");
+    const title = searchParams.get("title");
+
+    getExchangeList(idol, category, region, transactionType, title);
   }, []);
 
   if (loading) {
@@ -43,7 +100,7 @@ const ExchangeListPage = () => {
 
   return (
     <Container>
-      <ExchangeSearchBar setProducts={setProducts} setLoading={setLoading} />
+      <ExchangeSearchBar getExchangeList={getExchangeList} />
 
       <ExchangeList products={products} />
     </Container>

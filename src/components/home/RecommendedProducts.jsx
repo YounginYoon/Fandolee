@@ -21,6 +21,7 @@ import useProducts from "../../hooks/useProducts";
 import useUser from "../../hooks/useUser";
 import Loading from "../common/Loading";
 import { useNavigate } from "react-router-dom";
+import Product from "./Product";
 
 const RecommendedProducts = () => {
   const user = useUser();
@@ -165,59 +166,13 @@ const RecommendedProducts = () => {
     }
   }, [recommendedProducts]);
 
-  return (
-    <Container>
-      <Text>팬도리를 위한 추천상품 🎁</Text>
-
-      <ProductsDiv>
-        {!recommendedProducts ? (
-          <Loading size={"100px"} />
-        ) : (
-          recommendedProducts.map((product) => (
-            <ProductBox key={product.id}>
-              <ProductImg
-                src={product.images[0]}
-                onClick={() => onClick(product)}
-              />
-            </ProductBox>
-          ))
-        )}
-      </ProductsDiv>
-    </Container>
+  return !recommendedProducts ? (
+    <Loading size={"100px"} />
+  ) : (
+    recommendedProducts.map((product) => (
+      <Product key={`recomend_${product.id}`} product={product} />
+    ))
   );
 };
 
 export default RecommendedProducts;
-
-const Container = styled.div`
-  //   background-color: orange;
-  margin-top: 50px;
-  padding: 0 100px;
-`;
-
-const Text = styled.p`
-  font-weight: bold;
-  font-size: 18px;
-  color: ${colors.COLOR_MAIN};
-`;
-
-const ProductsDiv = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 30px auto 200px;
-`;
-
-const ProductBox = styled.div`
-  //   background-color: orange;
-  width: calc(100% / 6 - 20px);
-  margin: 0 10px;
-`;
-
-const ProductImg = styled.img`
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  object-fit: cover;
-  box-shadow: 10px 20px 20px 0 rgba(0, 0, 0, 0.15);
-  cursor: pointer;
-`;
