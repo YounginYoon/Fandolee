@@ -80,8 +80,8 @@ const AuctionPostPage = () => {
       const _minPrice = parseInt(minPrice);
       const _maxPrice = parseInt(maxPrice);
 
-      if (_minPrice > _maxPrice) {
-        alert("최소 금액이 최대 금액보다 작은 금액이어야 합니다!");
+      if (_minPrice >= _maxPrice) {
+        alert("최소 가격이 최대 가격보다 높습니다.");
         return;
       }
       setLoading(true);

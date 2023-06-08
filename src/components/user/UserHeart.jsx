@@ -21,8 +21,10 @@ const UserHeart = ({
   let arrayDataHook = useLike(user);
   const isLike = useIsLike(product.id, arrayDataHook);
   const [heart, setHeart] = useState(false);
- 
   
+  const {likes} = product;
+  
+  const [count,setCount] = useState(likes);
   useEffect(()=>{
     setHeart(isLike);
   },[isLike]);
@@ -33,13 +35,14 @@ const UserHeart = ({
     arrayDataHook = await Like2(user);
     
     setHeart(!heart);
-        
+    
     if (!heart) {
       if (arrayDataHook.indexOf(product.id)<0) {
       
         const newArrayData =[...arrayDataHook, product.id ];
         await productDB.doc(user.uid).update({ products: newArrayData });
         plusProductLike(product.id);
+        setCount(count+1);
       }
     }
     else{
@@ -49,6 +52,7 @@ const UserHeart = ({
           ...arrayDataHook.slice(index + 1)];
         await productDB.doc(user.uid).update({ products: removeArrayData });
         miusProductLike(product.id);
+        setCount(count-1);
       }
     }
     
@@ -57,7 +61,13 @@ const UserHeart = ({
 
   
   return (
-    <FontAwesomeIcon onClick={HandleHeart} icon={heart ? faHeart : faHeartOutlined} style={heartStyle} />
+    
+    <HeartDiv>
+            <FontAwesomeIcon onClick={HandleHeart} icon={heart ? faHeart : faHeartOutlined} style={heartStyle} />
+            <Likes>{count ? count : 0}</Likes>
+    </HeartDiv> 
+   
+    
   );
 };
 
@@ -74,10 +84,22 @@ const BorderRadisSizeTable = {
   M: "10px",
   L: "15px",
 };
-
+const HeartDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  //   background-color: white;
+  height: 100%;
+  width: 12%;
+`;
 
 const heartStyle = {
   color: colors.COLOR_HEART,
   fontSize: "28px",
   cursor: "pointer",
 };
+const Likes = styled.p`
+  color: ${colors.COLOR_HEART};
+  font-size: 12px;
+`;

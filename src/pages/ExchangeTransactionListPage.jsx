@@ -1,24 +1,24 @@
-import React from "react";
-import styled from "styled-components";
-import { colors } from "../common/color";
+import React from 'react';
+import styled from 'styled-components';
+import { colors } from '../common/color';
 
-import { realTimeDatabase } from "../config/firebase";
-import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import Loading from "../components/common/Loading";
-import ChattingHeader from "../components/chat/ChattingHeader";
-import useExchange from "../hooks/useExchange";
-import ChattingInfo from "../components/chat/ChattingInfo";
-import Tag from "../components/common/Tag";
-import ProductOwner from "../components/common/ProductOwner";
-import { timestampToDateTimeFormat } from "../common/date";
+import { realTimeDatabase } from '../config/firebase';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import Loading from '../components/common/Loading';
+import ChattingHeader from '../components/chat/ChattingHeader';
+import useExchange from '../hooks/useExchange';
+import ChattingInfo from '../components/chat/ChattingInfo';
+import Tag from '../components/common/Tag';
+import ProductOwner from '../components/common/ProductOwner';
+import { timestampToDateTimeFormat } from '../common/date';
 
 const LastMessage = ({ productId, id }) => {
   const [lastMessage, setLastMessage] = useState({
-    username: "",
-    nickname: "",
+    username: '',
+    nickname: '',
     timestamp: 0,
-    message: "",
+    message: '',
   });
 
   const navigate = useNavigate();
@@ -29,18 +29,22 @@ const LastMessage = ({ productId, id }) => {
   const getLastMessage = async () => {
     try {
       const ref = realTimeDatabase.ref(`ChatRoom/Exchange/${productId}/${id}`);
-      const snapshot = await ref.limitToLast(1).once("value");
+      const snapshot = await ref
+        .orderByChild('timestamp')
+        .limitToLast(1)
+        .once('value');
 
       let message = {};
       snapshot.forEach((childSnapshot) => {
         const childData = childSnapshot.val();
+        //console.log(childData);
         message = childData;
       });
 
       // console.log(message);
       setLastMessage(message);
     } catch (err) {
-      console.log("getLastMessage err: ", err);
+      console.log('getLastMessage err: ', err);
     }
   };
 
@@ -56,7 +60,11 @@ const LastMessage = ({ productId, id }) => {
     <LastMessageBox onClick={goExchangeChat}>
       <ProductOwner uid={lastMessage.username} />
       <Message>{lastMessage.message}</Message>
-      <Date>{timestampToDateTimeFormat(lastMessage.timestamp)}</Date>
+      {lastMessage.timestamp !== 0 ? (
+        <Date>{timestampToDateTimeFormat(lastMessage.timestamp)}</Date>
+      ) : (
+        <></>
+      )}
     </LastMessageBox>
   );
 };
@@ -73,7 +81,7 @@ const ExchangeTransactionListPage = () => {
     try {
       const chatRef = realTimeDatabase.ref(`ChatRoom/Exchange/${productId}`);
       const promises = [];
-      await chatRef.once("value").then(async (snapshot) => {
+      await chatRef.once('value').then(async (snapshot) => {
         snapshot.forEach((child) => {
           const exchange = {
             id: child.key,
@@ -85,7 +93,7 @@ const ExchangeTransactionListPage = () => {
       // console.log(promises);
       setExchangeChats(promises);
     } catch (err) {
-      console.log("getExchangeList err: ", err);
+      console.log('getExchangeList err: ', err);
     }
   };
 
