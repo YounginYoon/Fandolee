@@ -62,6 +62,19 @@ const ExchangeSearchBar = ({ getExchangeList }) => {
         searchParams.set("region", region);
       }
     }
+      
+//       const ret = await getDocs(q);
+//       const newData = ret.docs.map((doc) => ({
+//         id: doc.id,
+//         ...doc.data(),
+//       }));
+//       const products = newData.filter((product) => {
+//         return product.wantMember.includes(input) || product.haveMember.includes(input);
+//       });
+
+//       setProducts(products);
+      
+    
     setSearchParams(searchParams);
   };
   const setInitialStates = () => {
