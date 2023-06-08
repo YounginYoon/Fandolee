@@ -28,7 +28,7 @@ const SearchBar = ({ input, setInput, onClick }) => {
       />
 
       <SearchIcon>
-        <FontAwesomeIcon icon={faSearch} />
+        <FontAwesomeIcon icon={faSearch} onClick={onClick} />
       </SearchIcon>
     </SearchInputDiv>
   );
