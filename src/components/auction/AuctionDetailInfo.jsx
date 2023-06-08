@@ -43,7 +43,12 @@ const AuctionDetailInfo = ({ product }) => {
   const [complete, setComplete] = useState(0);
 
   const goAuctionChatting = () => {
-    navigate(`/auction/${id}/chat`);
+    if(user){
+      navigate(`/auction/${id}/chat`);
+    }else{
+      alert('로그인이 필요합니다.');
+    }
+    
   };
 
   const onDelete = async () => {
@@ -129,11 +134,13 @@ const AuctionDetailInfo = ({ product }) => {
 
         <BtnDiv>
           {/* <Btn onClick={() => navigate(`/auction/auctionbidding/${dataID}`)}> */}
-          {complete || isComplete ? (
+          
+          { (complete || isComplete )? (
             <EndBtn onClick={goAuctionChatting}>경매 종료</EndBtn>
           ) : (
             <Btn onClick={goAuctionChatting}>경매 참여</Btn>
           )}
+          
           <HeartDiv>
             <UserHeart product={product} />
             <Likes>{likes ? likes : 0}</Likes>

@@ -21,7 +21,7 @@ const SearchBar = ({ input, setInput, onClick }) => {
   return (
     <SearchInputDiv>
       <SearchInput
-        placeholder="어떤 상품을 찾으시나요?"
+        placeholder="멤버를 검색하세요."
         value={input}
         onChange={onChange}
         onKeyUp={onKeyUp}

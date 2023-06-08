@@ -61,7 +61,10 @@ const ExchangeDetailInfo = ({ product }) => {
   };
 
   const goTransactionPage = () => {
-    if (uid !== user.uid)
+    if(!user){
+      alert('로그인이 필요합니다.');
+    }
+    else if (uid !== user.uid)
       navigate(`/transaction/exchange/${product.id}/${user.uid}`);
     else {
       navigate(`/transaction/exchange/${product.id}/list`);
