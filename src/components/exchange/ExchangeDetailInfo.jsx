@@ -65,7 +65,7 @@ const ExchangeDetailInfo = ({ product }) => {
     } else if (uid !== user.uid) {
       createChatRoom();
       navigate(`/transaction/exchange/${product.id}/${user.uid}`);
-    } else {
+    } else if (uid === user.uid) {
       navigate(`/transaction/exchange/${product.id}/list`);
     }
   };

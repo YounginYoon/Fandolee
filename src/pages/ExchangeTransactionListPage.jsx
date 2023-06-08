@@ -101,7 +101,7 @@ const ExchangeTransactionListPage = () => {
     getExchangeList();
   }, []);
 
-  if (!exchangeChats) {
+  if (!exchangeChats || !product) {
     return <Loading />;
   }
 

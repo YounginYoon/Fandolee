@@ -35,7 +35,7 @@ const RecommendedProducts = () => {
   const exchanges = useExchanges(exchangeIds);
 
   const [idols, setIdols] = useState(null);
-  const [recommendedProducts, setRecommendProducts] = useState(null);
+  const [recommendedProducts, setRecommendProducts] = useState([]);
 
   // 사용자가 찜한 경매, 교환 상품에서 아이돌 추출
   const getIdols = async () => {
@@ -107,10 +107,18 @@ const RecommendedProducts = () => {
     try {
       const productRef = collection(db, 'product');
       const exchangeRef = collection(db, 'exchange');
-      const limit = 6 - len;
+      const limitCnt = 6 - len;
 
-      const q = query(productRef, where('isComplete', '==', 0), limit(limit));
-      const eq = query(exchangeRef, where('isComplete', '==', 0), limit(limit));
+      const q = query(
+        productRef,
+        where('isComplete', '==', 0),
+        limit(limitCnt)
+      );
+      const eq = query(
+        exchangeRef,
+        where('isComplete', '==', 0),
+        limit(limitCnt)
+      );
       const productDocs = await getDocs(q);
       const exchangeDocs = await getDocs(eq);
 
@@ -155,6 +163,8 @@ const RecommendedProducts = () => {
   useEffect(() => {
     if (idols && idols.length > 0) {
       loadIdolProducts();
+    } else {
+      loadRandomProducts(0); // idols가 없으면 loadRandomProducts를 실행
     }
   }, [idols]);
 
@@ -162,6 +172,7 @@ const RecommendedProducts = () => {
     // console.log("recommendedProducts: ", recommendedProducts);
     if (recommendedProducts && recommendedProducts.length < 6) {
       //   console.log("random");
+      //console.log(recommendedProducts);
       loadRandomProducts(recommendedProducts.length);
     }
   }, [recommendedProducts]);
