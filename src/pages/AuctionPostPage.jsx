@@ -70,6 +70,10 @@ const AuctionPostPage = () => {
         alert("모든 정보를 입력해주세요.");
         return;
       }
+      if(maxPrice <= minPrice){
+        alert("최소 가격이 최대 가격보다 높습니다.");
+        return;
+      }
       setLoading(true);
       //console.log({ inputs, idol, category });
       const productDB = db.collection("product");
