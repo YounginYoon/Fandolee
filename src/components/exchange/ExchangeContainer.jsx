@@ -8,6 +8,7 @@ import ProductTitle from "../common/ProductTitle";
 import ExchangeMember from "../common/ExchangeMember";
 import { ImageSizeTable } from "../common/ProductImg";
 import TagList from "../common/TagList";
+import ProductLikes from "../common/ProductLikes";
 
 const ExchangeContainer = ({ data }) => {
   const navigate = useNavigate();
@@ -32,6 +33,8 @@ const ExchangeContainer = ({ data }) => {
         width={ImageSizeTable["M"]}
         tags={[data.region, data.transactionType]}
       />
+
+      <ProductLikes likes={data.likes} />
     </ProductContainer>
   );
 };

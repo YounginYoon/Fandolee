@@ -6,6 +6,7 @@ import { moneyFormat } from "../../common/money";
 
 import ProductContainer from "../common/ProductContainer";
 import ProductImg from "../common/ProductImg";
+import ProductLikes from "../common/ProductLikes";
 import ProductOwner from "../common/ProductOwner";
 import ProductTitle from "../common/ProductTitle";
 
@@ -29,6 +30,8 @@ const AuctionContainer = ({ data }) => {
         <Money>{moneyFormat(data.minPrice)}</Money> 원 ~
         <Money> {moneyFormat(data.maxPrice)}</Money> 원
       </MoneyContainer>
+
+      <ProductLikes likes={data.likes} />
     </ProductContainer>
   );
 };

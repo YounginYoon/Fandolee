@@ -23,9 +23,9 @@ const UserHeartExchange = ({ product, onClick = null }) => {
 
   const isLike = useIsLike(product.id, arrayDataHook);
   const [heart, setHeart] = useState(false);
-  const {likes} = product;
-  
-  const [count,setCount] = useState(likes);
+  const { likes } = product;
+
+  const [count, setCount] = useState(likes);
   useEffect(() => {
     setHeart(isLike);
   }, [isLike]);
@@ -41,7 +41,7 @@ const UserHeartExchange = ({ product, onClick = null }) => {
         const newArrayData = [...arrayDataHook, product.id];
         await productDB.doc(user.uid).update({ exchanges: newArrayData });
         plusProductLike(product.id);
-        setCount(count+1);
+        setCount(count + 1);
       }
     } else {
       if (arrayDataHook.includes(product.id)) {
@@ -52,16 +52,20 @@ const UserHeartExchange = ({ product, onClick = null }) => {
         ];
         await productDB.doc(user.uid).update({ exchanges: removeArrayData });
         miusProductLike(product.id);
-        setCount(count-1);
+        setCount(count - 1);
       }
     }
   };
 
   return (
     <HeartDiv>
-            <FontAwesomeIcon onClick={HandleHeart} icon={heart ? faHeart : faHeartOutlined} style={heartStyle} />
-            <Likes>{count ? count : 0}</Likes>
-    </HeartDiv> 
+      <FontAwesomeIcon
+        onClick={HandleHeart}
+        icon={heart ? faHeart : faHeartOutlined}
+        style={heartStyle}
+      />
+      {/* <Likes>{count ? count : 0}</Likes> */}
+    </HeartDiv>
   );
 };
 
@@ -84,12 +88,12 @@ const HeartDiv = styled.div`
   align-items: center;
   justify-content: space-between;
   //   background-color: white;
-  height: 100%;
-  width: 12%;
+  // height: 100%;
+  // width: 12%;
 `;
 const heartStyle = {
   color: colors.COLOR_HEART,
-  fontSize: "28px",
+  fontSize: "23px",
   cursor: "pointer",
 };
 const Likes = styled.p`

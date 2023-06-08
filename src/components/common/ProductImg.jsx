@@ -31,7 +31,7 @@ const ProductImg = ({ product, onClick = null, size = "M", auction }) => {
     dots: false,
     infinite: true,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 2000,
     speed: 500,
     slidesToShow: 1, // 한번에 볼 수 있는 슬라이드 개수
     slidesToScroll: 1, // 한번에 넘어가는 슬라이드 개수
