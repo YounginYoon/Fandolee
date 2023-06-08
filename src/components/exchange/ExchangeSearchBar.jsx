@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,7 +11,7 @@ import { Category } from "../../constants/category";
 import DropDownMenu from "../common/DropDownMenu";
 import { TransactionType } from "../../constants/transactionType";
 import { Region } from "../../constants/region";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { db } from "../../config/firebase";
 
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
@@ -21,52 +21,96 @@ import SearchBar from "../common/SearchBar";
 const height = "28px";
 const fontSize = "12px";
 
-const ExchangeSearchBar = ({ setProducts, setLoading }) => {
+const initialStates = {
+  idol: "내가 찾는 아이돌",
+  category: "굿즈 종류",
+  transactionType: "교환 방법",
+  region: "지역",
+};
+
+const ExchangeSearchBar = ({ getExchangeList }) => {
   const user = useUser();
-  const [idol, setIdol] = useState("내가 찾는 아이돌");
-  const [category, setCategory] = useState("굿즈 종류");
-  const [method, setMethod] = useState("교환방법");
-  const [region, setRegion] = useState("지역");
+  const [idol, setIdol] = useState(initialStates.idol);
+  const [category, setCategory] = useState(initialStates.category);
+  const [transactionType, setTransactionType] = useState(
+    initialStates.transactionType
+  );
+  const [region, setRegion] = useState(initialStates.region);
 
   const [input, setInput] = useState("");
 
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const setQueryString = (idol, category, transactionType, region) => {
+    if (!idol && !category && !transactionType && !region) {
+      searchParams.delete("idol");
+      searchParams.delete("category");
+      searchParams.delete("transactionType");
+      searchParams.delete("region");
+    } else {
+      if (idol) {
+        searchParams.set("idol", idol);
+      }
+      if (category) {
+        searchParams.set("category", category);
+      }
+      if (transactionType) {
+        searchParams.set("transactionType", transactionType);
+      }
+      if (region) {
+        searchParams.set("region", region);
+      }
+    }
+    setSearchParams(searchParams);
+  };
+  const setInitialStates = () => {
+    const idol = searchParams.get("idol");
+    const category = searchParams.get("category");
+    const transactionType = searchParams.get("transactionType");
+    const region = searchParams.get("region");
+    if (idol) {
+      setIdol(idol);
+    }
+    if (category) {
+      setCategory(category);
+    }
+    if (transactionType) {
+      setTransactionType(transactionType);
+    }
+    if (region) {
+      setRegion(region);
+    }
+  };
 
   const handleSearch = async () => {
-    setLoading(true);
-    const productDB = collection(db, "exchange");
+    const _idol = idol === initialStates.idol ? null : idol;
+    const _category = category === initialStates.category ? null : category;
+    const _region = region === initialStates.region ? null : region;
+    const _transactionType =
+      transactionType === initialStates.transactionType
+        ? null
+        : transactionType;
 
-    try {
-      let q = query(productDB, where("isComplete", "==", 0), orderBy("date"));
-      if (idol !== "내가 찾는 아이돌") {
-        q = query(q, where("idol", "==", idol));
-      }
-      if (category !== "굿즈 종류") {
-        q = query(q, where("category", "==", category));
-      }
+    setQueryString(_idol, _category, _transactionType, _region);
 
-      if (method !== "교환방법") {
-        q = query(q, where("transactionType", "==", method));
-      }
-      if (region !== "지역") {
-        q = query(q, where("region", "==", region));
-      }
-      const ret = await getDocs(q);
-      const newData = ret.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      const products = newData.filter((product) => {
-        return product.wantMember.includes(input);
-      });
-
-      setProducts(products);
-    } catch (err) {
-      console.log("err:", err);
-    }
-
-    setLoading(false);
+    await getExchangeList(_idol, _category, _region, _transactionType, input);
   };
+
+  const onRefresh = async () => {
+    setIdol(initialStates.idol);
+    setCategory(initialStates.category);
+    setRegion(initialStates.region);
+    setTransactionType(initialStates.transactionType);
+    setInput("");
+    setQueryString();
+
+    await getExchangeList();
+  };
+
+  useEffect(() => {
+    setInitialStates();
+  }, []);
 
   return (
     <Container>
@@ -96,8 +140,8 @@ const ExchangeSearchBar = ({ setProducts, setLoading }) => {
             fontSize={fontSize}
             margin="0 5px 0 0"
             list={TransactionType}
-            selected={method}
-            setSelected={setMethod}
+            selected={transactionType}
+            setSelected={setTransactionType}
           />
           <DropDownMenu
             width="80px"

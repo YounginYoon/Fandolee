@@ -33,7 +33,7 @@ const ProductBox = styled.div`
   //   background-color: orange;
   //   width: calc(100% / 6 - 20px);
   width: 160px;
-  margin: 0 10px 10px;
+  margin: 0 10px 20px;
 `;
 
 const ProductImg = styled.img`

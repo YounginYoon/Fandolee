@@ -9,7 +9,6 @@ import RandomProducts from "../components/home/RandomProducts";
 
 const MainPage = () => {
   const user = useUser();
-  console.log(user);
 
   return (
     <>
