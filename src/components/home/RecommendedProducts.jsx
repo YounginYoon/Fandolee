@@ -107,10 +107,18 @@ const RecommendedProducts = () => {
     try {
       const productRef = collection(db, "product");
       const exchangeRef = collection(db, "exchange");
-      const limit = 6 - len;
+      const limitNum = 6 - len;
 
-      const q = query(productRef, where("isComplete", "==", 0), limit(limit));
-      const eq = query(exchangeRef, where("isComplete", "==", 0), limit(limit));
+      const q = query(
+        productRef,
+        where("isComplete", "==", 0),
+        limit(limitNum)
+      );
+      const eq = query(
+        exchangeRef,
+        where("isComplete", "==", 0),
+        limit(limitNum)
+      );
       const productDocs = await getDocs(q);
       const exchangeDocs = await getDocs(eq);
 
@@ -125,11 +133,8 @@ const RecommendedProducts = () => {
         type: "exchange",
       }));
 
-      let combineData = [
-        ...recommendedProducts,
-        ...productData,
-        ...exchangeData,
-      ];
+      const prevProducts = recommendedProducts ? recommendedProducts : [];
+      let combineData = [...prevProducts, ...productData, ...exchangeData];
       combineData.sort((a, b) => b.likes - a.likes);
       combineData = combineData.slice(0, 6);
 
@@ -139,13 +144,6 @@ const RecommendedProducts = () => {
     }
   };
 
-  const navigate = useNavigate();
-  const onClick = (product) => {
-    const { type, id } = product;
-    const path = `/${type}/${type}detail/${id}`;
-    navigate(path);
-  };
-
   useEffect(() => {
     if (products && exchanges) {
       getIdols();
@@ -153,8 +151,12 @@ const RecommendedProducts = () => {
   }, [products, exchanges]);
 
   useEffect(() => {
-    if (idols && idols.length > 0) {
-      loadIdolProducts();
+    if (idols) {
+      if (idols.length > 0) {
+        loadIdolProducts();
+      } else {
+        loadRandomProducts(0);
+      }
     }
   }, [idols]);
 

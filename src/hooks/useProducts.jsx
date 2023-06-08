@@ -27,7 +27,7 @@ const useProducts = (arrayId) => {
   };
 
   useEffect(() => {
-    if (arrayId && arrayId.length > 0) {
+    if (arrayId) {
       getProduct(arrayId);
     }
   }, [arrayId]);
