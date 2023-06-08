@@ -32,10 +32,18 @@ const AuctionPostPage = () => {
     info: "",
     title: "",
     likes: 0,
-    completeTransaction:0,
+    completeTransaction: 0,
     endDate: addDays(new Date(), 1),
   });
-  const { title, info, likes, completeTransaction, endDate, minPrice, maxPrice } = inputs;
+  const {
+    title,
+    info,
+    likes,
+    completeTransaction,
+    endDate,
+    minPrice,
+    maxPrice,
+  } = inputs;
   const [idol, setIdol] = useState("");
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(false);
@@ -51,8 +59,6 @@ const AuctionPostPage = () => {
 
   const onPost = async () => {
     try {
-      
-
       if (images.length === 0) {
         alert("이미지를 선택해주세요.");
         return;
@@ -70,7 +76,11 @@ const AuctionPostPage = () => {
         alert("모든 정보를 입력해주세요.");
         return;
       }
-      if(maxPrice <= minPrice){
+
+      const _minPrice = parseInt(minPrice);
+      const _maxPrice = parseInt(maxPrice);
+
+      if (_minPrice >= _maxPrice) {
         alert("최소 가격이 최대 가격보다 높습니다.");
         return;
       }
@@ -95,8 +105,8 @@ const AuctionPostPage = () => {
       }
 
       const body = {
-        minPrice: parseInt(minPrice),
-        maxPrice: parseInt(maxPrice),
+        minPrice: _minPrice,
+        maxPrice: _maxPrice,
         info,
         idol,
         images: imageUrls,

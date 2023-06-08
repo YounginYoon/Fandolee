@@ -38,7 +38,10 @@ const AuctionChattingPage = () => {
   };
 
   const checkComplete = async () => {
+    // 낙찰 완료된 상품
     if (product && product.isComplete === 1) {
+      // 현재 로그인된 유저가 낙찰자일 때
+      // 또는 현재 유저가 판매자이면서 낙찰자가 정해진 상태일때 모달 오픈
       if (
         user.uid === product.bidder ||
         (user.uid === product.uid && product.bidder)

@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import styled from 'styled-components';
-import ReactModal from 'react-modal';
-import { useState } from 'react';
-import useOwner from '../../hooks/useOwner';
-import useProduct from '../../hooks/useProduct';
-import Loading from '../common/Loading';
-import { colors } from '../../common/color';
-import { moneyFormat } from '../../common/money';
+import React, { useEffect } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import styled from "styled-components";
+import ReactModal from "react-modal";
+import { useState } from "react";
+import useOwner from "../../hooks/useOwner";
+import useProduct from "../../hooks/useProduct";
+import Loading from "../common/Loading";
+import { colors } from "../../common/color";
+import { moneyFormat } from "../../common/money";
 
 const AuctionModal = ({ product }) => {
   const navigate = useNavigate();
@@ -38,25 +38,25 @@ const AuctionModal = ({ product }) => {
     //console.log(product);
   }, []);
 
-  if (!product) {
-    return <Loading />;
+  if (!product || !owner) {
+    return <></>;
   }
 
   return (
     <ReactModal
       isOpen={isModalOpen}
       onRequestClose={closeModal}
-      appElement={document.getElementById('root')}
+      appElement={document.getElementById("root")}
       style={{
         overlay: {
-          backgroundColor: 'rgba(0, 0, 0, 0.35)',
+          backgroundColor: "rgba(0, 0, 0, 0.35)",
           zIndex: 9999,
         },
         content: {
-          margin: 'auto',
-          width: 'max-content',
-          height: 'max-content',
-          padding: '25px',
+          margin: "auto",
+          width: "max-content",
+          height: "max-content",
+          padding: "25px",
         },
       }}
     >
@@ -71,7 +71,7 @@ const AuctionModal = ({ product }) => {
         </TextBox>
         <TextBox>
           <Label>낙찰자</Label>
-          <Text>{owner ? owner.nickName : '없음'}</Text>
+          <Text>{owner ? owner.nickName : "없음"}</Text>
         </TextBox>
 
         <BtnDiv>
