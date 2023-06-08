@@ -53,8 +53,8 @@ const AuctionModal = ({ product }) => {
     //console.log(product);
   }, []);
 
-  if (!product) {
-    return <Loading />;
+  if (!product || !owner) {
+    return <></>;
   }
 
   return (
