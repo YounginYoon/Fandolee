@@ -57,7 +57,7 @@ const ExchangeSearchBar = ({ setProducts, setLoading }) => {
         ...doc.data(),
       }));
       const products = newData.filter((product) => {
-        return product.wantMember.includes(input);
+        return product.wantMember.includes(input) || product.haveMember.includes(input);
       });
 
       setProducts(products);
