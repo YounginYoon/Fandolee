@@ -13,8 +13,10 @@ export const Container = styled.div`
 
 export const CurrentAuctionIcon = styled.div`
   position: absolute;
-  top: 15px;
-  right: 15px;
+  //   top: 15px;
+  //   right: 15px;
+  top: -50px;
+  right: 10px;
   z-index: 100;
   background-color: ${colors.COLOR_LIGHTGREEN_BACKGROUND};
   color: ${colors.COLOR_MAIN};
@@ -31,22 +33,25 @@ export const CurrentAuctionIcon = styled.div`
 
 export const CurrentAuctionDiv = styled.div`
   position: absolute;
-  top: 1%;
-  left: 1%;
+  //   top: 1%;
+  // left: 1%;
+  top: -60px;
+  left: 0;
 
   z-index: 100;
   box-sizing: border-box;
-  width: 98%;
+  //width: 98%;
+  width: 100%;
   // background-color: ${colors.COLOR_LIGHTGREEN_BACKGROUND};
   background-color: rgba(236, 245, 233, 0.7);
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  padding: 20px;
-  // height: 40px;
+  //   padding: 20px;
+  height: 50px;
   border-radius: 7px;
   box-shadow: 5px 10px 10px 0 rgba(176, 176, 176, 0.4);
-  cursor: pointer;
+  //   cursor: pointer;
 `;
 
 export const CurrentAuctionText = styled.p`

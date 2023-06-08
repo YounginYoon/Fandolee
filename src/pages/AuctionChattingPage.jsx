@@ -81,6 +81,7 @@ const AuctionChattingPage = () => {
   return (
     <>
       <ChattingHeader product={product} uid={product.uid} />
+
       <Wrapper>
         <ChattingInfo
           product={product}
@@ -116,7 +117,7 @@ export default AuctionChattingPage;
 
 const Wrapper = styled.div`
   //   background-color: whitesmoke;
-  margin: 50px auto 300px;
+  margin: 70px auto 300px;
   width: max-content;
   display: flex;
 `;
