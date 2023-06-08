@@ -142,7 +142,7 @@ const ExchangeDetailInfo = ({ product }) => {
           )}
           <HeartDiv>
             <UserHeartExchange product={product} />
-            <Likes>{likes ? likes : 0}</Likes>
+            
           </HeartDiv>
         </BtnDiv>
       </SubContainer>
