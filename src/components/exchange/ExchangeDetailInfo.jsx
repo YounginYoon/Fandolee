@@ -23,7 +23,6 @@ import UserHeartExchange from '../user/UserHeartExchange';
 const ExchangeDetailInfo = ({ product }) => {
   const navigate = useNavigate();
   const user = useUser();
-
   const [isLike, setIsLike] = useState(false);
   const {
     images,
@@ -61,14 +60,27 @@ const ExchangeDetailInfo = ({ product }) => {
   };
 
   const goTransactionPage = () => {
-    if(!user){
+    if (!user) {
       alert('로그인이 필요합니다.');
-    }
-    else if (uid !== user.uid)
+    } else if (uid !== user.uid) {
+      createChatRoom();
       navigate(`/transaction/exchange/${product.id}/${user.uid}`);
-    else {
+    } else {
       navigate(`/transaction/exchange/${product.id}/list`);
     }
+  };
+
+  const createChatRoom = () => {
+    const chatRef = realTimeDatabase.ref(
+      `ChatRoom/Exchange/${id}/${user.uid}/manager`
+    );
+    const createChat = {
+      username: user.uid,
+      nickname: user.displayName,
+      message: '채팅방이 생성되었습니다.',
+      timestamp: 0,
+    };
+    chatRef.set(createChat);
   };
 
   return (

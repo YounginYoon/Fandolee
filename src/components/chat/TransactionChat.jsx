@@ -2,6 +2,8 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { realTimeDatabase, db } from '../../config/firebase';
+import { colors } from '../../common/color';
+import styled from 'styled-components';
 import useUser from '../../hooks/useUser';
 import useOwner from '../../hooks/useOwner';
 import { useParams } from 'react-router-dom';
@@ -36,6 +38,8 @@ const TransactionChat = ({ productId, type, onLastMessageChange, product }) => {
   const [input, setInput] = useState('');
   //채팅 리스트
   const [chatList, setChatList] = useState([]);
+  //채팅방 생성 확인 메세지
+  const [createChat, setCreateChat] = useState('');
 
   // 상품 타입에 따른 채팅 ref
   const chatRef =
@@ -75,8 +79,14 @@ const TransactionChat = ({ productId, type, onLastMessageChange, product }) => {
     chatRef.on('value', async (snapshot) => {
       const chats = [];
       snapshot.forEach((child) => {
-        const message = child.val();
-        chats.push({ key: child.key, ...message });
+        //console.log(child.key);
+        if (child.key !== 'manager') {
+          const message = child.val();
+          chats.push({ key: child.key, ...message });
+        } else {
+          const emptyChat = '채팅방이 생성되었습니다.';
+          setCreateChat(emptyChat);
+        }
       });
       chats.sort((a, b) => a.timestamp - b.timestamp);
       // setChatList(chats);
@@ -103,6 +113,9 @@ const TransactionChat = ({ productId, type, onLastMessageChange, product }) => {
     <Container>
       <ChattingWrap>
         <Chatting>
+          <ChatDiv>
+            <Message>{createChat}</Message>
+          </ChatDiv>
           {chatList.length > 0 &&
             chatList.map((chat) =>
               user.uid === chat.username ? (
@@ -139,3 +152,23 @@ const TransactionChat = ({ productId, type, onLastMessageChange, product }) => {
 };
 
 export default TransactionChat;
+
+const ChatDiv = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+`;
+
+const Message = styled.div`
+  box-sizing: border-box;
+  background-color: ${colors.COLOR_LIGHTGREEN_BACKGROUND};
+  padding: 10px 20px;
+  border-radius: 12px;
+  max-width: 65%;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 24px;
+  font-size: 12px;
+`;

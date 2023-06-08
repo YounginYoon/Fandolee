@@ -8,6 +8,7 @@ import useProduct from '../../hooks/useProduct';
 import Loading from '../common/Loading';
 import { colors } from '../../common/color';
 import { moneyFormat } from '../../common/money';
+import { realTimeDatabase } from '../../config/firebase';
 
 const AuctionModal = ({ product }) => {
   const navigate = useNavigate();
@@ -16,11 +17,25 @@ const AuctionModal = ({ product }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   //낙찰자
   const [owner, profileImage] = useOwner(product.bidder);
+  //거래채팅 ref
+  const chatRef = realTimeDatabase.ref(`ChatRoom/Auction/${productId}/manager`);
 
   // 채팅하기 버튼 클릭시 거래채팅으로 이동
-  const goTransactionPage = () => {
+  const goTransactionPage = async () => {
+    createChatRoom();
     navigate(`/transaction/auction/${productId}`);
     closeModal();
+  };
+
+  //채팅하기 버튼 클릭시 빈 채팅방 생성
+  const createChatRoom = () => {
+    const createChat = {
+      username: owner.uid,
+      nickname: owner.nickName,
+      message: '채팅방이 생성되었습니다.',
+      timestamp: 0,
+    };
+    chatRef.set(createChat);
   };
 
   // 모달 open and close

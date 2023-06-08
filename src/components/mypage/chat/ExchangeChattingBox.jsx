@@ -32,10 +32,15 @@ const ExchangeChattingBox = ({ productId }) => {
     );
 
     try {
-      const snapshot = await ref.limitToLast(1).once('value');
+      const snapshot = await ref
+        .orderByChild('timestamp')
+        .limitToLast(1)
+        .once('value');
+
       let message = {};
       snapshot.forEach((childSnapshot) => {
         const childData = childSnapshot.val();
+        //console.log(childSnapshot.key);
         // message = childData.message;
         message = { ...childData };
       });
@@ -59,8 +64,11 @@ const ExchangeChattingBox = ({ productId }) => {
     <ChattingBox uid={product.uid} title={product.title} onClick={goChatPage}>
       <Wrapper>
         <Message>{lastMessage.message}</Message>
-
-        <Date>{timestampToDateTimeFormat(lastMessage.timestamp)}</Date>
+        {lastMessage.timestamp !== 0 ? (
+          <Date>{timestampToDateTimeFormat(lastMessage.timestamp)}</Date>
+        ) : (
+          <></>
+        )}
       </Wrapper>
     </ChattingBox>
   );
