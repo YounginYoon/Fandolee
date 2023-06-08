@@ -18,8 +18,6 @@ const Product = ({ product }) => {
     <ProductBox>
       <ProductImg src={images[0]} onClick={onClick} />
 
-      {/* <Title>{title}</Title> */}
-
       <Type>{type === "auction" ? "경매" : "교환"}</Type>
 
       <Title>{title}</Title>
@@ -51,11 +49,12 @@ const Title = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 14px;
+  padding: 5px 0;
 `;
 
 const Type = styled.p`
   //   background-color: orange;
   font-weight: bold;
-  padding: 10px 0;
+  padding: 5px 0;
   color: ${colors.COLOR_MAIN};
 `;

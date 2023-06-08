@@ -45,7 +45,9 @@ const ProfileImage = styled.img`
 `;
 
 const Ninckname = styled.p`
+  // background-color: aqua;
   margin-left: 5px;
+  padding: 5px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

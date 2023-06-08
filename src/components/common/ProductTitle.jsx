@@ -12,9 +12,9 @@ const Title = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  // margin-top: 10px;
   font-weight: ${({ fontWeight }) => fontWeight};
   // background-color: orange;
-  line-height: 32px;
+  // line-height: 32px;
+  padding: 5px 0;
   font-size: 16px;
 `;
