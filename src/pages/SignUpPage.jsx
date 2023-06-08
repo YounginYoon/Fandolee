@@ -1,74 +1,74 @@
-import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-import styled from 'styled-components';
-import { colors } from '../common/color';
-import { db, authService, storage } from '../config/firebase';
-import { async } from '@firebase/util';
-import { doc } from 'firebase/firestore';
+import styled from "styled-components";
+import { colors } from "../common/color";
+import { db, authService, storage } from "../config/firebase";
+import { async } from "@firebase/util";
+import { doc } from "firebase/firestore";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
 
   const [input, setInputs] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    username: '',
-    nickname: '',
+    email: "",
+    password: "",
+    confirmPassword: "",
+    username: "",
+    nickname: "",
   });
   const [error, setError] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    username: '',
-    nickname: '',
+    email: "",
+    password: "",
+    confirmPassword: "",
+    username: "",
+    nickname: "",
   });
 
   //const { email, password, password_check, name, nickname } = inputs;
 
   const onSignUp = async () => {
     if (!input.email) {
-      alert('이메일을 입력하세요!');
+      alert("이메일을 입력하세요!");
       return;
     } else {
       const EmailCheck = await db
-        .collection('users')
-        .where('email', '==', input.email)
+        .collection("users")
+        .where("email", "==", input.email)
         .get();
       if (EmailCheck.docs.length > 0) {
-        alert('이메일을 확인하세요!');
+        alert("이메일을 확인하세요!");
         return;
       }
     }
     if (!input.password) {
-      alert('비밀번호를 입력하세요!');
+      alert("비밀번호를 입력하세요!");
       return;
     } else if (input.password.length < 8 || input.password.length > 20) {
-      alert('비밀번호를 8~20자로 입력하세요!');
+      alert("비밀번호를 8~20자로 입력하세요!");
       return;
     }
     if (!input.confirmPassword || input.confirmPassword !== input.password) {
-      alert('비밀번호를 다시 확인하세요!');
+      alert("비밀번호를 다시 확인하세요!");
       return;
     }
     if (!input.username) {
-      alert('이름을 입력하세요!');
+      alert("이름을 입력하세요!");
       return;
     }
     if (!input.nickname) {
-      alert('닉네임을 입력하세요!');
+      alert("닉네임을 입력하세요!");
       return;
     } else {
       const NicknameCheck = await db
-        .collection('users')
-        .where('nickName', '==', input.nickname)
+        .collection("users")
+        .where("nickName", "==", input.nickname)
         .get();
       if ((await NicknameCheck).docs.length > 0) {
-        alert('닉네임을 확인하세요!');
+        alert("닉네임을 확인하세요!");
         return;
       }
     }
@@ -88,10 +88,10 @@ const SignUpPage = () => {
 
       const user = ret.user;
       if (user) {
-        console.log('1');
+        console.log("1");
         await updateProfile(user, { displayName: input.nickname });
         // 프사 기본으로 지정
-        const file = '/img/user.png';
+        const file = "/img/user.png";
         const imageRef = ref(storage, `profile_image/${user.uid}`);
 
         const response = await fetch(file);
@@ -103,17 +103,17 @@ const SignUpPage = () => {
           });
         });
 
-        db.collection('users')
+        db.collection("users")
           .doc(user.uid)
           .set(user_info)
           .then((result) => {
             console.log(result);
-            alert('회원가입이 완료되었습니다.');
-            navigate('/user/login');
+            alert("회원가입이 완료되었습니다.");
+            navigate("/user/login");
           });
       }
     } catch (err) {
-      console.log('signup error', err);
+      console.log("signup error", err);
     }
   };
 
@@ -129,61 +129,61 @@ const SignUpPage = () => {
   const validateInput = (e) => {
     let { name, value } = e.target;
     setError((prev) => {
-      const stateObj = { ...prev, [name]: '' };
+      const stateObj = { ...prev, [name]: "" };
 
       switch (name) {
-        case 'username':
+        case "username":
           if (!value) {
-            stateObj[name] = '이름을 입력하세요!';
+            stateObj[name] = "이름을 입력하세요!";
           }
           break;
-        case 'email':
+        case "email":
           if (!value) {
-            stateObj[name] = '이메일을 입력하세요!';
+            stateObj[name] = "이메일을 입력하세요!";
           } else {
             const check = db
-              .collection('users')
-              .where('email', '==', value)
+              .collection("users")
+              .where("email", "==", value)
               .get()
               .then((res) => {
                 if (res.size > 0)
-                  stateObj[name] = '이미 사용 중인 이메일 입니다.';
+                  stateObj[name] = "이미 사용 중인 이메일 입니다.";
               });
           }
           break;
-        case 'nickname':
+        case "nickname":
           if (!value) {
-            stateObj[name] = '닉네임을 입력하세요!';
+            stateObj[name] = "닉네임을 입력하세요!";
           } else {
             const check = db
-              .collection('users')
-              .where('nickName', '==', value)
+              .collection("users")
+              .where("nickName", "==", value)
               .get()
               .then((res) => {
                 if (res.size > 0)
-                  stateObj[name] = '이미 사용 중인 닉네임 입니다.';
+                  stateObj[name] = "이미 사용 중인 닉네임 입니다.";
               });
           }
           break;
-        case 'password':
+        case "password":
           if (!value) {
-            stateObj[name] = '비밀번호를 입력하세요!';
+            stateObj[name] = "비밀번호를 입력하세요!";
           } else if (value.length < 8) {
-            stateObj[name] = '비밀번호가 너무 짧습니다. (8~20자)';
+            stateObj[name] = "비밀번호가 너무 짧습니다. (8~20자)";
           } else if (value.length > 20) {
-            stateObj[name] = '비밀번호가 너무 깁니다. (8~20자)';
+            stateObj[name] = "비밀번호가 너무 깁니다. (8~20자)";
           } else if (input.confirmPassword && value !== input.confirmPassword) {
-            stateObj['confirmPassword'] = '비밀번호가 일치하지 않습니다!';
+            stateObj["confirmPassword"] = "비밀번호가 일치하지 않습니다!";
           } else {
-            stateObj['confirmPassword'] = input.confirmPassword
-              ? ''
+            stateObj["confirmPassword"] = input.confirmPassword
+              ? ""
               : error.confirmPassword;
           }
           break;
-        case 'confirmPassword':
-          if (!value) stateObj[name] = '비밀번호를 다시 입력하세요!';
+        case "confirmPassword":
+          if (!value) stateObj[name] = "비밀번호를 다시 입력하세요!";
           if (input.password && value !== input.password) {
-            stateObj[name] = '비밀번호가 일치하지 않습니다!';
+            stateObj[name] = "비밀번호가 일치하지 않습니다!";
           }
           break;
         default:
@@ -195,7 +195,7 @@ const SignUpPage = () => {
   };
 
   const onKeyUp = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       onSignUp();
     }
   };
@@ -214,10 +214,11 @@ const SignUpPage = () => {
             onChange={onChange}
             onBlur={validateInput}
           />
+
+          <ERRDIV>
+            {error.username && <span className="err">{error.username}</span>}
+          </ERRDIV>
         </InputDiv>
-        <ERRDIV>
-          {error.username && <span className="err">{error.username}</span>}
-        </ERRDIV>
 
         <InputDiv>
           <Label>닉네임</Label>
@@ -229,10 +230,10 @@ const SignUpPage = () => {
             onChange={onChange}
             onBlur={validateInput}
           />
+          <ERRDIV>
+            {error.nickname && <span className="err">{error.nickname}</span>}
+          </ERRDIV>
         </InputDiv>
-        <ERRDIV>
-          {error.nickname && <span className="err">{error.nickname}</span>}
-        </ERRDIV>
 
         <InputDiv>
           <Label>이메일</Label>
@@ -244,10 +245,10 @@ const SignUpPage = () => {
             onChange={onChange}
             onBlur={validateInput}
           />
+          <ERRDIV>
+            {error.email && <div className="err">{error.email}</div>}
+          </ERRDIV>
         </InputDiv>
-        <ERRDIV>
-          {error.email && <div className="err">{error.email}</div>}
-        </ERRDIV>
 
         <InputDiv>
           <Label>비밀번호</Label>
@@ -259,10 +260,10 @@ const SignUpPage = () => {
             onChange={onChange}
             onBlur={validateInput}
           />
+          <ERRDIV>
+            {error.password && <span className="err">{error.password}</span>}
+          </ERRDIV>
         </InputDiv>
-        <ERRDIV>
-          {error.password && <span className="err">{error.password}</span>}
-        </ERRDIV>
 
         <InputDiv>
           <Label>비밀번호 확인</Label>
@@ -275,14 +276,14 @@ const SignUpPage = () => {
             onBlur={validateInput}
             onKeyUp={onKeyUp}
           />
+          <ERRDIV>
+            {error.confirmPassword && (
+              <span className="err">{error.confirmPassword}</span>
+            )}
+          </ERRDIV>
         </InputDiv>
-        <ERRDIV>
-          {error.confirmPassword && (
-            <span className="err">{error.confirmPassword}</span>
-          )}
-        </ERRDIV>
 
-        <div style={{ marginBottom: '70px' }}></div>
+        <div style={{ marginBottom: "50px" }}></div>
 
         <Button
           color={colors.COLOR_WHITE_TEXT}
@@ -294,7 +295,7 @@ const SignUpPage = () => {
         <Button
           color={colors.COLOR_MAIN}
           backgroundColor={colors.COLOR_MAIN_BACKGROUND}
-          onClick={() => navigate('/user/login')}
+          onClick={() => navigate("/user/login")}
         >
           로그인
         </Button>
@@ -306,12 +307,12 @@ const SignUpPage = () => {
 export default SignUpPage;
 
 const SignUpDiv = styled.div`
-  //   background-color: orange;
+  // background-color: orange;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 50px 0;
+  padding: 50px 0 150px;
 `;
 
 const SignUpBox = styled.div`
@@ -333,7 +334,10 @@ const SignUpHeader = styled.div`
 const InputDiv = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  // margin: 15px 0;
+  padding: 15px 0;
+  // background-color: orange;
+  position: relative;
 `;
 
 const Label = styled.p`
@@ -380,6 +384,14 @@ const ERRDIV = styled.div`
   width: 100%;
   text-align: center;
   color: ${colors.COLOR_RED_TEXT};
-  font-size: small;
-  margin-bottom: 10px;
+  // font-size: small;
+  // margin-bottom: 10px;
+  position: absolute;
+  left: 0;
+  top: -3px;
+  font-size: 12px;
+  // line-height: 20px;
+  // background-color: aqua;
+  display: flex;
+  justify-content: flex-end;
 `;

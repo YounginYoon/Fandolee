@@ -52,18 +52,28 @@ const ExchangeSearchBar = ({ getExchangeList }) => {
     } else {
       if (idol) {
         searchParams.set("idol", idol);
+      } else {
+        searchParams.delete("idol");
       }
       if (category) {
         searchParams.set("category", category);
+      } else {
+        searchParams.delete("category");
       }
       if (transactionType) {
         searchParams.set("transactionType", transactionType);
+      } else {
+        searchParams.delete("transactionType");
       }
       if (region) {
         searchParams.set("region", region);
+      } else {
+        searchParams.delete("region");
       }
       if (title) {
         searchParams.set("title", title);
+      } else {
+        searchParams.delete("title");
       }
     }
 
@@ -75,6 +85,7 @@ const ExchangeSearchBar = ({ getExchangeList }) => {
     const transactionType = searchParams.get("transactionType");
     const region = searchParams.get("region");
     const title = searchParams.get("title");
+
     if (idol) {
       setIdol(idol);
     }
@@ -112,6 +123,7 @@ const ExchangeSearchBar = ({ getExchangeList }) => {
     setRegion(initialStates.region);
     setTransactionType(initialStates.transactionType);
     setInput("");
+
     setQueryString();
 
     await getExchangeList();

@@ -57,12 +57,18 @@ const AuctionSearchBar = ({ getAuctionList }) => {
     } else {
       if (idol !== initialIdol) {
         searchParams.set("idol", idol);
+      } else {
+        searchParams.delete("idol");
       }
       if (category !== initialCategory) {
         searchParams.set("category", category);
+      } else {
+        searchParams.delete("category");
       }
       if (title) {
         searchParams.set("title", title);
+      } else {
+        searchParams.delete("title");
       }
     }
 

@@ -93,7 +93,7 @@ const ExchangeTransactionListPage = () => {
     getExchangeList();
   }, []);
 
-  if (!exchangeChats) {
+  if (!exchangeChats || !product) {
     return <Loading />;
   }
 
@@ -116,9 +116,13 @@ const ExchangeTransactionListPage = () => {
         </ChattingInfo>
 
         <Messages>
-          {exchangeChats.map((chat) => (
-            <LastMessage key={chat.id} productId={productId} id={chat.id} />
-          ))}
+          {exchangeChats.length === 0 ? (
+            <EmptyChats>교환 채팅 내역이 없습니다.</EmptyChats>
+          ) : (
+            exchangeChats.map((chat) => (
+              <LastMessage key={chat.id} productId={productId} id={chat.id} />
+            ))
+          )}
         </Messages>
       </Wrapper>
     </>
@@ -163,12 +167,14 @@ const LastMessageBox = styled.div`
 `;
 
 const Message = styled.p`
-  margin: 10px 0;
+  // margin: 10px 0;
   font-size: 14px;
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
+  padding: 10px 0;
   text-overflow: ellipsis;
+  // background-color: orange;
 `;
 
 const Date = styled.p`
@@ -176,4 +182,11 @@ const Date = styled.p`
   justify-content: flex-end;
   font-size: 10px;
   color: ${colors.COLOR_GRAY_TEXT};
+`;
+
+const EmptyChats = styled.p`
+  color: ${colors.COLOR_GRAY_TEXT};
+  // background-color: orange;
+  text-align: center;
+  padding: 50px 0;
 `;
