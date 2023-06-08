@@ -42,12 +42,13 @@ const ExchangeSearchBar = ({ getExchangeList }) => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const setQueryString = (idol, category, transactionType, region) => {
-    if (!idol && !category && !transactionType && !region) {
+  const setQueryString = (idol, category, transactionType, region, title) => {
+    if (!idol && !category && !transactionType && !region && !title) {
       searchParams.delete("idol");
       searchParams.delete("category");
       searchParams.delete("transactionType");
       searchParams.delete("region");
+      searchParams.delete("title");
     } else {
       if (idol) {
         searchParams.set("idol", idol);
@@ -61,20 +62,11 @@ const ExchangeSearchBar = ({ getExchangeList }) => {
       if (region) {
         searchParams.set("region", region);
       }
+      if (title) {
+        searchParams.set("title", title);
+      }
     }
-      
-//       const ret = await getDocs(q);
-//       const newData = ret.docs.map((doc) => ({
-//         id: doc.id,
-//         ...doc.data(),
-//       }));
-//       const products = newData.filter((product) => {
-//         return product.wantMember.includes(input) || product.haveMember.includes(input);
-//       });
 
-//       setProducts(products);
-      
-    
     setSearchParams(searchParams);
   };
   const setInitialStates = () => {
@@ -82,6 +74,7 @@ const ExchangeSearchBar = ({ getExchangeList }) => {
     const category = searchParams.get("category");
     const transactionType = searchParams.get("transactionType");
     const region = searchParams.get("region");
+    const title = searchParams.get("title");
     if (idol) {
       setIdol(idol);
     }
@@ -94,6 +87,9 @@ const ExchangeSearchBar = ({ getExchangeList }) => {
     if (region) {
       setRegion(region);
     }
+    if (title) {
+      setInput(title);
+    }
   };
 
   const handleSearch = async () => {
@@ -105,7 +101,7 @@ const ExchangeSearchBar = ({ getExchangeList }) => {
         ? null
         : transactionType;
 
-    setQueryString(_idol, _category, _transactionType, _region);
+    setQueryString(_idol, _category, _transactionType, _region, input);
 
     await getExchangeList(_idol, _category, _region, _transactionType, input);
   };

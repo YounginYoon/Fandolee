@@ -69,11 +69,10 @@ const ExchangeListPage = () => {
       const exchanges = !title
         ? [...newData]
         : newData.filter((product) => {
-            const inputArray = title.split(" ");
-            const isAllIncluded = inputArray.every((el) =>
-              product.title.includes(el)
+            return (
+              product.wantMember.includes(title) ||
+              product.haveMember.includes(title)
             );
-            return isAllIncluded;
           });
 
       setProducts(exchanges);
