@@ -16,6 +16,7 @@ import {
 
 import Loading from "../components/common/Loading";
 import { useSearchParams } from "react-router-dom";
+import EmptyProductList from "../components/common/EmptyProductList";
 
 const ExchangeListPage = () => {
   const [loading, setLoading] = useState(true);
@@ -83,7 +84,7 @@ const ExchangeListPage = () => {
 
   useEffect(() => {
     const idol = searchParams.get("idol");
-    const category = searchParams.get("cateogry");
+    const category = searchParams.get("category");
     const region = searchParams.get("region");
     const transactionType = searchParams.get("transactionType");
     const title = searchParams.get("title");
@@ -91,7 +92,7 @@ const ExchangeListPage = () => {
     getExchangeList(idol, category, region, transactionType, title);
   }, []);
 
-  if (loading) {
+  if (loading || !products) {
     return <Loading />;
   }
 
@@ -99,7 +100,11 @@ const ExchangeListPage = () => {
     <Container>
       <ExchangeSearchBar getExchangeList={getExchangeList} />
 
-      <ExchangeList products={products} />
+      {products.length === 0 ? (
+        <EmptyProductList />
+      ) : (
+        <ExchangeList products={products} />
+      )}
     </Container>
   );
 };
