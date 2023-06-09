@@ -142,8 +142,7 @@ const AuctionDetailInfo = ({ product }) => {
           )}
           
           <HeartDiv>
-            <UserHeart product={product} />
-            {/* <Likes>{likes ? likes : 0}</Likes> */}
+            <UserHeart product={product} HeartNumber={true} />
           </HeartDiv>
         </BtnDiv>
       </SubContainer>

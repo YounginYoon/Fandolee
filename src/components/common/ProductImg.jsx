@@ -49,11 +49,11 @@ const ProductImg = ({ product, onClick = null, size = "M", auction }) => {
 
       <HeartBox>
         {auction ? (
-          <UserHeart product={product} />
+          <UserHeart product={product} HeartNumber={false} />
         ) : (
-          <UserHeartExchange product={product} />
+          <UserHeartExchange product={product} HeartNumber={false}/>
         )}
-        {/* <UserHeart product={product}/> */}
+        
       </HeartBox>
 
       {isComplete ? (

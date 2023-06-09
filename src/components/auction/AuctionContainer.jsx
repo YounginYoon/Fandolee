@@ -17,6 +17,7 @@ const AuctionContainer = ({ data }) => {
   };
 
   // console.log("AuctionContainer: ", data);
+  
 
   return (
     <ProductContainer>

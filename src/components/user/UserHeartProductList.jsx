@@ -17,7 +17,7 @@ import useUser from "../../hooks/useUser";
 import { colors } from "../../common/color";
 import { db } from "../../config/firebase";
 
-const UserHeart = ({ product, onClick = null, HeartNumber }) => {
+const UserHeart = ({ product, onClick = null }) => {
   const user = useUser();
   let arrayDataHook = useLike(user);
   const isLike = useIsLike(product.id, arrayDataHook);
@@ -64,9 +64,7 @@ const UserHeart = ({ product, onClick = null, HeartNumber }) => {
         icon={heart ? faHeart : faHeartOutlined}
         style={heartStyle}
       />
-      {HeartNumber ? (
-        <Likes>{count ? count : 0}</Likes>
-      ) : null}
+      
     </HeartDiv>
   );
 };
