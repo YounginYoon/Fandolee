@@ -153,7 +153,7 @@ const ExchangeDetailInfo = ({ product }) => {
             <Btn onClick={goTransactionPage}>교환 채팅</Btn>
           )}
           <HeartDiv>
-            <UserHeartExchange product={product} />
+            <UserHeartExchange product={product} HeartNumber={true}/>
             
           </HeartDiv>
         </BtnDiv>
