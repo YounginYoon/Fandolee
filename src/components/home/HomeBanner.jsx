@@ -29,7 +29,7 @@ const HomeBanner = () => {
         <SliderImage src="/img/mon2.jpeg" />
       </SliderBox>
       <SliderBox>
-        <SliderImage src="/img/mon3.jpeg" />
+        <SliderImage src="/img/nctdream.jpg" />
       </SliderBox>
     </StyledSlider>
   );
