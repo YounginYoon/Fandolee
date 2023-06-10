@@ -9,4 +9,5 @@ export const IdolList = [
   "IVE",
   "NEW JEANS",
   "NCT",
+  "Your Idol"
 ];
