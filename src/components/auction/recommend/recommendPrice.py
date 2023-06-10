@@ -20,7 +20,7 @@ from sklearn.metrics import accuracy_score
 
 # 키워드 리스트
 # 그룹
-groups = ['방탄', 'bts', '방탄소년단','스트레이키즈', '스트레이 키즈', '스트래이키즈','스트래이 키즈', 'skz', '스키즈', '세븐틴', '새븐틴','svt', 'seventeen', 'nctdream', 'nct dream', '엔시티드림', '엔시티 드림', '앤시티드림', '앤시티 드림', 'nct127', 'nct 127','엔시티127','엔시티 127', '앤시티127', '앤시티 127', '에스파', '애스파', 'aespa', 'ive', '아이브', '뉴진스', '누진스', 'newjeans', 'new jeans','블랙핑크', '블랙 핑크', '블렉핑크', '블렉 핑크','블핑', 'blackpink', 'black pink','monstax','몬스타엑스', '몬스타 엑스', '몬스타액스', '몬스타 액스', '몬엑', '몬액']
+groups = ['방탄', 'bts', '방탄소년단','스트레이키즈', '스트레이 키즈', '스트래이키즈','스트래이 키즈', 'skz', '스키즈', '세븐틴', '새븐틴','svt', 'seventeen', 'nctdream', 'nct dream', '엔시티드림', '엔시티 드림', '앤시티드림', '앤시티 드림', 'nct127', 'nct 127','엔시티127','엔시티 127', '앤시티127', '앤시티 127', '에스파', '애스파', 'aespa', 'ive', '아이브', '뉴진스', '누진스', 'newjeans', 'new jeans','블랙핑크', '블랙 핑크', '블렉핑크', '블렉 핑크','블핑', 'blackpink', 'black pink','monstax','몬스타엑스', '몬스타 엑스', '몬스타액스', '몬스타 액스', '몬엑', '몬액', '르세라핌', 'lesserafim']
 # 상품 종류
 categories = ['앨범','엘범','포토카드', '포토 카드', '미공포', '포카','인형','포스터']
 # 그 외
@@ -76,6 +76,7 @@ newjeans = ['민지', '하니', '다니엘', '해린', '혜인']
 blackpink = ['제니', '지수', '로제', '리사']
 ive = ['안유진', '가을', '레이', '장원영', '리즈', '이서']
 aespa = ['카리나', '윈터', '닝닝', '지젤']
+lesserafim = ['사쿠라', '김채원', '허윤진', '카즈하', '홍은채']
 
 groupMemberCheck = [
     nctDream,
@@ -87,7 +88,8 @@ groupMemberCheck = [
     newjeans,
     blackpink,
     ive,
-    aespa
+    aespa,
+    lesserafim
 ]
 
 # 멤버 검색
@@ -106,6 +108,7 @@ newjeansName = ['뉴진스', '누진스', 'newjeans', 'new jeans']
 blackpinkName = ['블랙핑크', '블랙 핑크', '블렉핑크', '블렉 핑크','블핑', 'blackpink', 'black pink']
 iveName = ['ive', '아이브']
 aespaName = ['에스파', '애스파', 'aespa']
+lesserafimName = ['르세라핌', 'lesserafim']
 
 groupNames = [
     nctDreamName,
@@ -117,7 +120,8 @@ groupNames = [
     newjeansName,
     blackpinkName,
     iveName,
-    aespaName
+    aespaName,
+    lesserafimName
 ]
 
 def checkMember(group, sentence):
@@ -205,6 +209,7 @@ def search_similar(title, category):
     similar_sentences = []
     prices = []
     titles = []
+    print("keywords: ", combinedKeyWords)
 
     for sentence in gensim_input:
         sentence_vec = np.mean([ft_model.wv[word] for word in sentence.split()], axis=0)
@@ -252,7 +257,7 @@ def on_snapshot(doc_snapshot, changes, read_time):
                           if price == minPrice:
                             minTitle = title
                         print("max min: ", maxPrice, minPrice)
-                        print("max min: ", maxTitle, minTitle)
+                        print("max: ", maxTitle, ", min: ", minTitle)
 
                         # 파이어스토어에 추천 가격 수정
                         new_doc_ref.update({"recommendMaxPrice": int(maxPrice), "recommendMaxTitle": maxTitle, "recommendMinPrice": int(minPrice),  "recommendMinTitle": minTitle})

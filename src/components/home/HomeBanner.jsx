@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import styled from "styled-components";
-import { colors } from "../../common/color";
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import styled from 'styled-components';
+import { colors } from '../../common/color';
 
 const HomeBanner = () => {
   const sliderParams = {
@@ -23,13 +23,13 @@ const HomeBanner = () => {
         <SliderImage src="/img/newjeans.jpeg" />
       </SliderBox>
       <SliderBox>
-        <SliderImage src="/img/mon1.jpeg" />
+        <SliderImage src="/img/nctdream.jpg" />
       </SliderBox>
       <SliderBox>
         <SliderImage src="/img/mon2.jpeg" />
       </SliderBox>
       <SliderBox>
-        <SliderImage src="/img/mon3.jpeg" />
+        <SliderImage src="/img/ive.jpg" />
       </SliderBox>
     </StyledSlider>
   );

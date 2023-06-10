@@ -1,57 +1,57 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { doc } from "firebase/firestore";
-import { db, storage } from "../config/firebase";
-import { ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
-import moment from "moment";
+import { doc } from 'firebase/firestore';
+import { db, storage } from '../config/firebase';
+import { ref, uploadBytes, getDownloadURL, listAll } from 'firebase/storage';
+import moment from 'moment';
 //달력 추가하기 npm install 해야함
-import DatePicker from "react-datepicker";
-import { ko } from "date-fns/esm/locale";
-import "react-datepicker/dist/react-datepicker.css";
-import { addDays } from "date-fns";
+import DatePicker from 'react-datepicker';
+import { ko } from 'date-fns/esm/locale';
+import 'react-datepicker/dist/react-datepicker.css';
+import { addDays } from 'date-fns';
 
 const AuctionUpPage = () => {
   const navigate = useNavigate();
   const [input, setInputs] = useState({
     minPrice: 0,
     maxPrice: 0,
-    info: "",
-    image: "",
-    title: "",
-    subtitle: "",
+    info: '',
+    image: '',
+    title: '',
+    subtitle: '',
     likes: 0,
   });
   //현재시간
-  const timeStamp = moment().format("YYYY-MM-DD hh:mm:ss");
+  const timeStamp = moment().format('YYYY-MM-DD hh:mm:ss');
 
   const selectList = [
-    "Your Idol",
-    "BTS",
-    "SKZ",
-    "SVT",
-    "NCT DREAM",
-    "Black Pink",
-    "MONSTA X",
-    "NCT 127",
-    "IVE",
-    "NEW JEANS",
-    "NCT",
+    'Your Idol',
+    'BTS',
+    'SKZ',
+    'SVT',
+    'NCT DREAM',
+    'Black Pink',
+    'MONSTA X',
+    'NCT 127',
+    'IVE',
+    'NEW JEANS',
+    'NCT',
   ];
   //카테고리리스트
 
-  const categoryList = ["Goods", "Albums", "MD", "Tickets", "Photo Cards"];
+  const categoryList = ['Goods', 'Albums', 'MD', 'Tickets', 'Photo Cards'];
   // const handleClickFileInput = () => {
   //   fileInputRef.current?.click();
   // };
-  const [selected, setSelected] = useState("Your Idol");
+  const [selected, setSelected] = useState('Your Idol');
   const handleSelect = (e) => {
     setSelected(e.target.value);
   };
 
-  const [category, setCategory] = useState("Goods");
+  const [category, setCategory] = useState('Goods');
   const handleCategory = (e) => {
     setCategory(e.target.value);
   };
@@ -60,7 +60,7 @@ const AuctionUpPage = () => {
   const [imageUpload, setImageUpload] = useState(null);
 
   const [imageList, setImageList] = useState([]);
-  const imageListRef = ref(storage, "product_image/");
+  const imageListRef = ref(storage, 'product_image/');
 
   //이미지 불러오기
   // useEffect(() => {
@@ -74,7 +74,7 @@ const AuctionUpPage = () => {
   // }, []);
 
   const addPost = async () => {
-    const postDB = db.collection("product");
+    const postDB = db.collection('product');
 
     try {
       //이미지 upload
@@ -109,7 +109,7 @@ const AuctionUpPage = () => {
           };
 
           const user_info = {
-            uid: JSON.parse(sessionStorage.getItem("user")).uid,
+            uid: JSON.parse(sessionStorage.getItem('user')).uid,
           };
 
           postDB
@@ -119,14 +119,14 @@ const AuctionUpPage = () => {
             })
             .catch((err) => {
               // 실패했을 때
-              console.log("작성 실패", err);
+              console.log('작성 실패', err);
             });
           //
         });
       });
       //이미지 upload
     } catch (err) {
-      console.log("posting error", err);
+      console.log('posting error', err);
     }
   };
 
