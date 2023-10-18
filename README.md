@@ -34,6 +34,18 @@ http://cscp2.sogang.ac.kr/CSE4187/index.php/%EA%B9%80%EB%91%98%EC%9C%A4%ED%95%98
 
 ---
 
+## 시연영상
+
+https://youtu.be/s3-oVinhuCE?si=ktGzP1LL3Se2oFUe
+
+https://youtu.be/ngBt1pEw27w?si=TMhTcJ5hj9kENbr0
+
+https://youtu.be/3a9lhIcZ-uo?si=1RwHsXOdaZ4mzXc6
+
+https://youtu.be/Sd7GcjdMBiY?si=OiYKRvk5XV6jFlYx
+
+---
+
 ### 3/6
 
 1.  프로젝트 주제 결정
