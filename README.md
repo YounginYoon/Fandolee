@@ -4,7 +4,7 @@
 
 ```bash
 $ git clone https://github.com/Ahyoung-Kim/Fandolee.git
-$ cd DDJT
+$ cd Fandolee
 $ npm install
 ```
 
