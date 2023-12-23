@@ -28,12 +28,6 @@ $ npm start
 
 ---
 
-## 위키 페이지
-
-http://cscp2.sogang.ac.kr/CSE4187/index.php/%EA%B9%80%EB%91%98%EC%9C%A4%ED%95%98%EB%82%98
-
----
-
 ## 시연영상
 
 https://youtu.be/s3-oVinhuCE?si=ktGzP1LL3Se2oFUe
